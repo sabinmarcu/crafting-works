@@ -8,7 +8,7 @@ import {
 import styled from 'styled-components';
 
 import { Title } from '../state/title';
-import { SymbolsList } from '../components/SymbolsList';
+import Symbols from '../components/SymbolsList';
 import { RecipesList } from '../components/RecipesList';
 
 export const StyledContainer = styled(Container)`
@@ -25,7 +25,7 @@ export const HomeScreen = () => (
       <Card>
         <CardHeader title="Symbols" />
         <CardContent>
-          <SymbolsList />
+          <Symbols />
         </CardContent>
       </Card>
       <Card>

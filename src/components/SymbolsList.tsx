@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Chip } from '@material-ui/core';
 import styled from 'styled-components';
-import { useSymbols } from '../state/recipes';
+import { SymbolType, useSymbols } from '../state/recipes';
 import { StyledLink } from './styled';
 
 export const StyledContainer = styled.div`
@@ -19,19 +19,33 @@ export const ClickableStyledChip = styled(StyledChip)`
   cursor: pointer;
 `;
 
-export const SymbolsList: FC = () => {
-  const symbols = useSymbols();
-  return (
-    <StyledContainer>
-      {symbols.map(({ name, composite }) => (composite ? (
-        <StyledLink to={`/recipes/${name}`} key={name}>
-          <ClickableStyledChip label={name} />
-        </StyledLink>
-      ) : (
-        <StyledChip variant="outlined" label={name} key={name} />
-      )))}
-    </StyledContainer>
-  );
-};
+export const SymbolsList: FC<{
+  symbols: SymbolType[],
+  onDelete?: (input: string) => () => void,
+}> = ({
+  symbols,
+  onDelete,
+}) => (
+  <StyledContainer>
+    {symbols.map(({ name, composite }) => (composite ? (
+      <StyledLink to={`/recipes/${name}`} key={name}>
+        <ClickableStyledChip
+          label={name}
+          onDelete={onDelete && onDelete(name)}
+        />
+      </StyledLink>
+    ) : (
+      <StyledChip
+        variant="outlined"
+        label={name}
+        key={name}
+        onDelete={onDelete && onDelete(name)}
+      />
+    )))}
+  </StyledContainer>
+);
 
-export default SymbolsList;
+export default () => {
+  const symbols = useSymbols();
+  return <SymbolsList symbols={symbols} />;
+};

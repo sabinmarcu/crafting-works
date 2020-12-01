@@ -10,8 +10,8 @@ import styled from 'styled-components';
 
 import { useHistory } from 'react-router';
 import { useDrawer } from '../state/drawer';
-import { SymbolsList } from './SymbolsList';
 import { RecipesList } from './RecipesList';
+import Symbols from './SymbolsList';
 
 const StyledDrawer = styled(SwipeableDrawer)`
   .styledPaper {
@@ -56,7 +56,7 @@ export const Drawer: FC = () => {
     >
       <DrawerAppBar>Symbols</DrawerAppBar>
       <StyledContainer>
-        <SymbolsList />
+        <Symbols />
       </StyledContainer>
       <DrawerAppBar>Recipes</DrawerAppBar>
       <StyledContainer>

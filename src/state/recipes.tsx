@@ -4,6 +4,8 @@ import React, {
   createContext,
   useContext,
   FC,
+  useState,
+  useEffect,
 } from 'react';
 import seedData from '../config/seed';
 import { useLocalStorage } from '../hooks/useLocalStorage';
@@ -18,7 +20,7 @@ export type RecipesUpdateType = (name: string, recipe: RecipeType) => void;
 export type RecipesRemoveType = (name: string) => void;
 export type SymbolType = {
   name: string;
-  composite: boolean;
+  composite?: boolean;
 };
 export type RecipesContextType = {
   recipes: RecipesMapType | undefined;
@@ -26,6 +28,8 @@ export type RecipesContextType = {
   update: RecipesUpdateType;
   remove: RecipesRemoveType;
 };
+
+type RecipeInputEditType = { symbol: string, amount: number };
 
 export const makeRecipe = (input: RecipeInputType, output: number) => ({
   input,
@@ -102,9 +106,69 @@ export const RecipesProvider: FC = ({ children }) => {
 };
 export const useSymbols = () => useRecipes().symbols;
 export const useRecipe = (name: string) => {
-  const { recipes } = useRecipes();
-  const recipe = useMemo(() => recipes?.[name] ?? {}, [recipes, name]);
+  const { recipes, update } = useRecipes();
+  const recipe = useMemo(
+    () => recipes?.[name] ?? undefined,
+    [recipes, name],
+  );
+  const [inputs, setInputs] = useState<RecipeInputEditType[]>([]);
+  const [output, setOutput] = useState<number>(0);
+  const [initialized, setInitialized] = useState<boolean>(false);
+  useEffect(
+    () => {
+      if (!initialized && recipe) {
+        setInitialized(true);
+        setOutput(recipe.output);
+        setInputs(Object.entries(recipe.input)
+          .map(([key, value]) => ({
+            symbol: key,
+            amount: value,
+          })));
+      }
+    },
+    [recipe, setInitialized, setOutput, setInputs],
+  );
+  useEffect(
+    () => {
+      update(name, {
+        input: inputs.reduce((prev, { symbol, amount }) => ({
+          ...prev,
+          [symbol]: amount,
+        }), {}),
+        output,
+      });
+    },
+    [name, inputs, output, update],
+  );
+  const updateInput = useCallback(
+    (
+      inputName: string,
+      inputValue: number,
+    ) => setInputs((i) => i.map(
+      ({ symbol, amount }) => (symbol === inputName
+        ? ({ symbol, amount: inputValue })
+        : ({ symbol, amount })),
+    )),
+    [setInputs],
+  );
+  const deleteInput = useCallback(
+    (input: string) => setInputs(
+      (i) => i.filter(({ symbol }) => symbol !== input),
+    ),
+    [setInputs],
+  );
+  const addInput = useCallback(
+    (input: string) => setInputs(
+      (i) => [...i, { symbol: input, amount: 0 }],
+    ),
+    [setInputs],
+  );
   return {
     recipe,
+    inputs,
+    output,
+    updateInput,
+    deleteInput,
+    addInput,
   };
 };
