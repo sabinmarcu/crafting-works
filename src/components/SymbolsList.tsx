@@ -1,17 +1,21 @@
 import React, { FC } from 'react';
-import { Chip, Container } from '@material-ui/core';
+import { Chip } from '@material-ui/core';
 import styled from 'styled-components';
 import { useSymbols } from '../state/recipes';
 import { StyledLink } from './styled';
 
-export const StyledContainer = styled(Container)`
+export const StyledContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
 export const StyledChip = styled(Chip)`
+  margin: 5px;
+`;
+
+export const ClickableStyledChip = styled(StyledChip)`
   cursor: pointer;
 `;
 
@@ -21,10 +25,10 @@ export const SymbolsList: FC = () => {
     <StyledContainer>
       {symbols.map(({ name, composite }) => (composite ? (
         <StyledLink to={`/recipes/${name}`} key={name}>
-          <StyledChip label={name} />
+          <ClickableStyledChip label={name} />
         </StyledLink>
       ) : (
-        <Chip variant="outlined" label={name} key={name} />
+        <StyledChip variant="outlined" label={name} key={name} />
       )))}
     </StyledContainer>
   );

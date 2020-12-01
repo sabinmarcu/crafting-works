@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router';
 import { useDrawer } from '../state/drawer';
 import { SymbolsList } from './SymbolsList';
+import { RecipesList } from './RecipesList';
 
 const StyledDrawer = styled(SwipeableDrawer)`
   .styledPaper {
@@ -26,8 +27,22 @@ const StyledDrawer = styled(SwipeableDrawer)`
 `;
 
 const StyledAppBar = styled(AppBar)`
-  margin-bottom: 1.5rem;
+  position: sticky;
 `;
+
+const StyledContainer = styled(Container)`
+  margin: 1.5rem 0;
+`;
+
+const DrawerAppBar: FC = ({ children }) => (
+  <StyledAppBar>
+    <Toolbar>
+      <Container>
+        <Typography variant="h4">{children}</Typography>
+      </Container>
+    </Toolbar>
+  </StyledAppBar>
+);
 
 export const Drawer: FC = () => {
   const { isOpen, open, close } = useDrawer();
@@ -39,14 +54,14 @@ export const Drawer: FC = () => {
       onClose={close}
       classes={{ paper: 'styledPaper', root: 'styledRoot' }}
     >
-      <StyledAppBar position="static">
-        <Toolbar>
-          <Container>
-            <Typography variant="h4">Symbols</Typography>
-          </Container>
-        </Toolbar>
-      </StyledAppBar>
-      <SymbolsList />
+      <DrawerAppBar>Symbols</DrawerAppBar>
+      <StyledContainer>
+        <SymbolsList />
+      </StyledContainer>
+      <DrawerAppBar>Recipes</DrawerAppBar>
+      <StyledContainer>
+        <RecipesList />
+      </StyledContainer>
     </StyledDrawer>
   );
 };

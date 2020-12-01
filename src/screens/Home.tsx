@@ -1,17 +1,40 @@
 import React from 'react';
-import { RecipesContext } from '../state/recipes';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  Container,
+} from '@material-ui/core';
+import styled from 'styled-components';
+
 import { Title } from '../state/title';
+import { SymbolsList } from '../components/SymbolsList';
+import { RecipesList } from '../components/RecipesList';
+
+export const StyledContainer = styled(Container)`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1rem;
+  padding: 1rem 0;
+`;
 
 export const HomeScreen = () => (
   <>
     <Title title="Home" isRoot />
-    <RecipesContext.Consumer>
-      {(data) => (
-        <code style={{ whiteSpace: 'pre-wrap' }}>
-          {JSON.stringify(data, undefined, 2)}
-        </code>
-      )}
-    </RecipesContext.Consumer>
+    <StyledContainer>
+      <Card>
+        <CardHeader title="Symbols" />
+        <CardContent>
+          <SymbolsList />
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader title="Recipes" />
+        <CardContent>
+          <RecipesList />
+        </CardContent>
+      </Card>
+    </StyledContainer>
   </>
 );
 export default HomeScreen;
