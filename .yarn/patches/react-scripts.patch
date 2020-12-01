@@ -1,0 +1,76 @@
+diff --git a/scripts/utils/verifyTypeScriptSetup.js b/scripts/utils/verifyTypeScriptSetup.js
+index 00139ee4caf6e8499bb53bf31afe9bf94e557a1c..ffa19f1d0b9f264a6beba5a3e2ce6054514069b8 100644
+--- a/scripts/utils/verifyTypeScriptSetup.js
++++ b/scripts/utils/verifyTypeScriptSetup.js
+@@ -119,9 +119,9 @@ function verifyTypeScriptSetup() {
+     // 'parsedValue' matches the output value from ts.parseJsonConfigFileContent()
+     target: {
+       parsedValue: ts.ScriptTarget.ES5,
+-      suggested: 'es5',
++      suggested: "es5",
+     },
+-    lib: { suggested: ['dom', 'dom.iterable', 'esnext'] },
++    lib: { suggested: ["dom", "dom.iterable", "esnext"] },
+     allowJs: { suggested: true },
+     skipLibCheck: { suggested: true },
+     esModuleInterop: { suggested: true },
+@@ -134,29 +134,29 @@ function verifyTypeScriptSetup() {
+     // Keep this in sync with the webpack config
+     module: {
+       parsedValue: ts.ModuleKind.ESNext,
+-      value: 'esnext',
+-      reason: 'for import() and import/export',
++      value: "esnext",
++      reason: "for import() and import/export",
+     },
+     moduleResolution: {
+       parsedValue: ts.ModuleResolutionKind.NodeJs,
+-      value: 'node',
+-      reason: 'to match webpack resolution',
++      value: "node",
++      reason: "to match webpack resolution",
+     },
+-    resolveJsonModule: { value: true, reason: 'to match webpack loader' },
+-    isolatedModules: { value: true, reason: 'implementation limitation' },
++    resolveJsonModule: { value: true, reason: "to match webpack loader" },
++    isolatedModules: { value: true, reason: "implementation limitation" },
+     noEmit: { value: true },
+     jsx: {
+       parsedValue:
+-        hasJsxRuntime && semver.gte(ts.version, '4.1.0-beta')
+-          ? ts.JsxEmit.ReactJsx
++        hasJsxRuntime && semver.gte(ts.version, "4.1.0-beta")
++          ? ts.JsxEmit.ReactJSX
+           : ts.JsxEmit.React,
+       value:
+-        hasJsxRuntime && semver.gte(ts.version, '4.1.0-beta')
+-          ? 'react-jsx'
+-          : 'react',
+-      reason: 'to support the new JSX transform in React 17',
++        hasJsxRuntime && semver.gte(ts.version, "4.1.0-beta")
++          ? "react-jsx"
++          : "react",
++      reason: "to support the new JSX transform in React 17",
+     },
+-    paths: { value: undefined, reason: 'aliased imports are not supported' },
++    paths: { value: undefined, reason: "aliased imports are not supported" },
+   };
+ 
+   const formatDiagnosticHost = {
+@@ -218,7 +218,15 @@ function verifyTypeScriptSetup() {
+   if (appTsConfig.compilerOptions == null) {
+     appTsConfig.compilerOptions = {};
+     firstTimeSetup = true;
+-  }
++  } else {
++    // This is bug fix code of https://github.com/facebook/create-react-app/issues/9868
++    // Bellow code release variable from non-extensible and freeze status.
++    appTsConfig.compilerOptions = JSON.parse(JSON.stringify(appTsConfig.compilerOptions));
++
++    // Original appTsConfig.compilerOptions status
++    // Object.isExtensible(appTsConfig.compilerOptions) output: false
++    // Object.isFrozen(appTsConfig.compilerOptions) output: true
++  }	 
+ 
+   for (const option of Object.keys(compilerOptions)) {
+     const { parsedValue, value, suggested, reason } = compilerOptions[option];
