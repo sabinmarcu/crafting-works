@@ -1,19 +1,19 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 import {
   AppBar,
   Toolbar,
   Container,
   Button,
   Typography,
-  IconButton
-} from "@material-ui/core";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import styled from "styled-components";
+  IconButton,
+} from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import styled from 'styled-components';
 
-import { useDrawer } from "../state/drawer";
-import { useTitle } from "../state/title";
+import { useDrawer } from '../state/drawer';
+import { useTitle } from '../state/title';
 
-import { StyledLink } from "./styled";
+import { StyledLink } from './styled';
 
 const StyledContainer = styled(Container)`
   display: flex;
@@ -62,3 +62,5 @@ export const NavBar: FC = () => {
     </AppBar>
   );
 };
+
+export default NavBar;

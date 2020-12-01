@@ -4,8 +4,8 @@ import React, {
   useContext,
   createContext,
   useCallback,
-  useEffect
-} from "react";
+  useEffect,
+} from 'react';
 
 type TitleContextType = {
   title: string;
@@ -14,28 +14,28 @@ type TitleContextType = {
 };
 
 export const TitleContext = createContext<TitleContextType>({
-  title: "Unknown",
+  title: 'Unknown',
   isRoot: false,
-  setTitle: () => {}
+  setTitle: () => {},
 });
 export const useTitle = () => useContext(TitleContext);
 
 export const TitleProvider: FC = ({ children }) => {
-  const [title, setTitle] = useState("Unknown");
+  const [title, setTitle] = useState('Unknown');
   const [isRoot, setIsRoot] = useState(false);
   const update = useCallback(
-    (input: string, isRoot?: boolean) => {
+    (input: string, root?: boolean) => {
       setTitle(input);
-      setIsRoot(!!isRoot);
+      setIsRoot(!!root);
     },
-    [setTitle, setIsRoot]
+    [setTitle, setIsRoot],
   );
   return (
     <TitleContext.Provider
       value={{
         title,
         isRoot,
-        setTitle: update
+        setTitle: update,
       }}
     >
       {children}

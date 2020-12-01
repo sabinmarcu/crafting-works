@@ -1,8 +1,8 @@
-import React, { FC } from "react";
-import { useSymbols } from "../state/recipes";
-import { Chip, Container } from "@material-ui/core";
-import styled from "styled-components";
-import { StyledLink } from "./styled";
+import React, { FC } from 'react';
+import { Chip, Container } from '@material-ui/core';
+import styled from 'styled-components';
+import { useSymbols } from '../state/recipes';
+import { StyledLink } from './styled';
 
 export const StyledContainer = styled(Container)`
   display: flex;
@@ -19,15 +19,13 @@ export const SymbolsList: FC = () => {
   const symbols = useSymbols();
   return (
     <StyledContainer>
-      {symbols.map(({ name, composite }) =>
-        composite ? (
-          <StyledLink to={`/recipes/${name}`} key={name}>
-            <StyledChip label={name} />
-          </StyledLink>
-        ) : (
-          <Chip variant="outlined" label={name} key={name} />
-        )
-      )}
+      {symbols.map(({ name, composite }) => (composite ? (
+        <StyledLink to={`/recipes/${name}`} key={name}>
+          <StyledChip label={name} />
+        </StyledLink>
+      ) : (
+        <Chip variant="outlined" label={name} key={name} />
+      )))}
     </StyledContainer>
   );
 };

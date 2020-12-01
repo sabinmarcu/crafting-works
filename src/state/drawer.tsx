@@ -3,8 +3,8 @@ import React, {
   useState,
   useCallback,
   createContext,
-  useContext
-} from "react";
+  useContext,
+} from 'react';
 
 type DrawerContextType = {
   isOpen: boolean;
@@ -17,7 +17,7 @@ const DrawerContext = createContext<DrawerContextType>({
   isOpen: false,
   open: () => {},
   close: () => {},
-  toggle: () => {}
+  toggle: () => {},
 });
 
 export const useDrawer = () => useContext(DrawerContext);
@@ -32,7 +32,7 @@ export const DrawerProvider: FC = ({ children }) => {
         isOpen,
         open,
         close,
-        toggle
+        toggle,
       }}
     >
       {children}

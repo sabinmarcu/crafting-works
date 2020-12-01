@@ -1,13 +1,13 @@
-import React, { FC } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import { Route, Switch } from "react-router";
-import { Container } from "@material-ui/core";
+import React, { FC } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Route, Switch } from 'react-router';
+import { Container } from '@material-ui/core';
 
-import { NavBar } from "./components/NavBar";
-import { Drawer, RouteChangeDrawerClose } from "./components/Drawer";
+import { NavBar } from './components/NavBar';
+import { Drawer, RouteChangeDrawerClose } from './components/Drawer';
 
-import { HomeScreen } from "./screens/Home";
-import { RecipeScreen } from "./screens/Recipe";
+import { HomeScreen } from './screens/Home';
+import { RecipeScreen } from './screens/Recipe';
 
 export const App: FC = () => (
   <Router>

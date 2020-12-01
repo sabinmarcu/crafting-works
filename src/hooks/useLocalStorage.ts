@@ -1,10 +1,14 @@
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import {
+  useState, useEffect, Dispatch, SetStateAction,
+} from 'react';
 
-import { logGroup, logState, makeKey, isKey } from "./config";
+import {
+  logGroup, logState, makeKey, isKey,
+} from './config';
 
 export const useLocalStorage = <T>(
   key: string,
-  defaultValue?: T
+  defaultValue?: T,
 ): [T | undefined, Dispatch<SetStateAction<T | undefined>>] => {
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [value, setValue] = useState<T>();
@@ -14,10 +18,10 @@ export const useLocalStorage = <T>(
       const val = localStorage.getItem(makeKey(key));
       if (val) {
         try {
-          logState("⚙ LocalStorage Get", key, val);
+          logState('⚙ LocalStorage Get', key, val);
           setValue(JSON.parse(val));
         } catch {
-          logState("❌ Could not parse LS data", key, val);
+          logState('❌ Could not parse LS data', key, val);
           setValue(defaultValue);
         }
       } else {
@@ -38,10 +42,10 @@ export const useLocalStorage = <T>(
     } finally {
       if (shouldUpdate) {
         if (value === null) {
-          logState("⚙ LocalStorage Remove", key, value);
+          logState('⚙ LocalStorage Remove', key, value);
           localStorage.removeItem(makeKey(key));
         } else {
-          logState("⚙ LocalStorage Set", key, value);
+          logState('⚙ LocalStorage Set', key, value);
           localStorage.setItem(makeKey(key), JSON.stringify(value));
         }
       }
@@ -53,7 +57,7 @@ export const useLocalStorage = <T>(
       storageArea,
       key: k,
       oldValue,
-      newValue
+      newValue,
     }: StorageEvent) => {
       if (!k) {
         return;
@@ -62,24 +66,23 @@ export const useLocalStorage = <T>(
       const isLocalStorage = storageArea === localStorage;
       const isRightKey = k === makeKey(key);
       if (!(isLocalStorage && isValidKey && isRightKey)) {
-        return undefined;
+        return;
       }
       try {
         const [ov, nv] = [JSON.parse(oldValue!), JSON.parse(newValue!)];
         logGroup(
-          "⚙ LocalStorage Event",
+          '⚙ LocalStorage Event',
           key,
-          [`Old Value: %c${ov}`, "color: red; text-decoration: underline"],
-          [`New Value: %c${nv}`, "color: green; text-decoration: underline"]
+          [`Old Value: %c${ov}`, 'color: red; text-decoration: underline'],
+          [`New Value: %c${nv}`, 'color: green; text-decoration: underline'],
         );
         setValue(nv);
       } catch (e) {
-        logState("❌ Could not parse LS data from Event", key, newValue);
+        logState('❌ Could not parse LS data from Event', key, newValue);
       }
-      return undefined;
     };
-    window.addEventListener("storage", handler);
-    return () => window.removeEventListener("storage", handler);
+    window.addEventListener('storage', handler);
+    return () => window.removeEventListener('storage', handler);
   }, [setValue, key]);
   return [value, setValue];
 };

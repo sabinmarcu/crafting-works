@@ -3,10 +3,10 @@ import React, {
   useCallback,
   createContext,
   useContext,
-  FC
-} from "react";
-import seedData from "../config/seed";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+  FC,
+} from 'react';
+import seedData from '../config/seed';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export type RecipeInputType = Record<string, number>;
 export type RecipeType = {
@@ -29,65 +29,63 @@ export type RecipesContextType = {
 
 export const makeRecipe = (input: RecipeInputType, output: number) => ({
   input,
-  output
+  output,
 });
 
 export const RecipesContext = createContext<RecipesContextType>({
   recipes: {},
   symbols: [],
   update: () => {},
-  remove: () => {}
+  remove: () => {},
 });
 export const useRecipes = () => useContext(RecipesContext);
 export const RecipesProvider: FC = ({ children }) => {
   const [recipes, setRecipes] = useLocalStorage<RecipesMapType>(
-    "recipes",
-    seedData
+    'recipes',
+    seedData,
   );
   const symbols = useMemo<SymbolType[]>(
-    () =>
-      recipes
-        ? [
-            ...Object.keys(recipes),
-            ...Object.values(recipes)
-              .map(({ input }) => Object.keys(input))
-              .reduce((prev, it) => [...prev, ...it], [])
-          ]
-            .sort()
-            .filter((it, idx, arr) => arr.indexOf(it) === idx)
-            .map((it) => ({
-              name: it,
-              composite: it in recipes
-            }))
-        : [],
-    [recipes]
+    () => (recipes
+      ? [
+        ...Object.keys(recipes),
+        ...Object.values(recipes)
+          .map(({ input }) => Object.keys(input))
+          .reduce((prev, it) => [...prev, ...it], []),
+      ]
+        .sort()
+        .filter((it, idx, arr) => arr.indexOf(it) === idx)
+        .map((it) => ({
+          name: it,
+          composite: it in recipes,
+        }))
+      : []),
+    [recipes],
   );
   const updateRecipe = useCallback(
     (name: string, recipe: RecipeType) => {
       setRecipes((r) => ({
         ...r,
-        [name]: recipe
+        [name]: recipe,
       }));
     },
-    [setRecipes]
+    [setRecipes],
   );
   const removeRecipe = useCallback(
     (name: string) => {
       setRecipes(
-        (r) =>
-          r &&
-          Object.entries(r)
+        (r) => r
+          && Object.entries(r)
             .filter(([k]) => k !== name)
             .reduce(
               (prev, [k, v]) => ({
                 ...prev,
-                [k]: v
+                [k]: v,
               }),
-              {}
-            )
+              {},
+            ),
       );
     },
-    [setRecipes]
+    [setRecipes],
   );
   return (
     <RecipesContext.Provider
@@ -95,7 +93,7 @@ export const RecipesProvider: FC = ({ children }) => {
         recipes,
         symbols,
         update: updateRecipe,
-        remove: removeRecipe
+        remove: removeRecipe,
       }}
     >
       {children}
@@ -107,6 +105,6 @@ export const useRecipe = (name: string) => {
   const { recipes } = useRecipes();
   const recipe = useMemo(() => recipes?.[name] ?? {}, [recipes, name]);
   return {
-    recipe
+    recipe,
   };
 };

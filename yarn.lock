@@ -2605,23 +2605,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*":
+"@types/react@npm:*, @types/react@npm:^17.0.0":
   version: 17.0.0
   resolution: "@types/react@npm:17.0.0"
   dependencies:
     "@types/prop-types": "*"
     csstype: ^3.0.2
   checksum: dcef2034b822a949c5528fa8fa3c64da654fdbb822bd8f0488c0084d84cadb8b90af68813a6c95153d4754079f50b1cab206552c7c20f6b67a26c3641383fe31
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:16.9.19":
-  version: 16.9.19
-  resolution: "@types/react@npm:16.9.19"
-  dependencies:
-    "@types/prop-types": "*"
-    csstype: ^2.2.0
-  checksum: 0517d996fd9e52d8bf0ed9d4890189344d1c8d893acdb4cb2a59fd5ce029a1e057ec7b2bed9d1891d62cf91fd4570ec70a37a47a6b056cb99f4473c34ff03249
   languageName: node
   linkType: hard
 
@@ -5711,7 +5701,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csstype@npm:^2.2.0, csstype@npm:^2.5.2":
+"csstype@npm:^2.5.2":
   version: 2.6.14
   resolution: "csstype@npm:2.6.14"
   checksum: 9abe447b28534cc45304fca19a26d373c5bb8e9b18cedbb84330862937d102c9d8cc47f65d233f723c8512804e9d52b81d6fc57c23c6a4d5420f281827d73b03
@@ -13202,7 +13192,7 @@ react-scripts@next:
     "@material-ui/core": 4.11.1
     "@material-ui/icons": 4.9.1
     "@types/node": 14.14.10
-    "@types/react": 16.9.19
+    "@types/react": ^17.0.0
     "@types/react-dom": 16.9.5
     "@types/react-is": ^17
     "@types/react-router": 5.1.8
