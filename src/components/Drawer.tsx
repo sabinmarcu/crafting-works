@@ -48,7 +48,6 @@ export const Drawer: FC = () => {
   const { isOpen, open, close } = useDrawer();
   return (
     <StyledDrawer
-      disableSwipeToOpen={false}
       open={isOpen}
       onOpen={open}
       onClose={close}

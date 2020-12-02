@@ -21,6 +21,9 @@ export const StyledContainer = styled(Container)`
   grid-template-columns: 1fr 1fr;
   grid-gap: 1rem;
   padding: 1rem 0;
+  @media (max-width: 500px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const StyledTextField = styled(TextField)`
@@ -42,7 +45,7 @@ export const RecipeScreen: FC<RouteComponentProps<{ name: string }>> = ({
   const updateHandler = useCallback(
     (symbol: string) => (
       { target: { value } }: ChangeEvent<HTMLInputElement>,
-    ) => updateInput(symbol, parseInt(value, 10)),
+    ) => updateInput(symbol, parseInt(value, 10) || 0),
     [updateInput],
   );
   const symbols = useMemo<SymbolType[]>(
