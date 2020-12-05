@@ -29,7 +29,7 @@ export const FabWrapper = styled.div`
 `;
 
 export const ModalContainer = styled(Container)`
-  padding: 0;
+  padding: 25px;
   margin-top: 25px;
   display: flex;
   flex-flow: column nowrap;
@@ -92,6 +92,8 @@ export const CreateRecipeModal: FC<{
       open={open}
       onClose={close}
       closeAfterTransition
+      disableEnforceFocus
+      disableAutoFocus
       BackdropComponent={Backdrop}
       BackdropProps={{
         timeout: 500,

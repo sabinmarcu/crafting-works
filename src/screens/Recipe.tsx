@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import { RouteComponentProps } from 'react-router';
 import {
-  AppBar, Container, Tab, Tabs,
+  AppBar, Container, Tab, Tabs, withTheme,
 } from '@material-ui/core';
 import styled from 'styled-components';
 import {
@@ -13,6 +13,7 @@ import {
 import { useIsMobile } from '../hooks/useIsMobile';
 import { RecipeEditor } from '../components/RecipeEditor';
 import { RecipeViewer } from '../components/RecipeViewer';
+import { toolbarStyles } from '../components/styled';
 
 const StyledContainer = styled(Container)`
   padding: 1rem 0;
@@ -24,6 +25,14 @@ export const TabPanel: FC<{ isOpen: boolean }> = ({ children, isOpen }) => (
   >
     {isOpen && children}
   </div>
+);
+
+const StyledTabs = withTheme(
+  styled(Tabs)`
+    .MuiTabs-flexContainer {
+      ${toolbarStyles}
+    }
+  `,
 );
 
 const tabs = [
@@ -46,13 +55,13 @@ export const RecipeScreen: FC<RouteComponentProps<{ name: string }>> = ({
     <RecipeProvider name={name}>
       <StyledContainer>
         <AppBar position="static">
-          <Tabs
+          <StyledTabs
             value={tab}
             onChange={onChange}
             variant={isMobile ? 'fullWidth' : undefined}
           >
             {tabs.map(({ title }) => <Tab label={title} key={title} />)}
-          </Tabs>
+          </StyledTabs>
         </AppBar>
         {tabs.map(({ title, Component }, idx) => (
           <TabPanel

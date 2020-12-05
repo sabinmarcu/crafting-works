@@ -1,19 +1,23 @@
 import React, { FC } from 'react';
 import {
   AppBar,
-  Toolbar,
   Container,
-  Button,
   Typography,
   IconButton,
 } from '@material-ui/core';
+
+import Brightness4Icon from '@material-ui/icons/Brightness4';
+import Brightness7Icon from '@material-ui/icons/Brightness7';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import MenuIcon from '@material-ui/icons/Menu';
+
 import styled from 'styled-components';
 
 import { useDrawer } from '../state/drawer';
 import { useTitle } from '../state/title';
+import { useTheme } from '../state/theme';
 
-import { StyledLink } from './styled';
+import { StyledLink, StyledToolbar } from './styled';
 
 const StyledContainer = styled(Container)`
   display: flex;
@@ -23,7 +27,7 @@ const StyledContainer = styled(Container)`
 `;
 
 const StyledIconButton = styled(IconButton)`
-  color: white;
+  margin: 0 5px;
 `;
 
 const StyledTypography = styled(Typography)`
@@ -32,33 +36,45 @@ const StyledTypography = styled(Typography)`
   justify-content: center;
 `;
 
+const StyledWrapper = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+`;
+
 export const NavBar: FC = () => {
   const { open } = useDrawer();
   const { title, isRoot } = useTitle();
+  const { theme, toggle } = useTheme();
   return (
     <AppBar position="static">
-      <Toolbar>
+      <StyledToolbar>
         <StyledContainer>
-          <StyledTypography variant="body1">
-            {!isRoot && (
-              <StyledLink to="/">
-                <StyledIconButton>
-                  <ArrowBackIcon />
-                </StyledIconButton>
-              </StyledLink>
-            )}
-            {title}
-          </StyledTypography>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={open}
-            disableElevation
-          >
-            Recipes Book
-          </Button>
+          <StyledWrapper>
+            <StyledTypography variant="body1">
+              {!isRoot && (
+                <StyledLink to="/">
+                  <StyledIconButton>
+                    <ArrowBackIcon />
+                  </StyledIconButton>
+                </StyledLink>
+              )}
+              {title}
+            </StyledTypography>
+          </StyledWrapper>
+          <StyledWrapper>
+            <StyledIconButton onClick={toggle}>
+              {theme === 'light'
+                ? <Brightness7Icon />
+                : <Brightness4Icon />}
+            </StyledIconButton>
+            <StyledIconButton onClick={open}>
+              <MenuIcon />
+            </StyledIconButton>
+          </StyledWrapper>
         </StyledContainer>
-      </Toolbar>
+      </StyledToolbar>
     </AppBar>
   );
 };
