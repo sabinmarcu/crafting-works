@@ -5,12 +5,12 @@ import {
   ListItemText,
 } from '@material-ui/core';
 // import styled from 'styled-components';
-import { useRecipes } from '../state/recipes';
+import { useRecipes } from '../state/recipes-v2';
 import { camelCaseToCapitalized } from '../utils/strings';
 import { StyledLink } from './styled';
 
 export const RecipesList: FC = () => {
-  const { recipes } = useRecipes();
+  const recipes = useRecipes();
   const list = useMemo(
     () => Object.keys(recipes || {})
       .map((it) => ({
@@ -22,8 +22,8 @@ export const RecipesList: FC = () => {
   return (
     <List>
       {list.map(({ id, text }) => (
-        <StyledLink to={`/recipes/${id}`}>
-          <ListItem key={id} button>
+        <StyledLink to={`/recipes/${id}`} key={id}>
+          <ListItem button>
             <ListItemText>
               {text}
             </ListItemText>

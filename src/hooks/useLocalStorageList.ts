@@ -46,7 +46,7 @@ export const processKeys = <T>({
           [it]: ret,
         };
       },
-      { },
+      {},
     );
   }
   return list;
@@ -55,15 +55,12 @@ export const processKeys = <T>({
 export const processValue = <T>(
   lsKeys: ListValues<T>,
   defaultValue?: ListValues<T>,
-): ListValues<T> | undefined => {
-  const shouldNotReturnDefault = lsKeys && Array.isArray(lsKeys)
+): ListValues<T> | undefined => (lsKeys && (Array.isArray(lsKeys)
     ? lsKeys.length > 0
-    : true;
-  if (shouldNotReturnDefault) {
-    return lsKeys;
-  }
-  return defaultValue;
-};
+    : Object.keys(lsKeys).length > 0
+  )
+    ? lsKeys
+    : defaultValue || lsKeys);
 
 export function useLocalStorageList<T>(
   rawPattern: string | RegExp,
@@ -133,7 +130,16 @@ export function useLocalStorageList<T>(
           [`New Value: %c${JSON.stringify(lsKeys)}`, 'color: green; text-decoration: underline'],
         );
       }
-      setValue(processValue(lsKeys, !logText ? defaultValue : undefined));
+      const values = processValue(lsKeys, !logText ? defaultValue : undefined);
+      if (values && !Array.isArray(values)) {
+        Object.entries(values)
+          .forEach(([k, v]) => {
+            if (!localStorage.getItem(k)) {
+              localStorage.setItem(makeKey(k, rawPattern.toString()), JSON.stringify(v));
+            }
+          });
+      }
+      setValue(values);
     },
     [setValue, defaultValue, pattern, expand],
   );

@@ -19,9 +19,10 @@ import {
 } from '../hooks/useLocalStorage';
 import { stripKey } from '../hooks/config';
 
-export type ListContext<T> = {
+export type ListContext<T, K> = {
   keys: string[],
   values: ExpandedValues<T> | undefined,
+  extra: K | undefined,
 } & {
   addItem: (key: string, force?: boolean) => void,
   removeItem: (key: string, force?: boolean) => void,
@@ -30,9 +31,10 @@ export type ListContext<T> = {
   getKey: (key: string) => string,
 };
 
-export const makeContext = <T>() => createContext<ListContext<T>>({
+export const makeContext = <T, K>() => createContext<ListContext<T, K>>({
   keys: [],
   values: {},
+  extra: undefined,
   addItem: () => {},
   removeItem: () => {},
   updateItem: () => {},
@@ -40,14 +42,16 @@ export const makeContext = <T>() => createContext<ListContext<T>>({
   getKey: () => '',
 });
 
-export const makeProvider = <T>({
+export const makeProvider = <T, K>({
   name,
   defaultValue,
   context,
+  extra,
 }: {
   name: string,
   defaultValue?: ExpandedValues<T>,
-  context: Context<ListContext<T>>
+  context: Context<ListContext<T, K>>
+  extra?: (input: ExpandedValues<T>) => K,
 }) => {
   const Provider: FC = ({ children }) => {
     const { value, ...rest } = useLocalStorageList(
@@ -60,46 +64,62 @@ export const makeProvider = <T>({
       () => (value ? Object.keys(value) : []),
       [value],
     );
+    const extraValues: K | undefined = useMemo(
+      () => (value && extra
+        ? extra(value)
+        : undefined),
+      [value, extra],
+    );
     // eslint-disable-next-line react/destructuring-assignment
     return createElement(context.Provider, {
       value: {
         ...rest,
         keys,
         values: value,
+        extra: extraValues,
       },
     }, children);
   };
   return Provider;
 };
 
-export const makeUseContext = <T>({
+export const makeUseContext = <T, K>({
   context,
 }: {
-  context: Context<ListContext<T>>
+  context: Context<ListContext<T, K>>
 }) => () => useContext(context);
 
-export const makeUseList = <T>({
+export const makeUseList = <T, K>({
   useContext: uC,
 }: {
-  useContext: () => ListContext<T>
+  useContext: () => ListContext<T, K>
 }) => () => {
     const { keys } = uC();
     return keys;
   };
 
-export const makeUseValues = <T>({
+export const makeUseValues = <T, K>({
   useContext: uC,
 }: {
-  useContext: () => ListContext<T>
+  useContext: () => ListContext<T, K>
 }) => () => {
     const { values } = uC();
     return values;
   };
 
-export const makeUseControls = <T>({
+export const makeUseExtra = <T, K>({
   useContext: uC,
 }: {
-  useContext: () => ListContext<T>
+  useContext: () => ListContext<T, K>
+}) => () => {
+    const { extra } = uC();
+    return extra;
+  };
+
+export const makeUseControls = <T, K>({
+  useContext: uC,
+}: {
+  useContext: () => ListContext<T, K>
 }) => () => {
     const {
       addItem,
@@ -115,21 +135,21 @@ export const makeUseControls = <T>({
     };
   };
 
-export const makeUseKey = <T>({
+export const makeUseKey = <T, K>({
   useContext: uC,
 }: {
-  useContext: () => ListContext<T>
+  useContext: () => ListContext<T, K>
 }) => (key: string) => {
     const { getKey } = uC();
     return getKey(key);
   };
 
-export const makeUseItem = <T>({
+export const makeUseItem = <T, K>({
   useKey,
   useControls,
 }: {
   useKey: (key: string) => string
-  useControls: () => Omit<ListContext<T>, 'keys' | 'values' | 'getKey'>
+  useControls: () => Omit<ListContext<T, K>, 'keys' | 'values' | 'getKey' | 'extra'>
 }) => (key: string): [
     {value: T | undefined, key: string},
     {set: (input: T) => void, remove: () => void},
@@ -166,18 +186,22 @@ export const makeListComponent = <T>({
     return createElement(Fragment);
   };
 
-export const makeList = <T>(
+export const makeList = <T, K = {}>(
   name: string,
   defaultValue?: ExpandedValues<T>,
+  extra?: (input: ExpandedValues<T>) => K,
 ) => {
-  const context = makeContext<T>();
-  const provider = makeProvider<T>({ name, context, defaultValue });
-  const useContextFunc = makeUseContext<T>({ context });
-  const useList = makeUseList<T>({ useContext: useContextFunc });
-  const useValues = makeUseValues<T>({ useContext: useContextFunc });
-  const useControls = makeUseControls<T>({ useContext: useContextFunc });
-  const useKey = makeUseKey<T>({ useContext: useContextFunc });
-  const useItem = makeUseItem<T>({ useKey, useControls });
+  const context = makeContext<T, K>();
+  const provider = makeProvider<T, K>({
+    name, context, defaultValue, extra,
+  });
+  const useContextFunc = makeUseContext<T, K>({ context });
+  const useList = makeUseList<T, K>({ useContext: useContextFunc });
+  const useValues = makeUseValues<T, K>({ useContext: useContextFunc });
+  const useExtra = makeUseExtra<T, K>({ useContext: useContextFunc });
+  const useControls = makeUseControls<T, K>({ useContext: useContextFunc });
+  const useKey = makeUseKey<T, K>({ useContext: useContextFunc });
+  const useItem = makeUseItem<T, K>({ useKey, useControls });
   const List = makeListComponent<T>({ useList });
 
   return {
@@ -189,6 +213,7 @@ export const makeList = <T>(
     useControls,
     useKey,
     useItem,
+    useExtra,
     List,
   };
 };

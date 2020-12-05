@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Chip } from '@material-ui/core';
 import styled from 'styled-components';
-import { SymbolType, useSymbols } from '../state/recipes';
+import { SymbolType, useSymbols } from '../state/recipes-v2';
 import { StyledLink } from './styled';
 
 export const StyledContainer = styled.div`
@@ -47,5 +47,5 @@ export const SymbolsList: FC<{
 
 export default () => {
   const symbols = useSymbols();
-  return <SymbolsList symbols={symbols} />;
+  return symbols ? <SymbolsList symbols={symbols} /> : null;
 };
