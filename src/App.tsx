@@ -5,6 +5,7 @@ import { Container } from '@material-ui/core';
 
 import { NavBar } from './components/NavBar';
 import { Drawer, RouteChangeDrawerClose } from './components/Drawer';
+import CreateRecipe from './components/CreateRecipe';
 
 import { HomeScreen } from './screens/Home';
 import { RecipeScreen } from './screens/Recipe';
@@ -22,6 +23,7 @@ export const App: FC = () => (
         <Route exact path="/test" component={TestScreen} />
       </Switch>
     </Container>
+    <CreateRecipe />
   </Router>
 );
 

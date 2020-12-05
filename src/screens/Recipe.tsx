@@ -27,13 +27,14 @@ import {
 import { Title } from '../state/title';
 import { camelCaseToCapitalized } from '../utils/strings';
 import { SymbolsList } from '../components/SymbolsList';
+import { onMobile } from '../components/styled';
 
 export const StyledContainer = styled(Container)`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 1rem;
   padding: 1rem 0;
-  @media (max-width: 500px) {
+  ${onMobile} {
     grid-template-columns: 1fr;
   }
 `;

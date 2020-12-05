@@ -10,13 +10,14 @@ import styled from 'styled-components';
 import { Title } from '../state/title';
 import Symbols from '../components/SymbolsList';
 import { RecipesList } from '../components/RecipesList';
+import { onMobile } from '../components/styled';
 
 export const StyledContainer = styled(Container)`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 1rem;
   padding: 1rem 0;
-  @media (max-width: 500px) {
+  ${onMobile} {
     grid-template-columns: 1fr;
   }
 `;

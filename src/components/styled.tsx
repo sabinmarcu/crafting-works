@@ -7,4 +7,6 @@ export const StyledLink = styled(Link)`
   color: inherit;
 `;
 
+export const onMobile = '@media (max-width: 500px)';
+
 export default StyledLink;

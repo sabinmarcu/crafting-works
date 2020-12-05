@@ -219,7 +219,6 @@ export const useLocalStorageObject = (
   const updateField = useCallback(
     (path: string, val: any) => {
       const diffObj = updateObject(state?.value, path, val);
-      console.log(path, val, state?.value, diffObj);
       setValue({ value: diffObj, action: SetTypes.update });
     },
     [state, key, setValue],

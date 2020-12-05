@@ -32,6 +32,7 @@ type RecipesValuesType = {
 
 type RecipesFuncsType = {
   update: (path: string, value: any) => void;
+  addRecipe: (name: string) => void;
 };
 
 type RecipesContextType = RecipesValuesType & RecipesFuncsType;
@@ -41,6 +42,7 @@ const RecipesContext = createContext<RecipesContextType>({
   symbols: [],
   names: [],
   update: () => {},
+  addRecipe: () => {},
 });
 
 export const useRecipes = () => useContext(RecipesContext);
@@ -72,12 +74,17 @@ export const RecipeProviderV3: FC = ({ children }) => {
       .map((it) => ({ name: it, composite: recipeNames.includes(it) })),
     [allSymbols, recipeNames],
   );
+  const addRecipe = useCallback(
+    (name: string) => update(name, { input: {}, output: 0 }),
+    [update],
+  );
   return (
     <RecipesContext.Provider value={{
       recipes,
       symbols,
       names: recipeNames,
       update,
+      addRecipe,
     }}
     >
       {children}
