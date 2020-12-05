@@ -42,6 +42,15 @@ export const StyledTextField = styled(TextField)`
   margin: 0.5rem 0;
 `;
 
+const StyledCard = styled(Card)`
+  display: flex;
+  flex-flow: column nowrap;
+`;
+
+const StyledExpandCardContent = styled(CardContent)`
+  flex: 1;
+`;
+
 export const Input: FC<{
   name: string
 }> = ({
@@ -53,9 +62,9 @@ export const Input: FC<{
     [setValue],
   );
   return (
-    <TextField
+    <StyledTextField
       fullWidth
-      label={name}
+      label={camelCaseToCapitalized(name)}
       value={value}
       type="number"
       onChange={onChange}
@@ -70,7 +79,7 @@ export const Output: FC = () => {
     [setValue],
   );
   return (
-    <TextField
+    <StyledTextField
       fullWidth
       label="Output Number"
       value={value}
@@ -100,7 +109,10 @@ export const RecipeEditor: FC = () => {
     [symbols, allSymbols],
   );
   const deleteHandler = useCallback(
-    (symbol: string) => () => removeInput(symbol),
+    (symbol: string) => (e: Event) => {
+      e.preventDefault();
+      removeInput(symbol);
+    },
     [removeInput],
   );
   const [newSymbol, setNewSymbol] = useState<SymbolType & ComboBoxAddType | null>(null);
@@ -120,11 +132,11 @@ export const RecipeEditor: FC = () => {
     <>
       <Title title={`Recipe: ${camelCaseToCapitalized(name)}`} />
       <StyledContainer>
-        <Card>
+        <StyledCard>
           <CardHeader title="Symbols Used" />
-          <CardContent>
+          <StyledExpandCardContent style={{ flex: 1 }}>
             <SymbolsList symbols={symbols} onDelete={deleteHandler} />
-          </CardContent>
+          </StyledExpandCardContent>
           <CardContent>
             <Autocomplete
               value={newSymbol}
@@ -175,20 +187,21 @@ export const RecipeEditor: FC = () => {
               )}
             />
           </CardContent>
-        </Card>
-        <Card>
+        </StyledCard>
+        <StyledCard>
           <CardHeader title="Materials" />
-          <CardContent>
+          <StyledExpandCardContent>
             {Object.keys(recipe.input).sort().map((it) => (
               <Input
                 name={it}
                 key={it}
               />
             ))}
-            <br />
+          </StyledExpandCardContent>
+          <CardContent>
             <Output />
           </CardContent>
-        </Card>
+        </StyledCard>
       </StyledContainer>
     </>
   );

@@ -21,7 +21,7 @@ export const ClickableStyledChip = styled(StyledChip)`
 
 export const SymbolsList: FC<{
   symbols: SymbolType[],
-  onDelete?: (input: string) => () => void,
+  onDelete?: (input: string) => (e: Event) => void,
 }> = ({
   symbols,
   onDelete,

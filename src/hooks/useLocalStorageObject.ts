@@ -153,12 +153,9 @@ const updateObject = (obj: any, path: string, value: any): any => {
     split = path.length;
   }
   const [key, rest] = [path.substr(0, split), path.substr(split + 1)];
-  if (typeof obj[key] === 'undefined') {
-    return undefined;
-  }
   return {
     ...obj,
-    [key]: updateObject(obj[key], rest, value),
+    [key]: updateObject(obj[key] || {}, rest, value),
   };
 };
 
@@ -222,6 +219,7 @@ export const useLocalStorageObject = (
   const updateField = useCallback(
     (path: string, val: any) => {
       const diffObj = updateObject(state?.value, path, val);
+      console.log(path, val, state?.value, diffObj);
       setValue({ value: diffObj, action: SetTypes.update });
     },
     [state, key, setValue],

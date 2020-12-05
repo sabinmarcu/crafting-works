@@ -127,10 +127,7 @@ export const RecipeProvider: FC<{ name: string }> = ({ children, name }) => {
   );
   const addInput = useCallback(
     (n: string) => {
-      updateFunc('input', {
-        ...recipe.input,
-        [n]: 0,
-      });
+      updateFunc(['input', n].join('.'), 0);
     },
     [updateFunc, recipe],
   );
