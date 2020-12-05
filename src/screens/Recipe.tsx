@@ -51,9 +51,9 @@ export const RecipeScreen: FC<RouteComponentProps<{ name: string }>> = ({
   const symbols = useMemo<SymbolType[]>(
     () => inputs.map(({ symbol }) => ({
       name: symbol,
-      composite: false,
+      composite: allSymbols.find(({ name: n }) => symbol === n)?.composite || false,
     })),
-    [inputs],
+    [inputs, allSymbols],
   );
   const deleteHandler = useCallback(
     (symbol: string) => () => deleteInput(symbol),

@@ -51,6 +51,7 @@ export const Drawer: FC = () => {
       open={isOpen}
       onOpen={open}
       onClose={close}
+      anchor="right"
       classes={{ paper: 'styledPaper', root: 'styledRoot' }}
     >
       <DrawerAppBar>Symbols</DrawerAppBar>

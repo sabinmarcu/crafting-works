@@ -34,7 +34,7 @@ export const logGroup = (message: string, key: string, ...rest: any[]) => {
   groupEnd();
 };
 
-const makeMatcher = (pf?: string) => new RegExp(['^', _prefix, ...(pf ? [':', pf] : [])].join(''));
+const makeMatcher = (pf?: string) => new RegExp(['^', _prefix, ...(typeof pf !== 'undefined' ? [':', pf] : [])].join(''));
 export const makeKey = (key: string, pf?: string) => [_prefix, [pf, key].join('')].join(':');
 export const isKey = (key: string, pf?: string) => key.match(makeMatcher(pf));
 export const stripKey = (key: string, pf?: string) => key.replace(makeMatcher(pf), '');

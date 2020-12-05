@@ -9,12 +9,17 @@ import React, {
 } from 'react';
 import seedData from '../config/seed';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { usePrevious } from '../hooks/usePrevious';
 
 export type RecipeInputType = Record<string, number>;
-export type RecipeType = {
+export type RecipeSeedType = {
   input: RecipeInputType;
   output: number;
 };
+export type RecipeType = RecipeSeedType & {
+  name: string,
+};
+export type RecipesSeedMapType = Record<string, RecipeSeedType>;
 export type RecipesMapType = Record<string, RecipeType>;
 export type RecipesUpdateType = (name: string, recipe: RecipeType) => void;
 export type RecipesRemoveType = (name: string) => void;
@@ -43,10 +48,28 @@ export const RecipesContext = createContext<RecipesContextType>({
   remove: () => {},
 });
 export const useRecipes = () => useContext(RecipesContext);
+
+export const processSeedData = (data: RecipesSeedMapType): {
+  symbols: string[],
+  recipes: RecipesMapType
+} => {
+  const symbols: string[] = Object.keys(data);
+  const recipes: RecipesMapType = Object.entries(data)
+    .reduce((prev, [key, value]) => ({
+      ...prev,
+      [key]: {
+        ...value,
+        name: key,
+      },
+    }), {});
+  return {
+    symbols,
+    recipes,
+  };
+};
 export const RecipesProvider: FC = ({ children }) => {
   const [recipes, setRecipes] = useLocalStorage<RecipesMapType>(
-    'recipes',
-    seedData,
+    'recipes', processSeedData(seedData).recipes,
   );
   const symbols = useMemo<SymbolType[]>(
     () => (recipes
@@ -108,16 +131,18 @@ export const useSymbols = () => useRecipes().symbols;
 export const useRecipe = (name: string) => {
   const { recipes, update } = useRecipes();
   const recipe = useMemo(
-    () => recipes?.[name] ?? undefined,
+    () => {
+      console.log('recipe', name, recipes?.[name]);
+      return recipes?.[name] ?? undefined;
+    },
     [recipes, name],
   );
   const [inputs, setInputs] = useState<RecipeInputEditType[]>([]);
   const [output, setOutput] = useState<number>(0);
-  const [initialized, setInitialized] = useState<boolean>(false);
+  const prevName = usePrevious(name);
   useEffect(
     () => {
-      if (!initialized && recipe) {
-        setInitialized(true);
+      if (recipe && inputs.length === 0) {
         setOutput(recipe.output);
         setInputs(Object.entries(recipe.input)
           .map(([key, value]) => ({
@@ -126,19 +151,24 @@ export const useRecipe = (name: string) => {
           })));
       }
     },
-    [recipe, setInitialized, setOutput, setInputs],
+    [recipe, inputs, setOutput, setInputs],
   );
   useEffect(
     () => {
+      if (!(recipe && recipe.name === name)) {
+        return undefined;
+      }
       update(name, {
+        name,
         input: inputs.reduce((prev, { symbol, amount }) => ({
           ...prev,
           [symbol]: amount,
         }), {}),
         output,
       });
+      return undefined;
     },
-    [name, inputs, output, update],
+    [name, recipe?.name, prevName, inputs, output, update],
   );
   const updateInput = useCallback(
     (
