@@ -1,219 +1,70 @@
 import React, {
-  FC,
-  ChangeEvent,
-  useCallback,
-  useMemo,
-  useState,
-  useEffect,
+  FC, useCallback, useState,
 } from 'react';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Container,
-  TextField,
-} from '@material-ui/core';
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import styled from 'styled-components';
 import { RouteComponentProps } from 'react-router';
 import {
-  useRecipe,
-  useInput,
-  useOutput,
-  useRecipes,
+  AppBar, Container, Tab, Tabs,
+} from '@material-ui/core';
+import styled from 'styled-components';
+import {
   RecipeProvider,
-  SymbolType,
 } from '../state/recipes-v3';
-import { Title } from '../state/title';
-import { camelCaseToCapitalized } from '../utils/strings';
-import { SymbolsList } from '../components/SymbolsList';
-import { onMobile } from '../components/styled';
 
-export const StyledContainer = styled(Container)`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 1rem;
+import { useIsMobile } from '../hooks/useIsMobile';
+import { RecipeEditor } from '../components/RecipeEditor';
+import { RecipeViewer } from '../components/RecipeViewer';
+
+const StyledContainer = styled(Container)`
   padding: 1rem 0;
-  ${onMobile} {
-    grid-template-columns: 1fr;
-  }
 `;
 
-export const StyledTextField = styled(TextField)`
-  margin: 0.5rem 0;
-`;
+export const TabPanel: FC<{ isOpen: boolean }> = ({ children, isOpen }) => (
+  <div
+    hidden={!isOpen}
+  >
+    {isOpen && children}
+  </div>
+);
 
-const StyledCard = styled(Card)`
-  display: flex;
-  flex-flow: column nowrap;
-`;
-
-const StyledExpandCardContent = styled(CardContent)`
-  flex: 1;
-`;
-
-export const Input: FC<{
-  name: string
-}> = ({
-  name,
-}) => {
-  const [value, setValue] = useInput(name);
-  const onChange = useCallback(
-    ({ target: { value: v } }: ChangeEvent<HTMLInputElement>) => setValue(v),
-    [setValue],
-  );
-  return (
-    <StyledTextField
-      fullWidth
-      label={camelCaseToCapitalized(name)}
-      value={value}
-      type="number"
-      onChange={onChange}
-    />
-  );
-};
-
-export const Output: FC = () => {
-  const [value, setValue] = useOutput();
-  const onChange = useCallback(
-    ({ target: { value: v } }: ChangeEvent<HTMLInputElement>) => setValue(v),
-    [setValue],
-  );
-  return (
-    <StyledTextField
-      fullWidth
-      label="Output Number"
-      value={value}
-      type="number"
-      onChange={onChange}
-    />
-  );
-};
-
-type ComboBoxAddType = {inputValue?: string};
-const filter = createFilterOptions<SymbolType & ComboBoxAddType>();
-
-export const RecipeEditor: FC = () => {
-  const { symbols: allSymbols } = useRecipes();
-  const {
-    name,
-    symbols,
-    recipe,
-    addInput,
-    removeInput,
-  } = useRecipe();
-  const comboSymbols = useMemo(
-    () => {
-      const usedSymbols = symbols.map(({ name: n }) => n);
-      return allSymbols.filter(({ name: n }) => !usedSymbols.includes(n));
-    },
-    [symbols, allSymbols],
-  );
-  const deleteHandler = useCallback(
-    (symbol: string) => (e: Event) => {
-      e.preventDefault();
-      removeInput(symbol);
-    },
-    [removeInput],
-  );
-  const [newSymbol, setNewSymbol] = useState<SymbolType & ComboBoxAddType | null>(null);
-  useEffect(
-    () => {
-      if (newSymbol) {
-        addInput(newSymbol.name);
-        setNewSymbol(null);
-      }
-    },
-    [newSymbol, addInput, setNewSymbol],
-  );
-  if (!recipe) {
-    return null;
-  }
-  return (
-    <>
-      <Title title={`Recipe: ${camelCaseToCapitalized(name)}`} />
-      <StyledContainer>
-        <StyledCard>
-          <CardHeader title="Symbols Used" />
-          <StyledExpandCardContent style={{ flex: 1 }}>
-            <SymbolsList symbols={symbols} onDelete={deleteHandler} />
-          </StyledExpandCardContent>
-          <CardContent>
-            <Autocomplete
-              value={newSymbol}
-              onChange={(_, newValue) => {
-                if (typeof newValue === 'string') {
-                  setNewSymbol({ name: newValue, composite: false });
-                } else if (newValue && newValue.inputValue) {
-                  setNewSymbol({ name: newValue.inputValue, composite: false });
-                } else if (newValue) {
-                  setNewSymbol(newValue);
-                } else {
-                  setNewSymbol(null);
-                }
-              }}
-              filterOptions={(options, params) => {
-                const filtered = filter(options, params);
-
-                // Suggest the creation of a new value
-                if (params.inputValue !== '') {
-                  filtered.push({
-                    inputValue: params.inputValue,
-                    name: `Add "${params.inputValue}"`,
-                  });
-                }
-
-                return filtered;
-              }}
-              selectOnFocus
-              clearOnBlur
-              handleHomeEndKeys
-              options={comboSymbols as (SymbolType & ComboBoxAddType)[]}
-              getOptionLabel={(option) => {
-                if (typeof option === 'string') {
-                  return option;
-                }
-                if (option && option.inputValue) {
-                  return option.inputValue;
-                }
-                return option.name;
-              }}
-              renderOption={({ name: n }) => camelCaseToCapitalized(n)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  label="Add Symbol"
-                />
-              )}
-            />
-          </CardContent>
-        </StyledCard>
-        <StyledCard>
-          <CardHeader title="Materials" />
-          <StyledExpandCardContent>
-            {Object.keys(recipe.input).sort().map((it) => (
-              <Input
-                name={it}
-                key={it}
-              />
-            ))}
-          </StyledExpandCardContent>
-          <CardContent>
-            <Output />
-          </CardContent>
-        </StyledCard>
-      </StyledContainer>
-    </>
-  );
-};
+const tabs = [
+  { title: 'Editor', Component: RecipeEditor },
+  { title: 'Viewer', Component: RecipeViewer },
+];
 
 export const RecipeScreen: FC<RouteComponentProps<{ name: string }>> = ({
   match: {
     params: { name },
   },
-}) => (
-  <RecipeProvider name={name}>
-    <RecipeEditor />
-  </RecipeProvider>
-);
+}) => {
+  const isMobile = useIsMobile();
+  const [tab, setTab] = useState<number>(0);
+  const onChange = useCallback(
+    (event, newValue) => setTab(newValue),
+    [setTab],
+  );
+  return (
+    <RecipeProvider name={name}>
+      <StyledContainer>
+        <AppBar position="static">
+          <Tabs
+            value={tab}
+            onChange={onChange}
+            variant={isMobile ? 'fullWidth' : undefined}
+          >
+            {tabs.map(({ title }) => <Tab label={title} key={title} />)}
+          </Tabs>
+        </AppBar>
+        {tabs.map(({ title, Component }, idx) => (
+          <TabPanel
+            isOpen={tab === idx}
+            key={title}
+          >
+            <Component />
+          </TabPanel>
+        ))}
+      </StyledContainer>
+    </RecipeProvider>
+  );
+};
+
+export default RecipeScreen;

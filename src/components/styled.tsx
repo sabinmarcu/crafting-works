@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { mobileBreakpoint } from '../config/constants';
 
 export const StyledLink = styled(Link)`
   text-decoration: none;
@@ -7,6 +8,6 @@ export const StyledLink = styled(Link)`
   color: inherit;
 `;
 
-export const onMobile = '@media (max-width: 500px)';
+export const onMobile = `@media ${mobileBreakpoint}`;
 
 export default StyledLink;

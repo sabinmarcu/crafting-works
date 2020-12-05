@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import { Chip } from '@material-ui/core';
 import styled from 'styled-components';
-import { SymbolType, useSymbols } from '../state/recipes-v3';
+import { useSymbols } from '../state/recipes-v3';
 import { StyledLink } from './styled';
+import { SymbolType } from '../utils/types';
 
 export const StyledContainer = styled.div`
   display: flex;

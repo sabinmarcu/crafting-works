@@ -7,35 +7,9 @@ import {
 } from 'react';
 
 import seedData from '../config/seed';
+import { reduce } from '../utils/calculate';
 import { useLocalStorageObject } from '../hooks/useLocalStorageObject';
-
-export type RecipeInputType = Record<string, number>;
-export type RecipeType = {
-  input: RecipeInputType;
-  output: number;
-};
-export type RecipesType = Record<string, RecipeType>;
-export type SymbolType = {
-  name: string;
-  composite?: boolean;
-};
-export type RecipesExtraType = {
-  recipes: RecipesType | undefined;
-  symbols: SymbolType[];
-};
-
-type RecipesValuesType = {
-  recipes: RecipesType,
-  symbols: SymbolType[],
-  names: string[],
-};
-
-type RecipesFuncsType = {
-  update: (path: string, value: any) => void;
-  addRecipe: (name: string) => void;
-};
-
-type RecipesContextType = RecipesValuesType & RecipesFuncsType;
+import { RecipeContextType, RecipesContextType, RecipesType } from '../utils/types';
 
 const RecipesContext = createContext<RecipesContextType>({
   recipes: {},
@@ -95,19 +69,12 @@ export const RecipeProviderV3: FC = ({ children }) => {
 export const useSymbols = () => useRecipes().symbols;
 export const useNames = () => useRecipes().names;
 
-type RecipeContextType = {
-  recipe: RecipeType,
-  symbols: SymbolType[],
-  name: string,
-  update: (path: string, value: any) => void,
-  addInput: (name: string) => void,
-  removeInput: (name: string) => void,
-};
 export const RecipeContext = createContext<RecipeContextType>({
   recipe: {
     input: {},
     output: -1,
   },
+  resources: {},
   symbols: [],
   name: 'unknown',
   update: () => {},
@@ -149,11 +116,16 @@ export const RecipeProvider: FC<{ name: string }> = ({ children, name }) => {
     },
     [updateFunc, recipe],
   );
+  const resources = useMemo(
+    () => (store.recipes ? reduce(recipe, store.recipes) : {}),
+    [recipe, store],
+  );
   return (
     <RecipeContext.Provider value={{
       recipe,
       symbols,
       name,
+      resources,
       update: updateFunc,
       addInput,
       removeInput,
@@ -165,6 +137,7 @@ export const RecipeProvider: FC<{ name: string }> = ({ children, name }) => {
 };
 
 export const useRecipe = () => useContext(RecipeContext);
+export const useResources = () => useContext(RecipeContext).resources;
 export const useInput = (name: string): [number, (val: string) => void] => {
   const { recipe, update } = useRecipe();
   const value = useMemo(
