@@ -142,7 +142,7 @@ export const useRecipe = (name: string) => {
   const prevName = usePrevious(name);
   useEffect(
     () => {
-      if (recipe && inputs.length === 0) {
+      if (recipe && (inputs.length === 0 || prevName !== name)) {
         setOutput(recipe.output);
         setInputs(Object.entries(recipe.input)
           .map(([key, value]) => ({
@@ -151,7 +151,7 @@ export const useRecipe = (name: string) => {
           })));
       }
     },
-    [recipe, inputs, setOutput, setInputs],
+    [name, prevName, recipe, inputs, setOutput, setInputs],
   );
   useEffect(
     () => {

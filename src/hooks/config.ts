@@ -39,6 +39,9 @@ export const makeKey = (key: string, pf?: string) => [_prefix, [pf, key].join(''
 export const isKey = (key: string, pf?: string) => key.match(makeMatcher(pf));
 export const stripKey = (key: string, pf?: string) => key.replace(makeMatcher(pf), '');
 
+export const makeType = (type: string) => `###${type}###`;
+export const isType = (type: string) => type.match(/^###([^#]+)###$/);
+
 export const logState = (message: string, key: string, value: any) => {
   logGroup(
     message,

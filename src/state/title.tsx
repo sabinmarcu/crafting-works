@@ -44,10 +44,13 @@ export const TitleProvider: FC = ({ children }) => {
 };
 
 export const Title: FC<{
-  title: string;
+  title?: string;
   isRoot?: boolean;
-}> = ({ title, isRoot }) => {
+}> = ({ title, isRoot, children }) => {
   const { setTitle } = useTitle();
-  useEffect(() => setTitle(title, isRoot), [setTitle, title, isRoot]);
+  useEffect(() => setTitle(title
+     || (typeof children === 'string' ? children : undefined)
+     || 'unknown',
+  isRoot), [setTitle, title, isRoot]);
   return <></>;
 };

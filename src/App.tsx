@@ -8,6 +8,7 @@ import { Drawer, RouteChangeDrawerClose } from './components/Drawer';
 
 import { HomeScreen } from './screens/Home';
 import { RecipeScreen } from './screens/Recipe';
+import { TestScreen } from './screens/Test';
 
 export const App: FC = () => (
   <Router>
@@ -18,6 +19,7 @@ export const App: FC = () => (
       <Switch>
         <Route exact path="/" component={HomeScreen} />
         <Route exact path="/recipes/:name" component={RecipeScreen} />
+        <Route exact path="/test" component={TestScreen} />
       </Switch>
     </Container>
   </Router>

@@ -5,15 +5,17 @@ import {
 import {
   logGroup, logState, makeKey, isKey,
 } from './config';
+import { usePrevious } from './usePrevious';
 
 export const useLocalStorage = <T>(
   key: string,
   defaultValue?: T,
 ): [T | undefined, Dispatch<SetStateAction<T | undefined>>] => {
+  const prevKey = usePrevious(key);
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [value, setValue] = useState<T>();
   useEffect(() => {
-    if (!initialLoad) {
+    if (!initialLoad || prevKey !== key) {
       setInitialLoad(true);
       const val = localStorage.getItem(makeKey(key));
       if (val) {
