@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Chip } from '@material-ui/core';
 import styled from 'styled-components';
-import { SymbolType, useSymbols } from '../state/recipes-v2';
+import { SymbolType, useSymbols } from '../state/recipes-v3';
 import { StyledLink } from './styled';
 
 export const StyledContainer = styled.div`

@@ -1,12 +1,15 @@
 import {
-  useState, useEffect, Dispatch, SetStateAction, useCallback,
+  useState,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+  useCallback,
 } from 'react';
 
 import {
-  // logGroup,
   logState,
   makeKey,
-  // isKey,
+  isKey,
   makeType,
   isType,
 } from './config';
@@ -54,7 +57,7 @@ const readPairs = (prefix: string, type = 'object'): any => {
   const res = keys.reduce(
     (prev, { key, value }) => ({
       ...prev,
-      [key]: value,
+      [key]: /^[0-9]+$/.test(value) ? parseInt(value, 10) : value,
     }), {},
   );
   switch (type) {
@@ -73,8 +76,8 @@ const readPairs = (prefix: string, type = 'object'): any => {
 };
 
 enum DiffActions {
-  set,
   remove,
+  set,
 }
 type DiffPair = {
   key: string,
@@ -104,9 +107,27 @@ const diff = (orig: any, target: any, prefix?: string): DiffPair[] => {
       [] as PairType[],
     ).map((it) => ({ ...it, action: DiffActions.set }));
   const toChange = origKeys.filter((it) => targetKeys.includes(it))
-    .filter((it) => typeof orig[it] !== 'object')
     .filter((it) => orig[it] !== target[it])
-    .map((it) => ({ key: [prefix, it].join(':'), value: target[it], action: DiffActions.set }));
+    .reduce((prev, it) => [
+      ...prev,
+      ...(typeof target[it] === 'object'
+        ? [
+          {
+            key: [prefix, it].join(':'),
+            value: (Array.isArray(target[it])
+              ? makeType('array')
+              : makeType('object')),
+            action: DiffActions.set,
+          },
+          ...makePairs(target[it], [prefix, it].join(':'))
+            .map((i) => ({ ...i, action: DiffActions.set })),
+        ]
+        : [{
+          key: [prefix, it].join(':'),
+          value: target[it],
+          action: DiffActions.set,
+        }]),
+    ], [] as DiffPair[]) as DiffPair[];
   return [
     ...toRemove,
     ...toAdd,
@@ -123,22 +144,56 @@ const diff = (orig: any, target: any, prefix?: string): DiffPair[] => {
   ].filter(Boolean);
 };
 
+const updateObject = (obj: any, path: string, value: any): any => {
+  if (path.length === 0) {
+    return /^[0-9]+$/.test(value) ? parseInt(value, 10) : value;
+  }
+  let split = path.indexOf('.');
+  if (split === -1) {
+    split = path.length;
+  }
+  const [key, rest] = [path.substr(0, split), path.substr(split + 1)];
+  if (typeof obj[key] === 'undefined') {
+    return undefined;
+  }
+  return {
+    ...obj,
+    [key]: updateObject(obj[key], rest, value),
+  };
+};
+
+enum SetTypes {
+  initial,
+  update,
+  network,
+}
+
+type ValueType = {
+  action: SetTypes,
+  value: any,
+};
+
 export const useLocalStorageObject = (
   key: string,
   defaultValue?: any,
-): [any, Dispatch<SetStateAction<any>>] => {
+): [
+    any,
+    Dispatch<SetStateAction<any>>,
+    (path: string, value: any
+    ) => void,
+  ] => {
   const prevKey = usePrevious(key);
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
-  const [value, setValue] = useState<any>();
+  const [state, setValue] = useState<ValueType>();
   useEffect(() => {
     if (!initialLoad || prevKey !== key) {
       setInitialLoad(true);
       const realKey = makeKey(key);
       const val = localStorage.getItem(realKey);
       if (val) {
-        setValue(readPairs(realKey));
+        setValue({ value: readPairs(realKey), action: SetTypes.initial });
       } else {
-        setValue(defaultValue);
+        setValue({ value: defaultValue, action: SetTypes.initial });
         localStorage.setItem(realKey, makeType('object'));
         if (localStorage.getItem(realKey)) {
           makePairs(defaultValue, realKey)
@@ -149,62 +204,63 @@ export const useLocalStorageObject = (
   }, [initialLoad, key, defaultValue]);
   const diffUpdate = useCallback(
     (input: any) => {
+      if (state?.action !== SetTypes.update) {
+        return;
+      }
       const realKey = makeKey(key);
       const diffs = diff(readPairs(realKey), input, realKey);
       if (diffs) {
-        logState('⚙ LocalStorageObject Set', key, value);
+        logState('⚙ LocalStorageObject Set', realKey, state?.value);
         diffs
           .forEach(({ key: k, value: v, action }) => (action === DiffActions.remove
             ? localStorage.removeItem(k)
             : localStorage.setItem(k, v)));
       }
     },
-    [value, setValue, key],
+    [state, key],
+  );
+  const updateField = useCallback(
+    (path: string, val: any) => {
+      const diffObj = updateObject(state?.value, path, val);
+      setValue({ value: diffObj, action: SetTypes.update });
+    },
+    [state, key, setValue],
   );
   useEffect(() => {
     if (!initialLoad) {
       return undefined;
     }
-    if (!value) {
-      logState('⚙ LocalStorageObject Remove', key, value);
+    if (!state?.value) {
+      logState('⚙ LocalStorageObject Remove', key, state?.value);
+      diffUpdate({});
       localStorage.removeItem(makeKey(key));
     }
-    diffUpdate(value);
+    diffUpdate(state?.value);
     return undefined;
-  }, [key, value, initialLoad, diffUpdate]);
-  // useEffect(() => {
-  //   const handler = ({
-  //     storageArea,
-  //     key: k,
-  //     oldValue,
-  //     newValue,
-  //   }: StorageEvent) => {
-  //     if (!k) {
-  //       return;
-  //     }
-  //     const isValidKey = isKey(k);
-  //     const isLocalStorage = storageArea === localStorage;
-  //     const isRightKey = k === makeKey(key);
-  //     if (!(isLocalStorage && isValidKey && isRightKey)) {
-  //       return;
-  //     }
-  //     try {
-  //       const [ov, nv] = [oldValue!, newValue!];
-  //       logGroup(
-  //         '⚙ LocalStorageObject Event',
-  //         key,
-  //         [`Old Value: %c${ov}`, 'color: red; text-decoration: underline'],
-  //         [`New Value: %c${nv}`, 'color: green; text-decoration: underline'],
-  //       );
-  //       setValue(nv);
-  //     } catch (e) {
-  //       logState('❌ Could not parse LS data from Event', key, newValue);
-  //     }
-  //   };
-  //   window.addEventListener('storage', handler);
-  //   return () => window.removeEventListener('storage', handler);
-  // }, [setValue, key]);
-  return [value, setValue];
+  }, [key, state, initialLoad, diffUpdate]);
+  useEffect(() => {
+    const handler = ({
+      storageArea,
+      key: k,
+    }: StorageEvent) => {
+      if (!k) {
+        return;
+      }
+      const isValidKey = isKey(k);
+      const isLocalStorage = storageArea === localStorage;
+      if (!(isLocalStorage && isValidKey)) {
+        return;
+      }
+      setValue({ value: readPairs(makeKey(key)), action: SetTypes.network });
+    };
+    window.addEventListener('storage', handler);
+    return () => window.removeEventListener('storage', handler);
+  }, [setValue, key]);
+  const update = useCallback(
+    (input: any) => setValue({ value: input, action: SetTypes.update }),
+    [setValue],
+  );
+  return [state?.value, update, updateField];
 };
 
 export default useLocalStorageObject;
