@@ -6,7 +6,7 @@ import React, {
   useContext,
   useEffect,
 } from 'react';
-import { usePreventScroll } from './scroll';
+import { usePreventScroll } from '../hooks/scroll';
 
 type DrawerContextType = {
   isOpen: boolean;
