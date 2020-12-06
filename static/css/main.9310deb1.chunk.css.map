@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://src/styles.css"],"names":[],"mappings":"AAAA,gBAGE,QAAS,CACT,SAAU,CACV,iBAAkB,CAClB,oBACF,CAEA,EACE,qBACF","file":"main.9310deb1.chunk.css","sourcesContent":["body,\nhtml,\n#root {\n  margin: 0;\n  padding: 0;\n  overflow-x: hidden;\n  font-family: \"Roboto\";\n}\n\n* {\n  box-sizing: border-box;\n}\n"]}

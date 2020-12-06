@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "https://sabinmarcu.github.io/minecraft-calculator/static/css/main.9310deb1.chunk.css",
-    "main.js": "https://sabinmarcu.github.io/minecraft-calculator/static/js/main.c548e9c4.chunk.js",
-    "main.js.map": "https://sabinmarcu.github.io/minecraft-calculator/static/js/main.c548e9c4.chunk.js.map",
+    "main.css": "https://sabinmarcu.github.io/minecraft-calculator/static/css/main.cf1b5c1e.chunk.css",
+    "main.js": "https://sabinmarcu.github.io/minecraft-calculator/static/js/main.112a852e.chunk.js",
+    "main.js.map": "https://sabinmarcu.github.io/minecraft-calculator/static/js/main.112a852e.chunk.js.map",
     "runtime-main.js": "https://sabinmarcu.github.io/minecraft-calculator/static/js/runtime-main.c845af92.js",
     "runtime-main.js.map": "https://sabinmarcu.github.io/minecraft-calculator/static/js/runtime-main.c845af92.js.map",
     "static/css/2.768ee29e.chunk.css": "https://sabinmarcu.github.io/minecraft-calculator/static/css/2.768ee29e.chunk.css",
@@ -10,7 +10,7 @@
     "static/js/2.882359c0.chunk.js.map": "https://sabinmarcu.github.io/minecraft-calculator/static/js/2.882359c0.chunk.js.map",
     "index.html": "https://sabinmarcu.github.io/minecraft-calculator/index.html",
     "static/css/2.768ee29e.chunk.css.map": "https://sabinmarcu.github.io/minecraft-calculator/static/css/2.768ee29e.chunk.css.map",
-    "static/css/main.9310deb1.chunk.css.map": "https://sabinmarcu.github.io/minecraft-calculator/static/css/main.9310deb1.chunk.css.map",
+    "static/css/main.cf1b5c1e.chunk.css.map": "https://sabinmarcu.github.io/minecraft-calculator/static/css/main.cf1b5c1e.chunk.css.map",
     "static/js/2.882359c0.chunk.js.LICENSE.txt": "https://sabinmarcu.github.io/minecraft-calculator/static/js/2.882359c0.chunk.js.LICENSE.txt",
     "static/media/index.css": "https://sabinmarcu.github.io/minecraft-calculator/static/media/roboto-latin-900italic.cb5ad999.woff2"
   },
@@ -18,7 +18,7 @@
     "static/js/runtime-main.c845af92.js",
     "static/css/2.768ee29e.chunk.css",
     "static/js/2.882359c0.chunk.js",
-    "static/css/main.9310deb1.chunk.css",
-    "static/js/main.c548e9c4.chunk.js"
+    "static/css/main.cf1b5c1e.chunk.css",
+    "static/js/main.112a852e.chunk.js"
   ]
 }
