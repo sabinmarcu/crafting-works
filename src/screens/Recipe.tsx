@@ -46,7 +46,6 @@ export const RouteOnEmpty: FC = () => {
   );
   useEffect(
     () => {
-      console.log(hasLoaded, recipe);
       if (hasLoaded && !recipe) {
         history.push('/not-found');
       }

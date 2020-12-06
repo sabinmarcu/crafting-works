@@ -4,7 +4,9 @@ import React, {
   useCallback,
   createContext,
   useContext,
+  useEffect,
 } from 'react';
+import { usePreventScroll } from './scroll';
 
 type DrawerContextType = {
   isOpen: boolean;
@@ -26,6 +28,17 @@ export const DrawerProvider: FC = ({ children }) => {
   const open = useCallback(() => setIsOpen(true), [setIsOpen]);
   const close = useCallback(() => setIsOpen(false), [setIsOpen]);
   const toggle = useCallback(() => setIsOpen((t) => !t), [setIsOpen]);
+  const scrollPrevent = usePreventScroll();
+  useEffect(
+    () => {
+      if (isOpen) {
+        scrollPrevent.open();
+      } else {
+        scrollPrevent.close();
+      }
+    },
+    [isOpen, scrollPrevent],
+  );
   return (
     <DrawerContext.Provider
       value={{
