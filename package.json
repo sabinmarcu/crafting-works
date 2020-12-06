@@ -54,7 +54,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "feat": "gh issue create --label feat --project Backlog --assignee sabinmarcu"
+    "feat": "gh issue create --label feat --project Backlog --assignee sabinmarcu",
+    "bug": "gh issue create --label bug --project Backlog --assignee sabinmarcu",
+    "chore": "gh issue create --label chore --project Backlog --assignee sabinmarcu"
   },
   "browserslist": [
     ">0.2%",
