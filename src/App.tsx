@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router';
 import { Container, withTheme } from '@material-ui/core';
 import styled from 'styled-components';
 
+import { use100vh } from 'react-div-100vh';
 import { Redirect } from './components/Redirect';
 import { NavBar } from './components/NavBar';
 import { Drawer, RouteChangeDrawerClose } from './components/Drawer';
@@ -14,14 +15,22 @@ import { RecipeScreen, baseRoute as recipeRoute } from './screens/Recipe';
 import { TestScreen } from './screens/Test';
 import { baseURL } from './config/constants';
 
-const StyledContainer = withTheme(
+const StyledContainerRaw = withTheme(
   styled(Container)`
     background: ${({ theme: { palette: { background: { default: background } } } }) => background};
     width: 100vw !important;
-    min-height: 100vh;
     max-width: initial !important;
   `,
 );
+
+const StyledContainer: FC = ({ children }) => {
+  const height = use100vh();
+  return (
+    <StyledContainerRaw style={{ minHeight: height }}>
+      {children}
+    </StyledContainerRaw>
+  );
+};
 
 export const App: FC = () => (
   <Router basename={baseURL}>

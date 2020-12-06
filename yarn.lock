@@ -13017,6 +13017,15 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
+"react-div-100vh@npm:^0.5.6":
+  version: 0.5.6
+  resolution: "react-div-100vh@npm:0.5.6"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 9b30d309de8e42edc8f16a60d7f40c127e217cdf944a67fc56c343eee525f332f7cfb073ea57a00425b5ad77a5efaec39a89fd52c6bcb5185704897ab923e813
+  languageName: node
+  linkType: hard
+
 "react-dom@npm:^17.0.1":
   version: 17.0.1
   resolution: "react-dom@npm:17.0.1"
@@ -13336,6 +13345,7 @@ react-scripts@next:
     prettier-airbnb-config: ^1.0.0
     react: ^17.0.1
     react-d3-tree: ^1.16.1
+    react-div-100vh: ^0.5.6
     react-dom: ^17.0.1
     react-is: ^17.0.1
     react-measure: ^2.5.2
