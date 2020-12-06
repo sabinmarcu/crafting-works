@@ -6,18 +6,19 @@ import React, {
 import Measure, { BoundingRect } from 'react-measure';
 import styled from 'styled-components';
 
+const padding = 25;
 export const FabWrapper = styled.div<{
   horizontal?: 'left' | 'right',
   vertical?: 'top' | 'bottom',
 }>`
   position: fixed;
   ${({ vertical }) => (vertical && vertical === 'top'
-    ? 'top: 25px;'
-    : 'bottom: 25px;'
+    ? `top: ${padding}px;`
+    : `bottom: ${padding}px;`
   )}
   ${({ horizontal }) => (horizontal && horizontal === 'left'
-    ? 'left: calc(25px + env(safe-area-inset-left));'
-    : 'right: calc(25px + env(safe-area-inset-right));'
+    ? `left: calc(${padding}px + env(safe-area-inset-left));`
+    : `right: calc(${padding}px + env(safe-area-inset-right));`
   )}
 `;
 
@@ -57,8 +58,8 @@ export const BottomFab: FC<{
       </Measure>
       <Spacer style={{
         height: size
-          ? size.height + 50
-          : 50,
+          ? size.height + padding
+          : padding,
       }}
       />
     </>
