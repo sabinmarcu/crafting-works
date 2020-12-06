@@ -18,6 +18,7 @@ const RecipesContext = createContext<RecipesContextType>({
   symbols: [],
   names: [],
   update: () => {},
+  import: () => {},
   addRecipe: () => {},
   reset: () => {},
 });
@@ -54,6 +55,15 @@ export const RecipeProviderV3: FC = ({ children }) => {
     (name: string) => update(name, { input: {}, output: 0 }),
     [update],
   );
+  const importFunc = useCallback(
+    (imports: RecipesType) => {
+      setRecipes({
+        ...recipes,
+        ...imports,
+      });
+    },
+    [recipes, setRecipes],
+  );
   const reset = useCallback(
     () => setRecipes({}),
     [setRecipes],
@@ -65,6 +75,7 @@ export const RecipeProviderV3: FC = ({ children }) => {
       names: recipeNames,
       update,
       reset,
+      import: importFunc,
       addRecipe,
     }}
     >
