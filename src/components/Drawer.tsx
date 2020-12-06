@@ -14,11 +14,11 @@ import CloseIcon from '@material-ui/icons/Close';
 import styled from 'styled-components';
 
 import { useHistory } from 'react-router';
-import { TabContext, TabPanel } from '@material-ui/lab';
+import { TabContext } from '@material-ui/lab';
 import { useDrawer } from '../state/drawer';
 import { RecipesList } from './RecipesList';
 import Symbols from './SymbolsList';
-import { onMobile, StyledTabs } from './styled';
+import { onMobile, StyledTabPanel as TabPanel, StyledTabs } from './styled';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { BottomFab } from './BottomFab';
 import { useLocalStorage } from '../hooks/useLocalStorage';
@@ -58,11 +58,6 @@ const StyledToolbarContainer = styled(Container)`
   justify-content: space-between;
 `;
 
-const StyledTabPanel = styled(TabPanel)`
-  padding: 0 !important;
-  ${drawerStyle}
-`;
-
 const DrawerAppBar: FC = ({ children }) => (
   <StyledAppBar>
     <Toolbar>
@@ -84,6 +79,10 @@ export const DrawerInner = styled.article`
   flex: 1;
   overflow: hidden;
   overflow-y: auto;
+`;
+
+export const StyledTabPanel = styled(TabPanel)`
+  ${drawerStyle}
 `;
 
 export const RecipesView: FC = () => (

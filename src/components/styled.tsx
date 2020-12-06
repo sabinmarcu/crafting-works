@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import { FC, ReactElement } from 'react';
 import { use100vh } from 'react-div-100vh';
+import { TabPanel } from '@material-ui/lab';
 import { mobileBreakpoint } from '../config/constants';
 import { useIsMobile } from '../hooks/useIsMobile';
 
@@ -44,6 +45,10 @@ export const StyledTabs = withTheme(
     }
   `,
 );
+
+export const StyledTabPanel = styled(TabPanel)`
+  padding: 0 !important;
+`;
 
 export const StyledLink = styled(Link)`
   text-decoration: none;
