@@ -17,16 +17,35 @@ import {
   Modal,
   Button,
   IconButton,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@material-ui/core';
+
 import CloseIcon from '@material-ui/icons/Close';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 import styled from 'styled-components';
+
 import Tree from 'react-d3-tree';
 import Measure, { BoundingRect } from 'react-measure';
+
 import { RecipeAST } from '../utils/types';
-import { useAST, useRecipe, useResources } from '../state/recipes-v3';
 import {
-  ModalContainer, ModalContent, ModalWrapper, onMobile, RightCardActions,
+  useAST,
+  useRecipe,
+  useResources,
+  useSteps,
+} from '../state/recipes-v3';
+
+import {
+  ModalContainer,
+  ModalContent,
+  ModalWrapper,
+  onMobile,
+  RightCardActions,
 } from './styled';
+
 import { camelCaseToCapitalized } from '../utils/strings';
 import { Title } from '../state/title';
 
@@ -265,6 +284,49 @@ export const ASTPreview: FC = () => {
   );
 };
 
+export const FullCol = styled.div`
+  grid-row-start: 1;
+  grid-row-end: 999;
+  grid-column: 2;
+`;
+
+const StyledAccordionDetails = styled(AccordionDetails)`
+  display: flex;
+  flex-flow: column nowrap;
+`;
+
+export const StepsView: FC = () => {
+  const steps = useSteps();
+  const [active, setActive] = useState<number>(0);
+  const activate = useCallback(
+    (id: number) => () => setActive(id),
+    [setActive],
+  );
+  return (
+    <div>
+      {steps && steps.map((step, idx) => (
+        <Accordion
+          expanded={active === idx}
+          onChange={activate(idx)}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+          >
+            {`Step ${idx + 1}`}
+          </AccordionSummary>
+          <StyledAccordionDetails>
+            {step.map(
+              ({ name, amount }) => (
+                <ResourcePreview key={name} text={name} amount={amount} />
+              ),
+            )}
+          </StyledAccordionDetails>
+        </Accordion>
+      ))}
+    </div>
+  );
+};
+
 export const ResourcesView: FC = () => {
   const { name } = useRecipe();
   return (
@@ -274,8 +336,11 @@ export const ResourcesView: FC = () => {
         <div>
           <ResourcesSummary />
         </div>
-        <div>
+        <FullCol>
           <ASTPreview />
+        </FullCol>
+        <div>
+          <StepsView />
         </div>
       </StyledContainer>
     </>

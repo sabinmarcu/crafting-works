@@ -149,6 +149,7 @@ export const RecipeProvider: FC<{ name: string }> = ({ children, name }) => {
 export const useRecipe = () => useContext(RecipeContext);
 export const useResources = () => useContext(RecipeContext).resources;
 export const useAST = () => useContext(RecipeContext).ast;
+export const useSteps = () => useContext(RecipeContext).steps;
 export const useInput = (name: string): [number, (val: string) => void] => {
   const { recipe, update } = useRecipe();
   const value = useMemo(
