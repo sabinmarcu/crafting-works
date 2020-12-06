@@ -9,7 +9,10 @@ import {
   Toolbar,
   withTheme,
 } from '@material-ui/core';
+import { FC, ReactElement } from 'react';
+import { use100vh } from 'react-div-100vh';
 import { mobileBreakpoint } from '../config/constants';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export const onMobile = `@media ${mobileBreakpoint}`;
 
@@ -39,7 +42,7 @@ export const StyledLink = styled(Link)`
   color: inherit;
 `;
 
-export const ModalContainer = styled(Container)`
+export const ModalContainerRaw = styled(Container)`
   padding: 25px !important;
   margin-top: 25px !important;
   display: flex !important;
@@ -50,10 +53,24 @@ export const ModalContainer = styled(Container)`
   ${onMobile} {
     margin: 0;
     width: 100vw;
-    height: 100vh;
     padding: 15px;
   }
 `;
+
+export const ModalContainer: FC = ({ children }) => {
+  const isMobile = useIsMobile();
+  const height = use100vh();
+  return (
+    <ModalContainerRaw
+      {...(isMobile
+        ? { style: { height: height || '100vh' } }
+        : {}
+      )}
+    >
+      {children as ReactElement}
+    </ModalContainerRaw>
+  );
+};
 
 export const ModalWrapper = styled(Card)`
   display: flex;
