@@ -20,6 +20,7 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  Tab,
 } from '@material-ui/core';
 
 import CloseIcon from '@material-ui/icons/Close';
@@ -30,9 +31,11 @@ import styled from 'styled-components';
 import Tree from 'react-d3-tree';
 import Measure, { BoundingRect } from 'react-measure';
 
+import { TabContext, TabPanel } from '@material-ui/lab';
 import { RecipeAST } from '../utils/types';
 import {
   useAST,
+  useUses,
   useRecipe,
   useResources,
   useSteps,
@@ -44,10 +47,12 @@ import {
   ModalWrapper,
   onMobile,
   RightCardActions,
+  StyledTabs,
 } from './styled';
 
 import { camelCaseToCapitalized } from '../utils/strings';
 import { Title } from '../state/title';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 export const StyledContainer = styled(Container)`
   display: grid !important;
@@ -199,6 +204,10 @@ export const AST: FC<{
               orientation="vertical"
               collapsible={false}
               translate={translate}
+              nodeSize={{
+                x: 200,
+                y: 200,
+              }}
               textLayout={{
                 textAnchor: 'start',
                 y: 0,
@@ -212,7 +221,13 @@ export const AST: FC<{
   );
 };
 
-export const ASTPreview: FC = () => {
+export const Visualization: FC<{
+  ast?: RecipeAST,
+  title: string,
+}> = ({
+  ast,
+  title,
+}) => {
   const [modalOpen, setModalOpen] = useState(false);
   const open = useCallback(
     () => setModalOpen(true),
@@ -222,7 +237,6 @@ export const ASTPreview: FC = () => {
     () => setModalOpen(false),
     [setModalOpen],
   );
-  const ast = useAST();
   const humanReadableAst = useMemo(
     () => {
       if (!ast) {
@@ -240,19 +254,16 @@ export const ASTPreview: FC = () => {
   );
   return (
     <>
-      <SVGCard>
-        <CardHeader title="Dependency Tree" />
-        {humanReadableAst && <AST data={humanReadableAst} />}
-        <RightCardActions>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={open}
-          >
-            View Large
-          </Button>
-        </RightCardActions>
-      </SVGCard>
+      {humanReadableAst && <AST data={humanReadableAst} />}
+      <RightCardActions>
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={open}
+        >
+          View Large
+        </Button>
+      </RightCardActions>
       <Modal
         open={modalOpen}
         onClose={close}
@@ -266,7 +277,7 @@ export const ASTPreview: FC = () => {
           <LargeModalContainer>
             <ModalWrapper elevation={10}>
               <CardHeader
-                title="Create new Recipe"
+                title={`Large View: ${title}`}
                 action={(
                   <IconButton onClick={close}>
                     <CloseIcon />
@@ -281,6 +292,48 @@ export const ASTPreview: FC = () => {
         </Fade>
       </Modal>
     </>
+  );
+};
+
+export const ASTPreview: FC = () => {
+  const ast = useAST();
+  const uses = useUses();
+  const isMobile = useIsMobile();
+  const tabs = useMemo(
+    () => [
+      { title: 'Dependencies', ast },
+      { title: 'Uses', ast: uses },
+    ],
+    [ast, uses],
+  );
+  const [tab, setTab] = useState<string>(tabs[0].title);
+  const onChange = useCallback(
+    (event, newValue) => setTab(newValue),
+    [setTab],
+  );
+  return (
+    <SVGCard>
+      <TabContext value={tab}>
+        <StyledTabs
+          value={tab}
+          onChange={onChange}
+          variant={isMobile ? 'fullWidth' : undefined}
+        >
+          {tabs.map(({ title }) => (
+            <Tab
+              key={title}
+              value={title}
+              label={title}
+            />
+          ))}
+        </StyledTabs>
+        {tabs.map(({ title, ast: tree }) => (
+          <TabPanel value={title} key={title}>
+            <Visualization ast={tree} title={title} />
+          </TabPanel>
+        ))}
+      </TabContext>
+    </SVGCard>
   );
 };
 
