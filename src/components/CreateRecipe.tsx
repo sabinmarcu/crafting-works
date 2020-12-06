@@ -26,7 +26,7 @@ import {
 } from './styled';
 
 import { useRecipes } from '../state/recipes-v3';
-import { camelCaseToCapitalized, capitalizedToCamelCase } from '../utils/strings';
+import { camelCaseToCapitalized, capitalize, capitalizedToCamelCase } from '../utils/strings';
 import { SymbolType } from '../utils/types';
 import { baseRoute } from '../screens/Recipe';
 
@@ -65,9 +65,10 @@ export const CreateRecipeModal: FC<{
   const onSave = useCallback(
     () => {
       if (name) {
-        addRecipe(capitalizedToCamelCase(name));
+        const symbol = capitalizedToCamelCase(name.trim());
+        addRecipe(symbol);
         history.push([
-          baseRoute.replace(':name', name),
+          baseRoute.replace(':name', symbol),
           'edit',
         ].join('/'));
       }
@@ -122,7 +123,7 @@ export const CreateRecipeModal: FC<{
                   if (params.inputValue !== '') {
                     filtered.push({
                       inputValue: params.inputValue,
-                      name: `Add "${params.inputValue}"`,
+                      name: `Add "${capitalize(params.inputValue)}"`,
                     });
                   }
 

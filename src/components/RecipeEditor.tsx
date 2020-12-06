@@ -93,7 +93,7 @@ export const Output: FC = () => {
   );
 };
 
-const StyledAutocomplete = styled(Autocomplete)`
+const AutocompleteWrapper = styled.div`
   flex: 1;
 `;
 
@@ -176,54 +176,56 @@ export const RecipeEditor: FC = () => {
               <SymbolsList filter={false} symbols={symbols} onDelete={deleteHandler} />
             </StyledExpandCardContent>
             <RightCardActions>
-              <StyledAutocomplete
-                value={newSymbol}
-                onChange={(_, newValue) => {
-                  if (typeof newValue === 'string') {
-                    setNewSymbol({ name: newValue, composite: false });
-                  } else if (newValue && newValue.inputValue) {
-                    setNewSymbol({ name: newValue.inputValue, composite: false });
-                  } else if (newValue) {
-                    setNewSymbol(newValue);
-                  } else {
-                    setNewSymbol(null);
-                  }
-                }}
-                filterOptions={(options, params) => {
-                  const filtered = filter(options, params);
+              <AutocompleteWrapper>
+                <Autocomplete
+                  value={newSymbol}
+                  onChange={(_, newValue) => {
+                    if (typeof newValue === 'string') {
+                      setNewSymbol({ name: newValue, composite: false });
+                    } else if (newValue && newValue.inputValue) {
+                      setNewSymbol({ name: newValue.inputValue, composite: false });
+                    } else if (newValue) {
+                      setNewSymbol(newValue);
+                    } else {
+                      setNewSymbol(null);
+                    }
+                  }}
+                  filterOptions={(options, params) => {
+                    const filtered = filter(options, params);
 
-                  // Suggest the creation of a new value
-                  if (params.inputValue !== '') {
-                    filtered.push({
-                      inputValue: params.inputValue,
-                      name: `Add "${params.inputValue}"`,
-                    });
-                  }
+                    // Suggest the creation of a new value
+                    if (params.inputValue !== '') {
+                      filtered.push({
+                        inputValue: params.inputValue,
+                        name: `Add "${params.inputValue}"`,
+                      });
+                    }
 
-                  return filtered;
-                }}
-                selectOnFocus
-                clearOnBlur
-                handleHomeEndKeys
-                options={comboSymbols as (SymbolType & ComboBoxAddType)[]}
-                getOptionLabel={(option) => {
-                  if (typeof option === 'string') {
-                    return option;
-                  }
-                  if (option && option.inputValue) {
-                    return option.inputValue;
-                  }
-                  return option.name;
-                }}
-                renderOption={({ name: n }) => camelCaseToCapitalized(n)}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    fullWidth
-                    label="Add Symbol"
-                  />
-                )}
-              />
+                    return filtered;
+                  }}
+                  selectOnFocus
+                  clearOnBlur
+                  handleHomeEndKeys
+                  options={comboSymbols as (SymbolType & ComboBoxAddType)[]}
+                  getOptionLabel={(option) => {
+                    if (typeof option === 'string') {
+                      return option;
+                    }
+                    if (option && option.inputValue) {
+                      return option.inputValue;
+                    }
+                    return option.name;
+                  }}
+                  renderOption={({ name: n }) => camelCaseToCapitalized(n)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      fullWidth
+                      label="Add Symbol"
+                    />
+                  )}
+                />
+              </AutocompleteWrapper>
               <Button
                 color="secondary"
                 onClick={onOpen}
