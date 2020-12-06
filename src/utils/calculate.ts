@@ -104,12 +104,9 @@ export const hasCircularDependency = (
   recipes: RecipesType,
   symbols: SymbolType[],
 ): boolean => {
-  console.log('circular', symbol, recipe);
   const ownSymbols = Object.keys(recipe.input);
-  console.log(ownSymbols);
   const containsSymbol = ownSymbols
     .reduce((prev, it) => prev || (it === symbol.name), false);
-  console.log(containsSymbol);
   if (containsSymbol) {
     return true;
   }
@@ -120,10 +117,6 @@ export const hasCircularDependency = (
     .filter(({ composite }) => composite)
     .map(({ name }) => recipes[name])
     .filter(Boolean);
-  console.log((ownSymbols
-    .map((it) => symbols.find(({ name }) => name === it))
-    .filter(Boolean) as SymbolType[]
-  ));
   const nextContainSymbol = nextRecipes.reduce(
     (prev, it) => prev || hasCircularDependency(
       symbol,
