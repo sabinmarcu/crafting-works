@@ -5,6 +5,7 @@ import {
   RecipeSteps,
   RecipesType,
   RecipeType,
+  SymbolType,
 } from './types';
 
 export const adjust = (
@@ -95,4 +96,42 @@ export const generateSteps = (
       );
   }
   return steps.reverse();
+};
+
+export const hasCircularDependency = (
+  symbol: SymbolType,
+  recipe: RecipeType,
+  recipes: RecipesType,
+  symbols: SymbolType[],
+): boolean => {
+  console.log('circular', symbol, recipe);
+  const ownSymbols = Object.keys(recipe.input);
+  console.log(ownSymbols);
+  const containsSymbol = ownSymbols
+    .reduce((prev, it) => prev || (it === symbol.name), false);
+  console.log(containsSymbol);
+  if (containsSymbol) {
+    return true;
+  }
+  const nextRecipes = (ownSymbols
+    .map((it) => symbols.find(({ name }) => name === it))
+    .filter(Boolean) as SymbolType[]
+  )
+    .filter(({ composite }) => composite)
+    .map(({ name }) => recipes[name])
+    .filter(Boolean);
+  console.log((ownSymbols
+    .map((it) => symbols.find(({ name }) => name === it))
+    .filter(Boolean) as SymbolType[]
+  ));
+  const nextContainSymbol = nextRecipes.reduce(
+    (prev, it) => prev || hasCircularDependency(
+      symbol,
+      it,
+      recipes,
+      symbols,
+    ),
+    false,
+  );
+  return nextContainSymbol;
 };
