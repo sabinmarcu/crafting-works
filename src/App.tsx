@@ -10,7 +10,7 @@ import { Drawer, RouteChangeDrawerClose } from './components/Drawer';
 import CreateRecipe from './components/CreateRecipe';
 
 import { HomeScreen } from './screens/Home';
-import { RecipeScreen } from './screens/Recipe';
+import { RecipeScreen, baseRoute as recipeRoute } from './screens/Recipe';
 import { TestScreen } from './screens/Test';
 import { baseURL } from './config/constants';
 
@@ -33,7 +33,7 @@ export const App: FC = () => (
     <StyledContainer>
       <Switch>
         <Route exact path="/" component={HomeScreen} />
-        <Route exact path="/recipes/:name" component={RecipeScreen} />
+        <Route path={recipeRoute} component={RecipeScreen} />
         <Route exact path="/test" component={TestScreen} />
       </Switch>
     </StyledContainer>
