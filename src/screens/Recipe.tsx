@@ -61,14 +61,6 @@ export const RecipeScreen: FC = () => {
   const path = useRouteMatch({
     path: baseRoute,
   });
-  useEffect(
-    () => {
-      if (path && path.isExact) {
-        history.push(`${path.url}${tabs[0].route}`);
-      }
-    },
-    [path, history, location],
-  );
   const { name } = useParams<{name:string}>();
   const isMobile = useIsMobile();
   const [tab, setTab] = useState<number>(
@@ -78,13 +70,22 @@ export const RecipeScreen: FC = () => {
           const idx = tabs.findIndex(
             ({ route }) => route === location.pathname.replace(path.url, ''),
           );
-          if (idx > 0) {
+          if (idx >= 0) {
             return idx;
           }
           return 0;
         }
       )()
       : 0,
+  );
+  useEffect(
+    () => {
+      if (path && path.isExact) {
+        history.push(`${path.url}${tabs[0].route}`);
+        setTab(0);
+      }
+    },
+    [path, history, location],
   );
   const prevTab = usePrevious(tab);
   useEffect(
