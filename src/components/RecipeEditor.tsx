@@ -132,76 +132,80 @@ export const RecipeEditor: FC = () => {
     <>
       <Title title={`Edit: ${camelCaseToCapitalized(name)}`} />
       <StyledContainer>
-        <StyledCard>
-          <CardHeader title="Symbols Used" />
-          <StyledExpandCardContent style={{ flex: 1 }}>
-            <SymbolsList symbols={symbols} onDelete={deleteHandler} />
-          </StyledExpandCardContent>
-          <CardContent>
-            <Autocomplete
-              value={newSymbol}
-              onChange={(_, newValue) => {
-                if (typeof newValue === 'string') {
-                  setNewSymbol({ name: newValue, composite: false });
-                } else if (newValue && newValue.inputValue) {
-                  setNewSymbol({ name: newValue.inputValue, composite: false });
-                } else if (newValue) {
-                  setNewSymbol(newValue);
-                } else {
-                  setNewSymbol(null);
-                }
-              }}
-              filterOptions={(options, params) => {
-                const filtered = filter(options, params);
+        <div>
+          <StyledCard>
+            <CardHeader title="Symbols Used" />
+            <StyledExpandCardContent style={{ flex: 1 }}>
+              <SymbolsList symbols={symbols} onDelete={deleteHandler} />
+            </StyledExpandCardContent>
+            <CardContent>
+              <Autocomplete
+                value={newSymbol}
+                onChange={(_, newValue) => {
+                  if (typeof newValue === 'string') {
+                    setNewSymbol({ name: newValue, composite: false });
+                  } else if (newValue && newValue.inputValue) {
+                    setNewSymbol({ name: newValue.inputValue, composite: false });
+                  } else if (newValue) {
+                    setNewSymbol(newValue);
+                  } else {
+                    setNewSymbol(null);
+                  }
+                }}
+                filterOptions={(options, params) => {
+                  const filtered = filter(options, params);
 
-                // Suggest the creation of a new value
-                if (params.inputValue !== '') {
-                  filtered.push({
-                    inputValue: params.inputValue,
-                    name: `Add "${params.inputValue}"`,
-                  });
-                }
+                  // Suggest the creation of a new value
+                  if (params.inputValue !== '') {
+                    filtered.push({
+                      inputValue: params.inputValue,
+                      name: `Add "${params.inputValue}"`,
+                    });
+                  }
 
-                return filtered;
-              }}
-              selectOnFocus
-              clearOnBlur
-              handleHomeEndKeys
-              options={comboSymbols as (SymbolType & ComboBoxAddType)[]}
-              getOptionLabel={(option) => {
-                if (typeof option === 'string') {
-                  return option;
-                }
-                if (option && option.inputValue) {
-                  return option.inputValue;
-                }
-                return option.name;
-              }}
-              renderOption={({ name: n }) => camelCaseToCapitalized(n)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  label="Add Symbol"
-                />
-              )}
-            />
-          </CardContent>
-        </StyledCard>
-        <StyledCard>
-          <CardHeader title="Materials" />
-          <StyledExpandCardContent>
-            {Object.keys(recipe.input).sort().map((it) => (
-              <Input
-                name={it}
-                key={it}
+                  return filtered;
+                }}
+                selectOnFocus
+                clearOnBlur
+                handleHomeEndKeys
+                options={comboSymbols as (SymbolType & ComboBoxAddType)[]}
+                getOptionLabel={(option) => {
+                  if (typeof option === 'string') {
+                    return option;
+                  }
+                  if (option && option.inputValue) {
+                    return option.inputValue;
+                  }
+                  return option.name;
+                }}
+                renderOption={({ name: n }) => camelCaseToCapitalized(n)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    label="Add Symbol"
+                  />
+                )}
               />
-            ))}
-          </StyledExpandCardContent>
-          <CardContent>
-            <Output />
-          </CardContent>
-        </StyledCard>
+            </CardContent>
+          </StyledCard>
+        </div>
+        <div>
+          <StyledCard>
+            <CardHeader title="Materials" />
+            <StyledExpandCardContent>
+              {Object.keys(recipe.input).sort().map((it) => (
+                <Input
+                  name={it}
+                  key={it}
+                />
+              ))}
+            </StyledExpandCardContent>
+            <CardContent>
+              <Output />
+            </CardContent>
+          </StyledCard>
+        </div>
       </StyledContainer>
     </>
   );

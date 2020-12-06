@@ -26,18 +26,22 @@ export const HomeScreen = () => (
   <>
     <Title title="Home" isRoot />
     <StyledContainer>
-      <Card>
-        <CardHeader title="Symbols" />
-        <CardContent>
-          <Symbols />
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader title="Recipes" />
-        <CardContent>
-          <RecipesList />
-        </CardContent>
-      </Card>
+      <div>
+        <Card>
+          <CardHeader title="Symbols" />
+          <CardContent>
+            <Symbols />
+          </CardContent>
+        </Card>
+      </div>
+      <div>
+        <Card>
+          <CardHeader title="Recipes" />
+          <CardContent>
+            <RecipesList />
+          </CardContent>
+        </Card>
+      </div>
     </StyledContainer>
   </>
 );
