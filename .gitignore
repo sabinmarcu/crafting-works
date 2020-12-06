@@ -9,6 +9,7 @@ node_modules
 !.yarn/sdks
 !.yarn/versions
 !.yarn/patches
+!.yarn/cache
 .pnp.*
 
 # testing
