@@ -31,7 +31,7 @@ import styled from 'styled-components';
 import Tree from 'react-d3-tree';
 import Measure, { BoundingRect } from 'react-measure';
 
-import { TabContext, TabPanel } from '@material-ui/lab';
+import { TabContext } from '@material-ui/lab';
 import { RecipeAST } from '../utils/types';
 import {
   useAST,
@@ -47,6 +47,7 @@ import {
   ModalWrapper,
   onMobile,
   RightCardActions,
+  StyledTabPanel,
   StyledTabs,
 } from './styled';
 
@@ -328,9 +329,9 @@ export const ASTPreview: FC = () => {
           ))}
         </StyledTabs>
         {tabs.map(({ title, ast: tree }) => (
-          <TabPanel value={title} key={title}>
+          <StyledTabPanel value={title} key={title}>
             <Visualization ast={tree} title={title} />
-          </TabPanel>
+          </StyledTabPanel>
         ))}
       </TabContext>
     </SVGCard>
