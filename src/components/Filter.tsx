@@ -25,7 +25,7 @@ export const useFilter = <T extends any>(
     [setValue],
   );
   const regex = useMemo(
-    () => (value ? new RegExp(value) : undefined),
+    () => (value ? new RegExp(value, 'i') : undefined),
     [value],
   );
   const filteredList = useMemo(

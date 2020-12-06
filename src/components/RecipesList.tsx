@@ -8,10 +8,11 @@ import {
 import { useRecipes } from '../state/recipes-v3';
 import { camelCaseToCapitalized } from '../utils/strings';
 import { StyledLink } from './styled';
+import { Filter, useFilter } from './Filter';
 
 export const RecipesList: FC = () => {
   const { recipes } = useRecipes();
-  const list = useMemo(
+  const recipeList = useMemo(
     () => Object.keys(recipes || {})
       .map((it) => ({
         id: it,
@@ -19,8 +20,13 @@ export const RecipesList: FC = () => {
       })),
     [recipes],
   );
+  const { list, ...filterProps } = useFilter(
+    recipeList,
+    ({ text }) => text,
+  );
   return (
     <List>
+      <Filter {...filterProps} />
       {list.map(({ id, text }) => (
         <StyledLink to={`/recipes/${id}`} key={id}>
           <ListItem button>
