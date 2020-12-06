@@ -121,11 +121,15 @@ export const RecipeProvider: FC<{ name: string }> = ({ children, name }) => {
     [recipe, store],
   );
   const ast = useMemo(
-    () => (recipe ? generateAST(recipe, store.recipes) : undefined),
-    [recipe, store],
+    () => (recipe
+      ? generateAST(recipe, store.recipes, undefined, name)
+      : undefined),
+    [recipe, store, name],
   );
   const steps = useMemo(
-    () => (ast ? generateSteps(ast, resources) : undefined),
+    () => (ast
+      ? generateSteps(ast, resources)
+      : undefined),
     [ast, resources],
   );
   return (
