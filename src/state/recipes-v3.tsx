@@ -52,7 +52,7 @@ export const RecipeProviderV3: FC = ({ children }) => {
     [allSymbols, recipeNames],
   );
   const addRecipe = useCallback(
-    (name: string) => update(name, { input: {}, output: 0 }),
+    (name: string) => update(name, { input: {}, output: 1 }),
     [update],
   );
   const importFunc = useCallback(
@@ -202,7 +202,12 @@ export const useOutput = (): [number, (val: string) => void] => {
     [recipe],
   );
   const updateFunc = useCallback(
-    (val: string) => update('output', parseInt(val, 10)),
+    (val: string) => {
+      const v = parseInt(val, 10);
+      if (v > 0) {
+        update('output', v);
+      }
+    },
     [update],
   );
   return [

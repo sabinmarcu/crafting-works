@@ -23,11 +23,13 @@ export const reduce = (
   what: RecipeType,
   recipes: RecipesType,
 ): Record<string, number> => {
-  const input = Object.entries(what.input).map(([key, value]) => (key in recipes
+  const input = Object.entries(what.input).map((
+    [key, value],
+  ) => (key in recipes
     ? {
       ...adjust(
         reduce(recipes[key], recipes),
-        Math.ceil(value / recipes[key].output),
+        Math.ceil(value / (recipes[key].output || 1)),
       ),
       [`_${key}`]: value,
     }
