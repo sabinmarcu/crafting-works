@@ -1,7 +1,9 @@
 import React, {
   FC,
   useCallback,
+  useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import {
@@ -54,6 +56,7 @@ import {
 import { camelCaseToCapitalized } from '../utils/strings';
 import { Title } from '../state/title';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { usePreventScroll } from '../hooks/scroll';
 
 export const StyledContainer = styled(Container)`
   display: grid !important;
@@ -130,6 +133,7 @@ export const SVGWrapper = styled(CardContent)`
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
+  padding: 0 !important;
 `;
 
 const svgStyle = ({
@@ -171,10 +175,13 @@ export const LargeModalContent = styled(ModalContent)`
   flex: 0;
   display: flex;
   flex-flow: column nowrap;
+  padding: 0 !important;
 `;
 
 export const LargeModalContainer = styled(ModalContainer)`
   max-width: initial !important;
+  padding: 0 !important;
+  margin: 0 !important;
 `;
 
 export const AST: FC<{
@@ -192,8 +199,23 @@ export const AST: FC<{
       : undefined),
     [size],
   );
+  const rootRef = useRef<HTMLDivElement>();
+  useEffect(
+    () => {
+      const el = rootRef.current;
+      if (el) {
+        const handler = (event: TouchEvent) => event.preventDefault();
+        el.addEventListener('touchmove',
+          handler,
+          { passive: false });
+        return () => el.removeEventListener('touchmove', handler);
+      }
+      return undefined;
+    },
+    [rootRef],
+  );
   return (
-    <SVGWrapper>
+    <SVGWrapper innerRef={rootRef}>
       <Measure
         bounds
         onResize={({ bounds }) => setSize(bounds)}
@@ -229,6 +251,7 @@ export const Visualization: FC<{
   ast,
   title,
 }) => {
+  const scrollPrevent = usePreventScroll();
   const [modalOpen, setModalOpen] = useState(false);
   const open = useCallback(
     () => setModalOpen(true),
@@ -252,6 +275,16 @@ export const Visualization: FC<{
       return updateNode(ast);
     },
     [ast],
+  );
+  useEffect(
+    () => {
+      if (modalOpen) {
+        scrollPrevent.open();
+      } else {
+        scrollPrevent.close();
+      }
+    },
+    [modalOpen, scrollPrevent],
   );
   return (
     <>

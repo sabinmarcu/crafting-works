@@ -10,7 +10,7 @@ import {
   Toolbar,
   withTheme,
 } from '@material-ui/core';
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useMemo } from 'react';
 import { use100vh } from 'react-div-100vh';
 import { TabPanel } from '@material-ui/lab';
 import { mobileBreakpoint } from '../config/constants';
@@ -71,15 +71,27 @@ export const ModalContainerRaw = styled(Container)`
   }
 `;
 
-export const ModalContainer: FC = ({ children }) => {
+export const ModalContainer: FC<{
+  className?: 'string',
+  style?: StyleSheetList
+}> = ({
+  children,
+  className,
+  style,
+}) => {
   const isMobile = useIsMobile();
   const height = use100vh();
+  const renderStyle = useMemo(
+    () => ({
+      ...style,
+      height: (isMobile && height) || '100vh',
+    }),
+    [height, style],
+  );
   return (
     <ModalContainerRaw
-      {...(isMobile
-        ? { style: { height: height || '100vh' } }
-        : {}
-      )}
+      style={renderStyle}
+      className={className}
     >
       {children as ReactElement}
     </ModalContainerRaw>

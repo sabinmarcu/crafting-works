@@ -31,7 +31,7 @@ import { SymbolType } from '../utils/types';
 import { baseRoute } from '../screens/Recipe';
 
 import { BottomFab } from './BottomFab';
-import { usePreventScroll } from '../state/scroll';
+import { usePreventScroll } from '../hooks/scroll';
 
 type ComboBoxAddType = {inputValue?: string};
 const filter = createFilterOptions<SymbolType & ComboBoxAddType>();
