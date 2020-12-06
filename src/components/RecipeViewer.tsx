@@ -271,8 +271,12 @@ export const ResourcesView: FC = () => {
     <>
       <Title title={`View: ${camelCaseToCapitalized(name)}`} />
       <StyledContainer>
-        <ResourcesSummary />
-        <ASTPreview />
+        <div>
+          <ResourcesSummary />
+        </div>
+        <div>
+          <ASTPreview />
+        </div>
       </StyledContainer>
     </>
   );
