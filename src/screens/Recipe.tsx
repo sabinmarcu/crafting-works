@@ -1,7 +1,12 @@
 import React, {
-  FC, useCallback, useState,
+  FC, useCallback, useEffect, useState,
 } from 'react';
-import { RouteComponentProps } from 'react-router';
+import {
+  Route,
+  useHistory,
+  useLocation,
+  useParams, useRouteMatch,
+} from 'react-router';
 import {
   AppBar, Container, Tab, Tabs, withTheme,
 } from '@material-ui/core';
@@ -14,18 +19,11 @@ import { useIsMobile } from '../hooks/useIsMobile';
 import { RecipeEditor } from '../components/RecipeEditor';
 import { RecipeViewer } from '../components/RecipeViewer';
 import { toolbarStyles } from '../components/styled';
+import { usePrevious } from '../hooks/usePrevious';
 
 const StyledContainer = styled(Container)`
   padding: 1rem 0;
 `;
-
-export const TabPanel: FC<{ isOpen: boolean }> = ({ children, isOpen }) => (
-  <div
-    hidden={!isOpen}
-  >
-    {isOpen && children}
-  </div>
-);
 
 const StyledTabs = withTheme(
   styled(Tabs)`
@@ -35,18 +33,41 @@ const StyledTabs = withTheme(
   `,
 );
 
+export const baseRoute = '/recipes/:name';
+
 const tabs = [
-  { title: 'Editor', Component: RecipeEditor },
-  { title: 'Viewer', Component: RecipeViewer },
+  { title: 'Viewer', Component: RecipeViewer, route: '/view' },
+  { title: 'Editor', Component: RecipeEditor, route: '/edit' },
 ];
 
-export const RecipeScreen: FC<RouteComponentProps<{ name: string }>> = ({
-  match: {
-    params: { name },
-  },
-}) => {
+export const routes = tabs.map(({ route }) => route);
+
+export const RecipeScreen: FC = () => {
+  const history = useHistory();
+  const location = useLocation();
+  const path = useRouteMatch({
+    path: baseRoute,
+  });
+  useEffect(
+    () => {
+      if (path && path.isExact) {
+        history.push(`${path.url}${tabs[0].route}`);
+      }
+    },
+    [path, history, location],
+  );
+  const { name } = useParams<{name:string}>();
   const isMobile = useIsMobile();
   const [tab, setTab] = useState<number>(0);
+  const prevTab = usePrevious(tab);
+  useEffect(
+    () => {
+      if (path && prevTab !== tab) {
+        history.push(`${path.url}${tabs[tab].route}`);
+      }
+    },
+    [history, path, tab, prevTab],
+  );
   const onChange = useCallback(
     (event, newValue) => setTab(newValue),
     [setTab],
@@ -63,13 +84,13 @@ export const RecipeScreen: FC<RouteComponentProps<{ name: string }>> = ({
             {tabs.map(({ title }) => <Tab label={title} key={title} />)}
           </StyledTabs>
         </AppBar>
-        {tabs.map(({ title, Component }, idx) => (
-          <TabPanel
-            isOpen={tab === idx}
+        {tabs.map(({ title, route, Component }) => (
+          <Route
+            exact
+            path={`${baseRoute}${route}`}
+            component={Component}
             key={title}
-          >
-            <Component />
-          </TabPanel>
+          />
         ))}
       </StyledContainer>
     </RecipeProvider>
