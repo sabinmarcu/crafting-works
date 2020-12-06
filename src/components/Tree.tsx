@@ -4,6 +4,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useCallback,
 } from 'react';
 import {
   CardContent,
@@ -14,10 +15,14 @@ import Tree from 'react-d3-tree';
 import Measure, { BoundingRect } from 'react-measure';
 import styled from 'styled-components';
 
+import { useHistory } from 'react-router';
 import { RecipeAST } from '../utils/types';
 import {
   onMobile,
 } from './styled';
+import { capitalizedToCamelCase } from '../utils/strings';
+import { recipeBaseRoute } from '../config/constants';
+import { useSymbols } from '../state/recipes-v3';
 
 export const SVGWrapper = styled(CardContent)`
   width: 100%;
@@ -50,12 +55,24 @@ const svgStyle = ({
   color: ${text};
   box-shadow: ${shadow};
 `;
+const leafNodeStyle = ({
+  theme: {
+    palette: {
+      text: {
+        disabled: text,
+      },
+    },
+  },
+}: { theme: Theme }) => `
+  --leaf-color: ${text};
+`;
 
 export const SVG = withTheme(
-  styled.div`
+  styled.div<{styleLeafNodes: boolean}>`
     width: 100%;
     height: 100%;
     ${svgStyle}
+      ${leafNodeStyle}
     .linkBase {
       stroke: currentColor;
       opacity: 0.5 !important;
@@ -64,15 +81,26 @@ export const SVG = withTheme(
       fill: currentColor;
       stroke: transparent;
     }
+    ${({ styleLeafNodes }) => (styleLeafNodes
+    ? `
+        .leafNodeBase {
+          color: var(--leaf-color);
+        }
+      `
+    : '')}
   `,
 );
 
 export const AST: FC<{
   data: RecipeAST
+  styleLeafNodes?: boolean,
 }> = ({
   data,
+  styleLeafNodes = true,
 }) => {
   const [size, setSize] = useState<BoundingRect>();
+  const symbols = useSymbols();
+  const history = useHistory();
   const translate = useMemo(
     () => (size
       ? ({
@@ -83,6 +111,19 @@ export const AST: FC<{
     [size],
   );
   const rootRef = useRef<HTMLDivElement>();
+  const onClick = useCallback(
+    ({ name }) => {
+      const shortName = capitalizedToCamelCase(name.trim());
+      const symbol = symbols.find(({ name: n }) => n === shortName);
+      if (symbol?.composite) {
+        history.push([
+          recipeBaseRoute.replace(':name', shortName),
+          'view',
+        ].join('/'));
+      }
+    },
+    [history, symbols],
+  );
   useEffect(
     () => {
       const el = rootRef.current;
@@ -104,12 +145,13 @@ export const AST: FC<{
         onResize={({ bounds }) => setSize(bounds)}
       >
         {({ measureRef }) => (
-          <SVG ref={measureRef}>
+          <SVG ref={measureRef} styleLeafNodes={styleLeafNodes}>
             <Tree
               data={data}
               orientation="vertical"
               collapsible={false}
               translate={translate}
+              onClick={onClick}
               nodeSize={{
                 x: 200,
                 y: 200,
