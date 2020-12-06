@@ -27,6 +27,7 @@ import { camelCaseToCapitalized } from '../utils/strings';
 import { SymbolsList } from './SymbolsList';
 import { onMobile } from './styled';
 import { SymbolType } from '../utils/types';
+import { hasCircularDependency } from '../utils/calculate';
 
 export const StyledContainer = styled(Container)`
   display: grid !important;
@@ -93,7 +94,7 @@ type ComboBoxAddType = {inputValue?: string};
 const filter = createFilterOptions<SymbolType & ComboBoxAddType>();
 
 export const RecipeEditor: FC = () => {
-  const { symbols: allSymbols } = useRecipes();
+  const { symbols: allSymbols, recipes } = useRecipes();
   const {
     name,
     symbols,
@@ -104,9 +105,26 @@ export const RecipeEditor: FC = () => {
   const comboSymbols = useMemo(
     () => {
       const usedSymbols = symbols.map(({ name: n }) => n);
-      return allSymbols.filter(({ name: n }) => !usedSymbols.includes(n));
+      const circularSymbols = allSymbols.filter(
+        ({ name: n, composite }) => {
+          if (!composite) {
+            return false;
+          }
+          return hasCircularDependency(
+            { name },
+            recipes[n],
+            recipes,
+            allSymbols,
+          );
+        },
+      ).map(({ name: n }) => n);
+      return allSymbols.filter(({ name: n }) => (
+        !usedSymbols.includes(n)
+        && !circularSymbols.includes(n)
+        && n !== name
+      ));
     },
-    [symbols, allSymbols],
+    [symbols, allSymbols, recipes, name],
   );
   const deleteHandler = useCallback(
     (symbol: string) => (e: Event) => {
