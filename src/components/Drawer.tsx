@@ -1,25 +1,39 @@
-import React, { FC, useEffect } from 'react';
+import React, {
+  FC, useCallback, useEffect,
+} from 'react';
 import {
   SwipeableDrawer,
   AppBar,
   Toolbar,
   Container,
   Typography,
-  IconButton,
+  Tab,
+  Button,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import styled from 'styled-components';
 
 import { useHistory } from 'react-router';
+import { TabContext, TabPanel } from '@material-ui/lab';
 import { useDrawer } from '../state/drawer';
 import { RecipesList } from './RecipesList';
 import Symbols from './SymbolsList';
+import { onMobile, StyledTabs } from './styled';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { BottomFab } from './BottomFab';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
+const drawerStyle = `
+  min-width: min(100vw, 300px);
+  max-width: 500px;
+  ${onMobile} {
+    min-width: 100vw;
+    max-width: 100vw;
+  }
+`;
 const StyledDrawer = styled(SwipeableDrawer)`
   .styledPaper {
-    min-width: min(100vw, 300px);
-    max-width: 500px;
+    ${drawerStyle}
   }
   .styledRoot {
     display: flex;
@@ -44,27 +58,84 @@ const StyledToolbarContainer = styled(Container)`
   justify-content: space-between;
 `;
 
-const DrawerAppBar: FC = ({ children }) => {
-  const isMobile = useIsMobile();
-  const { close } = useDrawer();
+const StyledTabPanel = styled(TabPanel)`
+  padding: 0 !important;
+  ${drawerStyle}
+`;
+
+const DrawerAppBar: FC = ({ children }) => (
+  <StyledAppBar>
+    <Toolbar>
+      <StyledToolbarContainer>
+        <Typography variant="h4">{children}</Typography>
+      </StyledToolbarContainer>
+    </Toolbar>
+  </StyledAppBar>
+);
+
+export const DrawerWrapper = styled.section`
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100%;
+  width: 100%;
+`;
+
+export const DrawerInner = styled.article`
+  flex: 1;
+  overflow: hidden;
+  overflow-y: auto;
+`;
+
+export const RecipesView: FC = () => (
+  <>
+    <DrawerAppBar>Symbols</DrawerAppBar>
+    <StyledContainer>
+      <Symbols />
+    </StyledContainer>
+    <DrawerAppBar>Recipes</DrawerAppBar>
+    <StyledContainer>
+      <RecipesList />
+    </StyledContainer>
+  </>
+);
+
+export const SettingsView: FC = () => {
+  const reset = useCallback(
+    () => {
+      Object.keys(localStorage)
+        .forEach((key) => localStorage.removeItem(key));
+
+      // @ts-ignore
+      window.location = `${window.location}`;
+    },
+    [],
+  );
   return (
-    <StyledAppBar>
-      <Toolbar>
-        <StyledToolbarContainer>
-          <Typography variant="h4">{children}</Typography>
-          {isMobile && (
-            <IconButton onClick={close}>
-              <CloseIcon />
-            </IconButton>
-          )}
-        </StyledToolbarContainer>
-      </Toolbar>
-    </StyledAppBar>
+    <StyledContainer>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={reset}
+      >
+        Reset
+      </Button>
+    </StyledContainer>
   );
 };
 
+const tabs = [
+  { title: 'Recipes', Component: RecipesView },
+  { title: 'Settings', Component: SettingsView },
+];
+
 export const Drawer: FC = () => {
+  const isMobile = useIsMobile();
   const { isOpen, open, close } = useDrawer();
+  const [tab, setTab] = useLocalStorage<string>('drawer-tab', tabs[0].title);
+  const onChange = useCallback(
+    (event, newValue) => setTab(newValue),
+    [setTab],
+  );
   return (
     <StyledDrawer
       open={isOpen}
@@ -73,14 +144,32 @@ export const Drawer: FC = () => {
       anchor="right"
       classes={{ paper: 'styledPaper', root: 'styledRoot' }}
     >
-      <DrawerAppBar>Symbols</DrawerAppBar>
-      <StyledContainer>
-        <Symbols />
-      </StyledContainer>
-      <DrawerAppBar>Recipes</DrawerAppBar>
-      <StyledContainer>
-        <RecipesList />
-      </StyledContainer>
+      <DrawerWrapper>
+        <TabContext value={tab || tabs[0].title}>
+          <StyledTabs
+            value={tab}
+            onChange={onChange}
+          >
+            {tabs.map(({ title }) => (
+              <Tab label={title} key={title} value={title} />
+            ))}
+          </StyledTabs>
+          <DrawerInner>
+            {tabs.map(({ title, Component }) => (
+              <StyledTabPanel value={title} key={title}>
+                <Component />
+              </StyledTabPanel>
+            ))}
+            {isMobile && (
+              <BottomFab
+                onClick={close}
+                Icon={CloseIcon}
+                horizontal="left"
+              />
+            )}
+          </DrawerInner>
+        </TabContext>
+      </DrawerWrapper>
     </StyledDrawer>
   );
 };

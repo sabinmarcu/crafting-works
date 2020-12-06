@@ -20,7 +20,6 @@ const RecipesContext = createContext<RecipesContextType>({
 });
 
 export const useRecipes = () => useContext(RecipesContext);
-
 export const RecipeProviderV3: FC = ({ children }) => {
   const [recipes,,update] = useLocalStorageObject('recipes-v3', seedData);
   const recipeNames = useMemo(
@@ -117,11 +116,11 @@ export const RecipeProvider: FC<{ name: string }> = ({ children, name }) => {
     [updateFunc, recipe],
   );
   const resources = useMemo(
-    () => (store.recipes ? reduce(recipe, store.recipes) : {}),
+    () => (recipe && store.recipes ? reduce(recipe, store.recipes) : {}),
     [recipe, store],
   );
   const ast = useMemo(
-    () => (recipe
+    () => (recipe && store.recipes
       ? generateAST(recipe, store.recipes, undefined, name)
       : undefined),
     [recipe, store, name],

@@ -8,30 +8,22 @@ import {
   useParams, useRouteMatch,
 } from 'react-router';
 import {
-  AppBar, Container, Tab, Tabs, withTheme,
+  AppBar, Container, Tab,
 } from '@material-ui/core';
 import styled from 'styled-components';
 import {
-  RecipeProvider,
+  RecipeProvider, useRecipe,
 } from '../state/recipes-v3';
 
 import { useIsMobile } from '../hooks/useIsMobile';
 import { RecipeEditor } from '../components/RecipeEditor';
 import { RecipeViewer } from '../components/RecipeViewer';
-import { toolbarStyles } from '../components/styled';
+import { StyledTabs } from '../components/styled';
 import { usePrevious } from '../hooks/usePrevious';
 
 const StyledContainer = styled(Container)`
   padding: 1rem 0;
 `;
-
-const StyledTabs = withTheme(
-  styled(Tabs)`
-    .MuiTabs-flexContainer {
-      ${toolbarStyles}
-    }
-  `,
-);
 
 export const baseRoute = '/recipes/:name';
 
@@ -41,6 +33,28 @@ const tabs = [
 ];
 
 export const routes = tabs.map(({ route }) => route);
+
+export const RouteOnEmpty: FC = () => {
+  const { recipe } = useRecipe();
+  const history = useHistory();
+  const [hasLoaded, setHasLoaded] = useState<boolean>(false);
+  useEffect(
+    () => {
+      setTimeout(setHasLoaded, 500, true);
+    },
+    [setHasLoaded],
+  );
+  useEffect(
+    () => {
+      console.log(hasLoaded, recipe);
+      if (hasLoaded && !recipe) {
+        history.push('/not-found');
+      }
+    },
+    [recipe, hasLoaded, history],
+  );
+  return <></>;
+};
 
 export const RecipeScreen: FC = () => {
   const history = useHistory();
@@ -88,6 +102,7 @@ export const RecipeScreen: FC = () => {
   );
   return (
     <RecipeProvider name={name}>
+      <RouteOnEmpty />
       <StyledContainer>
         <AppBar position="static">
           <StyledTabs

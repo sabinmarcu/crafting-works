@@ -6,7 +6,6 @@ import React, {
 } from 'react';
 
 import {
-  Fab,
   Modal,
   Backdrop,
   Fade,
@@ -16,9 +15,6 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
-import Measure, { BoundingRect } from 'react-measure';
-import styled from 'styled-components';
-
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { useHistory } from 'react-router';
 import {
@@ -27,20 +23,13 @@ import {
   ModalWrapper,
   RightCardActions,
 } from './styled';
+
 import { useRecipes } from '../state/recipes-v3';
 import { camelCaseToCapitalized, capitalizedToCamelCase } from '../utils/strings';
 import { SymbolType } from '../utils/types';
 import { baseRoute } from '../screens/Recipe';
 
-export const FabWrapper = styled.div`
-  position: fixed;
-  bottom: 25px;
-  right: 25px;
-`;
-
-const Spacer = styled.div`
-  width: 100%;
-`;
+import { BottomFab } from './BottomFab';
 
 type ComboBoxAddType = {inputValue?: string};
 const filter = createFilterOptions<SymbolType & ComboBoxAddType>();
@@ -170,27 +159,9 @@ export const CreateRecipeWrapper: FC = () => {
     () => setIsOpen(true),
     [setIsOpen],
   );
-  const [size, setSize] = useState<BoundingRect>();
   return (
     <>
-      <Measure
-        bounds
-        onResize={({ bounds }) => setSize(bounds)}
-      >
-        {({ measureRef }) => (
-          <FabWrapper ref={measureRef}>
-            <Fab onClick={open} color="primary">
-              <AddIcon />
-            </Fab>
-          </FabWrapper>
-        )}
-      </Measure>
-      <Spacer style={{
-        height: size
-          ? size.height + 50
-          : 50,
-      }}
-      />
+      <BottomFab Icon={AddIcon} onClick={open} />
       <CreateRecipeModal open={isOpen} onClose={close} />
     </>
   );

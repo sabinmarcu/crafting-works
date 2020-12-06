@@ -286,7 +286,7 @@ export const ASTPreview: FC = () => {
 
 export const FullCol = styled.div`
   grid-row-start: 1;
-  grid-row-end: 999;
+  grid-row-end: 4;
   grid-column: 2;
   ${onMobile} {
     grid-row: 3;
