@@ -25,7 +25,7 @@ import {
 } from '../state/recipes-v3';
 
 import { Title } from '../state/title';
-import { camelCaseToCapitalized } from '../utils/strings';
+import { camelCaseToCapitalized, capitalize, capitalizedToCamelCase } from '../utils/strings';
 import { SymbolsList } from './SymbolsList';
 import { onMobile, RightCardActions } from './styled';
 import { SymbolType } from '../utils/types';
@@ -156,7 +156,7 @@ export const RecipeEditor: FC = () => {
   useEffect(
     () => {
       if (newSymbol) {
-        addInput(newSymbol.name);
+        addInput(capitalizedToCamelCase(newSymbol.name));
         setNewSymbol(null);
       }
     },
@@ -197,7 +197,7 @@ export const RecipeEditor: FC = () => {
                     if (params.inputValue !== '') {
                       filtered.push({
                         inputValue: params.inputValue,
-                        name: `Add "${params.inputValue}"`,
+                        name: `Add "${capitalize(params.inputValue)}"`,
                       });
                     }
 
