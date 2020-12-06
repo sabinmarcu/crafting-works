@@ -13,10 +13,12 @@ export const FabWrapper = styled.div<{
   position: fixed;
   ${({ vertical }) => (vertical && vertical === 'top'
     ? 'top: 25px;'
-    : 'bottom: 25px;')}
+    : 'bottom: 25px;'
+  )}
   ${({ horizontal }) => (horizontal && horizontal === 'left'
-    ? 'left: 25px;'
-    : 'right: 25px;')}
+    ? 'left: calc(25px + env(safe-area-inset-left));'
+    : 'right: calc(25px + env(safe-area-inset-right));'
+  )}
 `;
 
 export const Spacer = styled.div`

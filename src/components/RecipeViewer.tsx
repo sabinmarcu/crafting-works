@@ -178,6 +178,19 @@ export const LargeModalContent = styled(ModalContent)`
   padding: 0 !important;
 `;
 
+const getPadding = ({
+  theme: { spacing },
+}: { theme: Theme }) => `${spacing(2)}px`;
+
+export const StyledCardHeader = withTheme(
+  styled(CardHeader)`
+    padding-left: ${getPadding};
+    padding-right: ${getPadding};
+    padding-left: calc(${getPadding} + env(safe-area-inset-left)) !important;
+    padding-right: calc(${getPadding} + env(safe-area-inset-right)) !important;
+  `,
+);
+
 export const LargeModalContainer = styled(ModalContainer)`
   max-width: initial !important;
   padding: 0 !important;
@@ -310,7 +323,7 @@ export const Visualization: FC<{
         <Fade in={modalOpen}>
           <LargeModalContainer>
             <ModalWrapper elevation={10}>
-              <CardHeader
+              <StyledCardHeader
                 title={`Large View: ${title}`}
                 action={(
                   <IconButton onClick={close}>

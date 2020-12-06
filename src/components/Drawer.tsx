@@ -34,6 +34,10 @@ const drawerStyle = `
 const StyledDrawer = styled(SwipeableDrawer)`
   .styledPaper {
     ${drawerStyle}
+    ${onMobile} {
+      padding-left: env(safe-area-inset-left) !important;
+      padding-right: env(safe-area-inset-right) !important;
+    }
   }
   .styledRoot {
     display: flex;
