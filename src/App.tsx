@@ -11,6 +11,7 @@ import CreateRecipe from './components/CreateRecipe';
 import { HomeScreen } from './screens/Home';
 import { RecipeScreen } from './screens/Recipe';
 import { TestScreen } from './screens/Test';
+import { baseURL } from './config/constants';
 
 const StyledContainer = withTheme(
   styled(Container)`
@@ -23,7 +24,7 @@ const StyledContainer = withTheme(
 );
 
 export const App: FC = () => (
-  <Router>
+  <Router basename={baseURL}>
     <NavBar />
     <Drawer />
     <RouteChangeDrawerClose />

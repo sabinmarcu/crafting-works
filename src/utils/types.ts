@@ -35,3 +35,8 @@ export type RecipeContextType = {
   addInput: (name: string) => void,
   removeInput: (name: string) => void,
 };
+
+export type RecipeAST = {
+  name: string,
+  nodes: RecipeAST,
+}
