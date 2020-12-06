@@ -40,9 +40,9 @@ export const StyledLink = styled(Link)`
 `;
 
 export const ModalContainer = styled(Container)`
-  padding: 25px;
-  margin-top: 25px;
-  display: flex;
+  padding: 25px !important;
+  margin-top: 25px !important;
+  display: flex !important;
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;

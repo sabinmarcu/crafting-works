@@ -288,6 +288,10 @@ export const FullCol = styled.div`
   grid-row-start: 1;
   grid-row-end: 999;
   grid-column: 2;
+  ${onMobile} {
+    grid-row: 3;
+    grid-column: 1;
+  }
 `;
 
 const StyledAccordionDetails = styled(AccordionDetails)`
