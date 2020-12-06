@@ -8,7 +8,6 @@ import {
   Container,
   Typography,
   Tab,
-  Button,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import styled from 'styled-components';
@@ -22,6 +21,7 @@ import { onMobile, StyledTabPanel as TabPanel, StyledTabs } from './styled';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { BottomFab } from './BottomFab';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { SettingsView } from './SettingsPane';
 
 const drawerStyle = `
   min-width: min(100vw, 300px);
@@ -101,30 +101,6 @@ export const RecipesView: FC = () => (
     </StyledContainer>
   </>
 );
-
-export const SettingsView: FC = () => {
-  const reset = useCallback(
-    () => {
-      Object.keys(localStorage)
-        .forEach((key) => localStorage.removeItem(key));
-
-      // @ts-ignore
-      window.location = `${window.location}`;
-    },
-    [],
-  );
-  return (
-    <StyledContainer>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={reset}
-      >
-        Reset
-      </Button>
-    </StyledContainer>
-  );
-};
 
 const tabs = [
   { title: 'Recipes', Component: RecipesView },
