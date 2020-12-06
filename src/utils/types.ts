@@ -22,6 +22,7 @@ export type RecipesValuesType = {
 export type RecipesFuncsType = {
   update: (path: string, value: any) => void;
   addRecipe: (name: string) => void;
+  removeRecipe: (name: string) => void;
   reset: () => void;
   import: (imports: RecipesType) => void;
 };

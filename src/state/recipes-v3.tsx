@@ -20,6 +20,7 @@ const RecipesContext = createContext<RecipesContextType>({
   update: () => {},
   import: () => {},
   addRecipe: () => {},
+  removeRecipe: () => {},
   reset: () => {},
 });
 
@@ -55,6 +56,17 @@ export const RecipeProviderV3: FC = ({ children }) => {
     (name: string) => update(name, { input: {}, output: 1 }),
     [update],
   );
+  const removeRecipe = useCallback(
+    (name: string) => setRecipes(
+      Object.entries(recipes)
+        .filter(([key]) => key !== name)
+        .reduce((prev, [key, value]) => ({
+          ...prev,
+          [key]: value,
+        }), {}),
+    ),
+    [update],
+  );
   const importFunc = useCallback(
     (imports: RecipesType) => {
       setRecipes({
@@ -77,6 +89,7 @@ export const RecipeProviderV3: FC = ({ children }) => {
       reset,
       import: importFunc,
       addRecipe,
+      removeRecipe,
     }}
     >
       {children}

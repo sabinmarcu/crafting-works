@@ -7,6 +7,7 @@ import React, {
   useEffect,
 } from 'react';
 import {
+  Button,
   Card,
   CardContent,
   CardHeader,
@@ -15,6 +16,7 @@ import {
 } from '@material-ui/core';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import styled from 'styled-components';
+import { useHistory } from 'react-router';
 import {
   useRecipe,
   useInput,
@@ -25,9 +27,10 @@ import {
 import { Title } from '../state/title';
 import { camelCaseToCapitalized } from '../utils/strings';
 import { SymbolsList } from './SymbolsList';
-import { onMobile } from './styled';
+import { onMobile, RightCardActions } from './styled';
 import { SymbolType } from '../utils/types';
 import { hasCircularDependency } from '../utils/calculate';
+import { ConfirmDialog, useConfirm } from './Confirm';
 
 export const StyledContainer = styled(Container)`
   display: grid !important;
@@ -90,11 +93,19 @@ export const Output: FC = () => {
   );
 };
 
+const StyledAutocomplete = styled(Autocomplete)`
+  flex: 1;
+`;
+
 type ComboBoxAddType = {inputValue?: string};
 const filter = createFilterOptions<SymbolType & ComboBoxAddType>();
 
 export const RecipeEditor: FC = () => {
-  const { symbols: allSymbols, recipes } = useRecipes();
+  const {
+    symbols: allSymbols,
+    recipes, removeRecipe,
+  } = useRecipes();
+  const history = useHistory();
   const {
     name,
     symbols,
@@ -133,6 +144,14 @@ export const RecipeEditor: FC = () => {
     },
     [removeInput],
   );
+  const removeHandler = useCallback(
+    () => {
+      removeRecipe(name);
+      history.push('/');
+    },
+    [removeRecipe, name, history],
+  );
+  const { onOpen, ...confirmArgs } = useConfirm(removeHandler);
   const [newSymbol, setNewSymbol] = useState<SymbolType & ComboBoxAddType | null>(null);
   useEffect(
     () => {
@@ -156,8 +175,8 @@ export const RecipeEditor: FC = () => {
             <StyledExpandCardContent style={{ flex: 1 }}>
               <SymbolsList filter={false} symbols={symbols} onDelete={deleteHandler} />
             </StyledExpandCardContent>
-            <CardContent>
-              <Autocomplete
+            <RightCardActions>
+              <StyledAutocomplete
                 value={newSymbol}
                 onChange={(_, newValue) => {
                   if (typeof newValue === 'string') {
@@ -205,7 +224,13 @@ export const RecipeEditor: FC = () => {
                   />
                 )}
               />
-            </CardContent>
+              <Button
+                color="secondary"
+                onClick={onOpen}
+              >
+                Remove
+              </Button>
+            </RightCardActions>
           </StyledCard>
         </div>
         <div>
@@ -225,6 +250,11 @@ export const RecipeEditor: FC = () => {
           </StyledCard>
         </div>
       </StyledContainer>
+      <ConfirmDialog {...confirmArgs}>
+        Are you sure you want to delete this recipe (
+        {name}
+        )?
+      </ConfirmDialog>
     </>
   );
 };
