@@ -176,6 +176,10 @@ export const LargeModalContent = styled(ModalContent)`
   display: flex;
   flex-flow: column nowrap;
   padding: 0 !important;
+  ${onMobile} {
+    height: auto;
+    flex: 1;
+  }
 `;
 
 const getPadding = ({
@@ -195,6 +199,16 @@ export const LargeModalContainer = styled(ModalContainer)`
   max-width: initial !important;
   padding: 0 !important;
   margin: 0 !important;
+`;
+
+const largePadding = 50;
+export const LargeModalWrapper = styled(ModalWrapper)`
+  width: calc(100% - ${largePadding * 2}px);
+  height: calc(100% - ${largePadding * 2}px);
+  ${onMobile} {
+    height: 100%;
+    width: 100%;
+  }
 `;
 
 export const AST: FC<{
@@ -322,7 +336,7 @@ export const Visualization: FC<{
       >
         <Fade in={modalOpen}>
           <LargeModalContainer>
-            <ModalWrapper elevation={10}>
+            <LargeModalWrapper elevation={10}>
               <StyledCardHeader
                 title={`Large View: ${title}`}
                 action={(
@@ -334,7 +348,7 @@ export const Visualization: FC<{
               <LargeModalContent>
                 {humanReadableAst && <AST data={humanReadableAst} />}
               </LargeModalContent>
-            </ModalWrapper>
+            </LargeModalWrapper>
           </LargeModalContainer>
         </Fade>
       </Modal>
