@@ -68,6 +68,8 @@ export const ModalContainerRaw = styled(Container)`
     margin: 0;
     width: 100vw;
     padding: 15px;
+    padding-left: calc(15px + env(safe-area-inset-left)) !important;
+    padding-right: calc(15px + env(safe-area-inset-right)) !important;
   }
 `;
 
