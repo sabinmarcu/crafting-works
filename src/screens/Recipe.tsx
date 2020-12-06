@@ -60,17 +60,24 @@ export const RecipeScreen: FC = () => {
   const isMobile = useIsMobile();
   const [tab, setTab] = useState<number>(
     path
-      ? tabs.findIndex(
-        ({ route }) => route === location.pathname.replace(path.url, ''),
-      )
-        || 0
+      ? (
+        () => {
+          const idx = tabs.findIndex(
+            ({ route }) => route === location.pathname.replace(path.url, ''),
+          );
+          if (idx > 0) {
+            return idx;
+          }
+          return 0;
+        }
+      )()
       : 0,
   );
   const prevTab = usePrevious(tab);
   useEffect(
     () => {
       if (path && prevTab !== tab) {
-        history.push(`${path.url}${tabs[tab].route}`);
+        history.push(`${path.url}${(tabs[tab] || tabs[0]).route}`);
       }
     },
     [history, path, tab, prevTab],
