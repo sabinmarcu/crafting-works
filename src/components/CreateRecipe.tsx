@@ -146,7 +146,7 @@ export const CreateRecipeModal: FC<{
                   <TextField
                     {...params}
                     fullWidth
-                    label="Add Symbol"
+                    label="Add Recipe"
                   />
                 )}
               />
