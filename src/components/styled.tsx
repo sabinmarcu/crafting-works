@@ -5,6 +5,7 @@ import {
   CardActions,
   CardContent,
   Container,
+  Tabs,
   Theme,
   Toolbar,
   withTheme,
@@ -33,6 +34,14 @@ export const toolbarStyles = ({
 export const StyledToolbar = withTheme(
   styled(Toolbar)`
     ${toolbarStyles}
+  `,
+);
+
+export const StyledTabs = withTheme(
+  styled(Tabs)`
+    .MuiTabs-flexContainer {
+      ${toolbarStyles}
+    }
   `,
 );
 
