@@ -1,0 +1,7 @@
+branchName: short
+autoCloseIssue: true
+branches:
+  - label: feat
+    prefix: feat/
+  - label: bug
+    prefix: bug/
