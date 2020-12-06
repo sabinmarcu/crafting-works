@@ -94,5 +94,5 @@ export const generateSteps = (
         [] as RecipeAST[],
       );
   }
-  return [];
+  return steps.reverse();
 };
