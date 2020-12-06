@@ -3,6 +3,7 @@ import React, {
   useCallback,
   FC,
   useMemo,
+  useEffect,
 } from 'react';
 
 import {
@@ -30,6 +31,7 @@ import { SymbolType } from '../utils/types';
 import { baseRoute } from '../screens/Recipe';
 
 import { BottomFab } from './BottomFab';
+import { usePreventScroll } from '../state/scroll';
 
 type ComboBoxAddType = {inputValue?: string};
 const filter = createFilterOptions<SymbolType & ComboBoxAddType>();
@@ -42,6 +44,7 @@ export const CreateRecipeModal: FC<{
   onClose,
 }) => {
   const history = useHistory();
+  const scrollPrevent = usePreventScroll();
   const { symbols, addRecipe } = useRecipes();
   const availableSymbols = useMemo(
     () => symbols.filter(({ composite }) => !composite),
@@ -71,6 +74,16 @@ export const CreateRecipeModal: FC<{
       close();
     },
     [name, close, history],
+  );
+  useEffect(
+    () => {
+      if (open) {
+        scrollPrevent.open();
+      } else {
+        scrollPrevent.close();
+      }
+    },
+    [open, scrollPrevent],
   );
   return (
     <Modal
