@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "https://sabinmarcu.github.io/minecraft-calculator/static/css/main.9310deb1.chunk.css",
-    "main.js": "https://sabinmarcu.github.io/minecraft-calculator/static/js/main.848d3187.chunk.js",
-    "main.js.map": "https://sabinmarcu.github.io/minecraft-calculator/static/js/main.848d3187.chunk.js.map",
+    "main.js": "https://sabinmarcu.github.io/minecraft-calculator/static/js/main.2d985ddd.chunk.js",
+    "main.js.map": "https://sabinmarcu.github.io/minecraft-calculator/static/js/main.2d985ddd.chunk.js.map",
     "runtime-main.js": "https://sabinmarcu.github.io/minecraft-calculator/static/js/runtime-main.c845af92.js",
     "runtime-main.js.map": "https://sabinmarcu.github.io/minecraft-calculator/static/js/runtime-main.c845af92.js.map",
     "static/css/2.768ee29e.chunk.css": "https://sabinmarcu.github.io/minecraft-calculator/static/css/2.768ee29e.chunk.css",
@@ -19,6 +19,6 @@
     "static/css/2.768ee29e.chunk.css",
     "static/js/2.462c5b75.chunk.js",
     "static/css/main.9310deb1.chunk.css",
-    "static/js/main.848d3187.chunk.js"
+    "static/js/main.2d985ddd.chunk.js"
   ]
 }
