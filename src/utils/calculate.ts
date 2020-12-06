@@ -1,4 +1,4 @@
-import { RecipesType, RecipeType } from './types';
+import { RecipeAST, RecipesType, RecipeType } from './types';
 
 export const adjust = (
   obj: Record<string, number>,
@@ -36,3 +36,15 @@ export const reduce = (
   );
   return combined;
 };
+
+export const generateAST = (
+  what: RecipeType,
+  recipes: RecipesType,
+  name: string = 'root',
+): RecipeAST => ({
+  name,
+  nodes: Object.keys(what.input)
+    .map((it) => (recipes[it]
+      ? generateAST(recipes[it], recipes, it)
+      : it)),
+});

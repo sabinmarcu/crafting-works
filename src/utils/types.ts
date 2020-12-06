@@ -30,6 +30,7 @@ export type RecipeContextType = {
   recipe: RecipeType,
   symbols: SymbolType[],
   name: string,
+  ast?: RecipeAST,
   resources: Record<string, number>,
   update: (path: string, value: any) => void,
   addInput: (name: string) => void,
@@ -38,5 +39,5 @@ export type RecipeContextType = {
 
 export type RecipeAST = {
   name: string,
-  nodes: RecipeAST,
-}
+  nodes: (RecipeAST | string)[],
+};
