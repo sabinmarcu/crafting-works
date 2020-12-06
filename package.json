@@ -57,9 +57,10 @@
     "feat": "gh issue create --label feat --project Backlog --assignee sabinmarcu",
     "bug": "gh issue create --label bug --project Backlog --assignee sabinmarcu",
     "chore": "gh issue create --label chore --project Backlog --assignee sabinmarcu",
-    "pr": "gh pr create -B master -R $(yarn remote) -p Backlog -f",
+    "pr": "gh pr create -B master -R $(yarn config:remote) -H $(yarn config:branch) -p Backlog -f",
     "merge": "gh pr merge -rd",
-    "remote": "git config --get remote.origin.url | cut -d: -f2- | cut -d. -f1"
+    "config:remote": "git config --get remote.origin.url | cut -d: -f2- | cut -d. -f1",
+    "config:branch": "git rev-parse --abbrev-ref HEAD"
   },
   "browserslist": [
     ">0.2%",
