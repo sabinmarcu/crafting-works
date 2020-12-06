@@ -51,9 +51,11 @@ export const StyledTabPanel = styled(TabPanel)`
 `;
 
 export const StyledLink = styled(Link)`
-  text-decoration: none;
-  cursor: pointer;
-  color: inherit;
+  &, & > * {
+    text-decoration: none;
+    cursor: pointer !important;
+    color: inherit;
+  }
 `;
 
 export const ModalContainerRaw = styled(Container)`
