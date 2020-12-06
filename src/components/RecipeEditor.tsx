@@ -154,7 +154,7 @@ export const RecipeEditor: FC = () => {
           <StyledCard>
             <CardHeader title="Symbols Used" />
             <StyledExpandCardContent style={{ flex: 1 }}>
-              <SymbolsList symbols={symbols} onDelete={deleteHandler} />
+              <SymbolsList filter={false} symbols={symbols} onDelete={deleteHandler} />
             </StyledExpandCardContent>
             <CardContent>
               <Autocomplete
