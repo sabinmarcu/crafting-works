@@ -50,7 +50,7 @@ export const useLocalStorage = <T>(
       }
     } finally {
       if (shouldUpdate) {
-        if (value === null) {
+        if (typeof value !== 'undefined') {
           logState('⚙ LocalStorage Remove', key, value);
           localStorage.removeItem(makeKey(key));
         } else {

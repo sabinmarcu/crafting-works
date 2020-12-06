@@ -15,6 +15,7 @@ export type ThemeContextType = {
   theme: ThemeType,
   t: Theme,
   toggle: () => void,
+  reset: () => void,
 };
 
 const themes = {
@@ -28,6 +29,7 @@ export const ThemeContext = createContext<ThemeContextType>({
   theme: defaultTheme,
   t: themes[defaultTheme],
   toggle: () => {},
+  reset: () => {},
 });
 
 export const AppThemeProvider: FC = ({ children }) => {
@@ -60,12 +62,19 @@ export const AppThemeProvider: FC = ({ children }) => {
     },
     [theme, hasUserSelect, isLight, isDark, setTheme],
   );
+  const reset = useCallback(
+    () => {
+      setHasUserSelect(undefined);
+    },
+    [setHasUserSelect],
+  );
 
   return (
     <ThemeContext.Provider value={{
       theme: theme || 'light',
       t,
       toggle: toggleTheme,
+      reset,
     }}
     >
       <ThemeProvider theme={t}>

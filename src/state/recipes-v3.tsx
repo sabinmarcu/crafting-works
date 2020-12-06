@@ -19,11 +19,12 @@ const RecipesContext = createContext<RecipesContextType>({
   names: [],
   update: () => {},
   addRecipe: () => {},
+  reset: () => {},
 });
 
 export const useRecipes = () => useContext(RecipesContext);
 export const RecipeProviderV3: FC = ({ children }) => {
-  const [recipes,,update] = useLocalStorageObject('recipes-v3', seedData);
+  const [recipes, setRecipes, update] = useLocalStorageObject('recipes-v3', seedData);
   const recipeNames = useMemo(
     () => (recipes ? Object.keys(recipes) : []),
     [recipes],
@@ -53,12 +54,17 @@ export const RecipeProviderV3: FC = ({ children }) => {
     (name: string) => update(name, { input: {}, output: 0 }),
     [update],
   );
+  const reset = useCallback(
+    () => setRecipes({}),
+    [setRecipes],
+  );
   return (
     <RecipesContext.Provider value={{
       recipes,
       symbols,
       names: recipeNames,
       update,
+      reset,
       addRecipe,
     }}
     >
