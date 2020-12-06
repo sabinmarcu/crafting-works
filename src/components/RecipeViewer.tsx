@@ -3,9 +3,10 @@ import {
   Card, CardContent, CardHeader, Container, Typography,
 } from '@material-ui/core';
 import styled from 'styled-components';
-import { useResources } from '../state/recipes-v3';
+import { useRecipe, useResources } from '../state/recipes-v3';
 import { onMobile } from './styled';
 import { camelCaseToCapitalized } from '../utils/strings';
+import { Title } from '../state/title';
 
 export const StyledContainer = styled(Container)`
   display: grid;
@@ -46,6 +47,7 @@ export const ResourcePreview: FC<{
 );
 
 export const ResourcesView: FC = () => {
+  const { name } = useRecipe();
   const resources = useResources();
   const rootResources = useMemo(
     () => Object.entries(resources)
@@ -53,18 +55,21 @@ export const ResourcesView: FC = () => {
     [resources],
   );
   return (
-    <StyledContainer>
-      <Card>
-        <CardHeader title="Total Resouces" />
-        <CardContent>
-          {rootResources.map(
-            ([key, value]) => (
-              <ResourcePreview key={key} text={key} amount={value} />
-            ),
-          )}
-        </CardContent>
-      </Card>
-    </StyledContainer>
+    <>
+      <Title title={`View: ${camelCaseToCapitalized(name)}`} />
+      <StyledContainer>
+        <Card>
+          <CardHeader title="Total Resouces" />
+          <CardContent>
+            {rootResources.map(
+              ([key, value]) => (
+                <ResourcePreview key={key} text={key} amount={value} />
+              ),
+            )}
+          </CardContent>
+        </Card>
+      </StyledContainer>
+    </>
   );
 };
 

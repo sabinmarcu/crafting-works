@@ -5,13 +5,16 @@ import {
   Toolbar,
   Container,
   Typography,
+  IconButton,
 } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import styled from 'styled-components';
 
 import { useHistory } from 'react-router';
 import { useDrawer } from '../state/drawer';
 import { RecipesList } from './RecipesList';
 import Symbols from './SymbolsList';
+import { useIsMobile } from '../hooks/useIsMobile';
 
 const StyledDrawer = styled(SwipeableDrawer)`
   .styledPaper {
@@ -34,15 +37,31 @@ const StyledContainer = styled(Container)`
   margin: 1.5rem 0;
 `;
 
-const DrawerAppBar: FC = ({ children }) => (
-  <StyledAppBar>
-    <Toolbar>
-      <Container>
-        <Typography variant="h4">{children}</Typography>
-      </Container>
-    </Toolbar>
-  </StyledAppBar>
-);
+const StyledToolbarContainer = styled(Container)`
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const DrawerAppBar: FC = ({ children }) => {
+  const isMobile = useIsMobile();
+  const { close } = useDrawer();
+  return (
+    <StyledAppBar>
+      <Toolbar>
+        <StyledToolbarContainer>
+          <Typography variant="h4">{children}</Typography>
+          {isMobile && (
+            <IconButton onClick={close}>
+              <CloseIcon />
+            </IconButton>
+          )}
+        </StyledToolbarContainer>
+      </Toolbar>
+    </StyledAppBar>
+  );
+};
 
 export const Drawer: FC = () => {
   const { isOpen, open, close } = useDrawer();
