@@ -7,7 +7,7 @@ import {
 } from 'react';
 
 import seedData from '../config/seed';
-import { reduce } from '../utils/calculate';
+import { generateAST, reduce } from '../utils/calculate';
 import { useLocalStorageObject } from '../hooks/useLocalStorageObject';
 import { RecipeContextType, RecipesContextType, RecipesType } from '../utils/types';
 
@@ -120,12 +120,17 @@ export const RecipeProvider: FC<{ name: string }> = ({ children, name }) => {
     () => (store.recipes ? reduce(recipe, store.recipes) : {}),
     [recipe, store],
   );
+  const ast = useMemo(
+    () => (recipe ? generateAST(recipe, store.recipes) : undefined),
+    [recipe, store],
+  );
   return (
     <RecipeContext.Provider value={{
       recipe,
       symbols,
       name,
       resources,
+      ast,
       update: updateFunc,
       addInput,
       removeInput,
