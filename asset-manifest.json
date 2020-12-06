@@ -1,24 +1,24 @@
 {
   "files": {
     "main.css": "https://sabinmarcu.github.io/minecraft-calculator/static/css/main.cf1b5c1e.chunk.css",
-    "main.js": "https://sabinmarcu.github.io/minecraft-calculator/static/js/main.d54ded5a.chunk.js",
-    "main.js.map": "https://sabinmarcu.github.io/minecraft-calculator/static/js/main.d54ded5a.chunk.js.map",
+    "main.js": "https://sabinmarcu.github.io/minecraft-calculator/static/js/main.d8006e02.chunk.js",
+    "main.js.map": "https://sabinmarcu.github.io/minecraft-calculator/static/js/main.d8006e02.chunk.js.map",
     "runtime-main.js": "https://sabinmarcu.github.io/minecraft-calculator/static/js/runtime-main.c845af92.js",
     "runtime-main.js.map": "https://sabinmarcu.github.io/minecraft-calculator/static/js/runtime-main.c845af92.js.map",
     "static/css/2.768ee29e.chunk.css": "https://sabinmarcu.github.io/minecraft-calculator/static/css/2.768ee29e.chunk.css",
-    "static/js/2.7f92fe7c.chunk.js": "https://sabinmarcu.github.io/minecraft-calculator/static/js/2.7f92fe7c.chunk.js",
-    "static/js/2.7f92fe7c.chunk.js.map": "https://sabinmarcu.github.io/minecraft-calculator/static/js/2.7f92fe7c.chunk.js.map",
+    "static/js/2.c7ca61cc.chunk.js": "https://sabinmarcu.github.io/minecraft-calculator/static/js/2.c7ca61cc.chunk.js",
+    "static/js/2.c7ca61cc.chunk.js.map": "https://sabinmarcu.github.io/minecraft-calculator/static/js/2.c7ca61cc.chunk.js.map",
     "index.html": "https://sabinmarcu.github.io/minecraft-calculator/index.html",
     "static/css/2.768ee29e.chunk.css.map": "https://sabinmarcu.github.io/minecraft-calculator/static/css/2.768ee29e.chunk.css.map",
     "static/css/main.cf1b5c1e.chunk.css.map": "https://sabinmarcu.github.io/minecraft-calculator/static/css/main.cf1b5c1e.chunk.css.map",
-    "static/js/2.7f92fe7c.chunk.js.LICENSE.txt": "https://sabinmarcu.github.io/minecraft-calculator/static/js/2.7f92fe7c.chunk.js.LICENSE.txt",
+    "static/js/2.c7ca61cc.chunk.js.LICENSE.txt": "https://sabinmarcu.github.io/minecraft-calculator/static/js/2.c7ca61cc.chunk.js.LICENSE.txt",
     "static/media/index.css": "https://sabinmarcu.github.io/minecraft-calculator/static/media/roboto-latin-900italic.cb5ad999.woff2"
   },
   "entrypoints": [
     "static/js/runtime-main.c845af92.js",
     "static/css/2.768ee29e.chunk.css",
-    "static/js/2.7f92fe7c.chunk.js",
+    "static/js/2.c7ca61cc.chunk.js",
     "static/css/main.cf1b5c1e.chunk.css",
-    "static/js/main.d54ded5a.chunk.js"
+    "static/js/main.d8006e02.chunk.js"
   ]
 }
