@@ -2,7 +2,7 @@ import React, {
   useState,
   useCallback,
   FC,
-  ChangeEvent,
+  useMemo,
 } from 'react';
 
 import {
@@ -19,6 +19,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Measure, { BoundingRect } from 'react-measure';
 import styled from 'styled-components';
 
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import {
   ModalContainer,
   ModalContent,
@@ -26,7 +27,8 @@ import {
   RightCardActions,
 } from './styled';
 import { useRecipes } from '../state/recipes-v3';
-import { capitalizedToCamelCase } from '../utils/strings';
+import { camelCaseToCapitalized, capitalizedToCamelCase } from '../utils/strings';
+import { SymbolType } from '../utils/types';
 
 export const FabWrapper = styled.div`
   position: fixed;
@@ -38,6 +40,9 @@ const Spacer = styled.div`
   width: 100%;
 `;
 
+type ComboBoxAddType = {inputValue?: string};
+const filter = createFilterOptions<SymbolType & ComboBoxAddType>();
+
 export const CreateRecipeModal: FC<{
   open: boolean,
   onClose: () => void,
@@ -45,22 +50,37 @@ export const CreateRecipeModal: FC<{
   open,
   onClose,
 }) => {
-  const { addRecipe } = useRecipes();
-  const [name, setName] = useState<string>('');
+  const { symbols, addRecipe } = useRecipes();
+  const availableSymbols = useMemo(
+    () => symbols.filter(({ composite }) => !composite),
+    [symbols],
+  );
+  const [newSymbol, setNewSymbol] = useState<SymbolType & ComboBoxAddType | null>(null);
+  // useEffect(
+  //   () => {
+  //     if (newSymbol) {
+  //       addInput(newSymbol.name);
+  //       setNewSymbol(null);
+  //     }
+  //   },
+  //   [newSymbol, addInput, setNewSymbol],
+  // );
+  const name = useMemo(
+    () => newSymbol?.name,
+    [newSymbol],
+  );
   const close = useCallback(
     () => {
-      setName('');
+      setNewSymbol(null);
       onClose();
     },
-    [setName, onClose],
-  );
-  const onChange = useCallback(
-    ({ target: { value } }: ChangeEvent<HTMLInputElement>) => setName(value),
-    [setName],
+    [setNewSymbol, onClose],
   );
   const onSave = useCallback(
     () => {
-      addRecipe(capitalizedToCamelCase(name));
+      if (name) {
+        addRecipe(capitalizedToCamelCase(name));
+      }
       close();
     },
     [name, close],
@@ -82,11 +102,53 @@ export const CreateRecipeModal: FC<{
           <ModalWrapper elevation={10}>
             <CardHeader title="Create new Recipe" />
             <ModalContent>
-              <TextField
-                fullWidth
-                label="Short Name"
-                value={name}
-                onChange={onChange}
+              <Autocomplete
+                value={newSymbol}
+                onChange={(_, newValue) => {
+                  if (typeof newValue === 'string') {
+                    setNewSymbol({ name: newValue, composite: false });
+                  } else if (newValue && newValue.inputValue) {
+                    setNewSymbol({ name: newValue.inputValue, composite: false });
+                  } else if (newValue) {
+                    setNewSymbol(newValue);
+                  } else {
+                    setNewSymbol(null);
+                  }
+                }}
+                filterOptions={(options, params) => {
+                  const filtered = filter(options, params);
+
+                  // Suggest the creation of a new value
+                  if (params.inputValue !== '') {
+                    filtered.push({
+                      inputValue: params.inputValue,
+                      name: `Add "${params.inputValue}"`,
+                    });
+                  }
+
+                  return filtered;
+                }}
+                selectOnFocus
+                clearOnBlur
+                handleHomeEndKeys
+                options={availableSymbols as (SymbolType & ComboBoxAddType)[]}
+                getOptionLabel={(option) => {
+                  if (typeof option === 'string') {
+                    return option;
+                  }
+                  if (option && option.inputValue) {
+                    return option.inputValue;
+                  }
+                  return option.name;
+                }}
+                renderOption={({ name: n }) => camelCaseToCapitalized(n)}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    fullWidth
+                    label="Add Symbol"
+                  />
+                )}
               />
             </ModalContent>
             <RightCardActions>
