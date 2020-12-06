@@ -62,6 +62,26 @@ export const generateAST = (
   return ast;
 };
 
+export const generateUses = (
+  name: string = 'root',
+  recipes: RecipesType,
+  parent?: RecipeAST,
+): RecipeAST => {
+  const ast: RecipeAST = {
+    name,
+    parent,
+  };
+  const uses = Object.entries(recipes)
+    .filter(([, { input }]) => Object.keys(input).includes(name))
+    .map(([key]) => key);
+
+  if (uses.length > 0) {
+    ast.children = uses.map((it) => generateUses(it, recipes, ast));
+  }
+
+  return ast;
+};
+
 export const generateSteps = (
   ast: RecipeAST,
   resources: Record<string, number>,
