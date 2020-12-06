@@ -110,8 +110,8 @@ export const ASTPreview: FC = () => {
   const isMobile = useIsMobile();
   const tabs = useMemo(
     () => [
-      { title: 'Dependencies', ast },
-      { title: 'Uses', ast: uses },
+      { title: 'Dependencies', ast, styleLeafNodes: true },
+      { title: 'Uses', ast: uses, styleLeafNodes: false },
     ],
     [ast, uses],
   );
@@ -136,9 +136,13 @@ export const ASTPreview: FC = () => {
             />
           ))}
         </StyledTabs>
-        {tabs.map(({ title, ast: tree }) => (
+        {tabs.map(({ title, ast: tree, styleLeafNodes }) => (
           <StyledTabPanel value={title} key={title}>
-            <Visualization ast={tree} title={title} />
+            <Visualization
+              ast={tree}
+              title={title}
+              styleLeafNodes={styleLeafNodes}
+            />
           </StyledTabPanel>
         ))}
       </TabContext>

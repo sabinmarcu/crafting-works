@@ -20,12 +20,13 @@ import { RecipeEditor } from '../components/RecipeEditor';
 import { RecipeViewer } from '../components/RecipeViewer';
 import { StyledTabs } from '../components/styled';
 import { usePrevious } from '../hooks/usePrevious';
+import { recipeBaseRoute } from '../config/constants';
 
 const StyledContainer = styled(Container)`
   padding: 1rem 0;
 `;
 
-export const baseRoute = '/recipes/:name';
+export const baseRoute = recipeBaseRoute;
 
 const tabs = [
   { title: 'Viewer', Component: RecipeViewer, route: '/view' },

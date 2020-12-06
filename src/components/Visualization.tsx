@@ -74,9 +74,11 @@ export const LargeModalWrapper = styled(ModalWrapper)`
 export const Visualization: FC<{
   ast?: RecipeAST,
   title: string,
+  styleLeafNodes?: boolean,
 }> = ({
   ast,
   title,
+  styleLeafNodes = true,
 }) => {
   const scrollPrevent = usePreventScroll();
   const [modalOpen, setModalOpen] = useState(false);
@@ -115,7 +117,12 @@ export const Visualization: FC<{
   );
   return (
     <>
-      {humanReadableAst && <AST data={humanReadableAst} />}
+      {humanReadableAst && (
+      <AST
+        data={humanReadableAst}
+        styleLeafNodes={styleLeafNodes}
+      />
+      )}
       <RightCardActions>
         <Button
           color="primary"
@@ -146,7 +153,12 @@ export const Visualization: FC<{
               )}
               />
               <LargeModalContent>
-                {humanReadableAst && <AST data={humanReadableAst} />}
+                {humanReadableAst && (
+                <AST
+                  data={humanReadableAst}
+                  styleLeafNodes={styleLeafNodes}
+                />
+                )}
               </LargeModalContent>
             </LargeModalWrapper>
           </LargeModalContainer>
