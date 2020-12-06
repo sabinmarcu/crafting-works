@@ -30,15 +30,15 @@ const StyledDrawer = styled(SwipeableDrawer)`
 `;
 
 const StyledAppBar = styled(AppBar)`
-  position: sticky;
+  position: sticky !important;
 `;
 
 const StyledContainer = styled(Container)`
-  margin: 1.5rem 0;
+  margin: 1.5rem 0 !important;
 `;
 
 const StyledToolbarContainer = styled(Container)`
-  display: flex;
+  display: flex !important;
   flex-flow: row nowrap;
   align-items: center;
   justify-content: space-between;

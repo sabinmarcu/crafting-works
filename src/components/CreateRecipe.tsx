@@ -4,21 +4,27 @@ import React, {
   FC,
   ChangeEvent,
 } from 'react';
+
 import {
-  Container,
   Fab,
   Modal,
   Backdrop,
-  Card,
+  Fade,
   CardHeader,
-  CardContent,
   TextField,
   Button,
-  CardActions,
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+
+import Measure, { BoundingRect } from 'react-measure';
 import styled from 'styled-components';
-import { onMobile } from './styled';
+
+import {
+  ModalContainer,
+  ModalContent,
+  ModalWrapper,
+  RightCardActions,
+} from './styled';
 import { useRecipes } from '../state/recipes-v3';
 import { capitalizedToCamelCase } from '../utils/strings';
 
@@ -28,36 +34,8 @@ export const FabWrapper = styled.div`
   right: 25px;
 `;
 
-export const ModalContainer = styled(Container)`
-  padding: 25px;
-  margin-top: 25px;
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
-  justify-content: center;
-  ${onMobile} {
-    margin: 0;
-    width: 100vw;
-    height: 100vh;
-    padding: 15px;
-  }
-`;
-
-export const ModalWrapper = styled(Card)`
-  display: flex;
-  flex-flow: column nowrap;
+const Spacer = styled.div`
   width: 100%;
-`;
-
-export const ModalContent = styled(CardContent)`
-  flex: 1;
-`;
-
-export const ModalActions = styled(CardActions)`
-  display: flex;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: flex-end;
 `;
 
 export const CreateRecipeModal: FC<{
@@ -99,23 +77,25 @@ export const CreateRecipeModal: FC<{
         timeout: 500,
       }}
     >
-      <ModalContainer>
-        <ModalWrapper elevation={10}>
-          <CardHeader title="Create new Recipe" />
-          <ModalContent>
-            <TextField
-              fullWidth
-              label="Short Name"
-              value={name}
-              onChange={onChange}
-            />
-          </ModalContent>
-          <ModalActions>
-            <Button color="primary" variant="contained" onClick={onSave}>Save</Button>
-            <Button color="secondary" onClick={close}>Cancel</Button>
-          </ModalActions>
-        </ModalWrapper>
-      </ModalContainer>
+      <Fade in={open}>
+        <ModalContainer>
+          <ModalWrapper elevation={10}>
+            <CardHeader title="Create new Recipe" />
+            <ModalContent>
+              <TextField
+                fullWidth
+                label="Short Name"
+                value={name}
+                onChange={onChange}
+              />
+            </ModalContent>
+            <RightCardActions>
+              <Button color="primary" variant="contained" onClick={onSave}>Save</Button>
+              <Button color="secondary" onClick={close}>Cancel</Button>
+            </RightCardActions>
+          </ModalWrapper>
+        </ModalContainer>
+      </Fade>
     </Modal>
   );
 };
@@ -130,13 +110,27 @@ export const CreateRecipeWrapper: FC = () => {
     () => setIsOpen(true),
     [setIsOpen],
   );
+  const [size, setSize] = useState<BoundingRect>();
   return (
     <>
-      <FabWrapper>
-        <Fab onClick={open} color="primary">
-          <AddIcon />
-        </Fab>
-      </FabWrapper>
+      <Measure
+        bounds
+        onResize={({ bounds }) => setSize(bounds)}
+      >
+        {({ measureRef }) => (
+          <FabWrapper ref={measureRef}>
+            <Fab onClick={open} color="primary">
+              <AddIcon />
+            </Fab>
+          </FabWrapper>
+        )}
+      </Measure>
+      <Spacer style={{
+        height: size
+          ? size.height + 50
+          : 50,
+      }}
+      />
       <CreateRecipeModal open={isOpen} onClose={close} />
     </>
   );

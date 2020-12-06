@@ -43,8 +43,8 @@ export const generateAST = (
   name: string = 'root',
 ): RecipeAST => ({
   name,
-  nodes: Object.keys(what.input)
+  children: Object.keys(what.input)
     .map((it) => (recipes[it]
       ? generateAST(recipes[it], recipes, it)
-      : it)),
+      : { name: it })),
 });
