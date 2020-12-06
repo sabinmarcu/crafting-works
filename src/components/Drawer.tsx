@@ -149,6 +149,7 @@ export const Drawer: FC = () => {
           <StyledTabs
             value={tab}
             onChange={onChange}
+            variant={isMobile ? 'fullWidth' : undefined}
           >
             {tabs.map(({ title }) => (
               <Tab label={title} key={title} value={title} />
