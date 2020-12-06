@@ -5,8 +5,10 @@ import React, {
   useCallback,
   FC,
   useMemo,
+  useEffect,
 } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
+import { useMatchMedia } from '../hooks/useMatchMedia';
 
 export type ThemeType = 'light' | 'dark';
 export type ThemeContextType = {
@@ -20,22 +22,45 @@ const themes = {
   light: createMuiTheme({ palette: { type: 'light' } }),
 };
 
+const defaultTheme = 'dark';
+
 export const ThemeContext = createContext<ThemeContextType>({
-  theme: 'light',
-  t: themes.light,
+  theme: defaultTheme,
+  t: themes[defaultTheme],
   toggle: () => {},
 });
 
 export const AppThemeProvider: FC = ({ children }) => {
-  const [theme, setTheme] = useLocalStorage<ThemeType>('theme', 'light');
+  const [theme, setTheme] = useLocalStorage<ThemeType>('theme', defaultTheme);
+  const [hasUserSelect, setHasUserSelect] = useLocalStorage<boolean>('theme-select');
   const toggleTheme = useCallback(
-    () => setTheme((t) => (t === 'light' ? 'dark' : 'light')),
-    [setTheme],
+    () => {
+      setHasUserSelect(true);
+      setTheme((t) => (t === 'light' ? 'dark' : 'light'));
+    },
+    [setTheme, setHasUserSelect],
   );
   const t = useMemo(
     () => (theme ? themes[theme] : themes.light),
     [theme],
   );
+  const isLight = useMatchMedia('(prefers-color-scheme: light)');
+  const isDark = useMatchMedia('(prefers-color-scheme: dark)');
+  useEffect(
+    () => {
+      if (!hasUserSelect) {
+        if (isLight) {
+          setTheme('light');
+        } else if (isDark) {
+          setTheme('dark');
+        } else {
+          setTheme(defaultTheme);
+        }
+      }
+    },
+    [theme, hasUserSelect, isLight, isDark, setTheme],
+  );
+
   return (
     <ThemeContext.Provider value={{
       theme: theme || 'light',

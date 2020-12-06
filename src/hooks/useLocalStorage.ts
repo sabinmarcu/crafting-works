@@ -37,9 +37,16 @@ export const useLocalStorage = <T>(
     }
     let shouldUpdate = true;
     try {
-      const existingValue = localStorage.getItem(makeKey(key));
-      if (existingValue && JSON.parse(existingValue) === value) {
-        shouldUpdate = false;
+      let existingValue: string | T | null = localStorage.getItem(makeKey(key));
+      try {
+        existingValue = JSON.parse(existingValue as string);
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e);
+      } finally {
+        if (existingValue && existingValue === value) {
+          shouldUpdate = false;
+        }
       }
     } finally {
       if (shouldUpdate) {
