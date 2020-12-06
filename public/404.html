@@ -5,9 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Redirecting...</title>
 	<script>
-		const PUBLIC_URL = "%PUBLIC_URL%";
-		const path = window.location.href.replace(PUBLIC_URL, '');
-		window.location = `${PUBLIC_URL}/?r=${PATH}`
+		const root = window.location.pathname.split('/').slice(0, 2).join('/');
+		const path = window.location.pathname.split('/').slice(2).join('/');
+		window.location = `${root}/?r=/${path}`
 	</script>
 </head>
 <body>
