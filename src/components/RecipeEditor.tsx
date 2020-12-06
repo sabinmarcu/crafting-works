@@ -29,17 +29,17 @@ import { onMobile } from './styled';
 import { SymbolType } from '../utils/types';
 
 export const StyledContainer = styled(Container)`
-  display: grid;
+  display: grid !important;
   grid-template-columns: 1fr 1fr;
   grid-gap: 1rem;
-  padding: 1rem 0;
+  padding: 1rem 0 !important;
   ${onMobile} {
     grid-template-columns: 1fr;
   }
 `;
 
 export const StyledTextField = styled(TextField)`
-  margin: 0.5rem 0;
+  margin: 0.5rem 0 !important;
 `;
 
 const StyledCard = styled(Card)`

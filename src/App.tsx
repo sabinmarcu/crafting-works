@@ -17,27 +17,26 @@ import { baseURL } from './config/constants';
 const StyledContainer = withTheme(
   styled(Container)`
     background: ${({ theme: { palette: { background: { default: background } } } }) => background};
-    width: 100vw;
-    height: 100vh;
-    max-width: initial;
-    overflow-y: auto;
+    width: 100vw !important;
+    min-height: 100vh;
+    max-width: initial !important;
   `,
 );
 
 export const App: FC = () => (
   <Router basename={baseURL}>
     <Redirect />
-    <NavBar />
-    <Drawer />
     <RouteChangeDrawerClose />
     <StyledContainer>
+      <NavBar />
+      <Drawer />
       <Switch>
         <Route exact path="/" component={HomeScreen} />
         <Route path={recipeRoute} component={RecipeScreen} />
         <Route exact path="/test" component={TestScreen} />
       </Switch>
+      <CreateRecipe />
     </StyledContainer>
-    <CreateRecipe />
   </Router>
 );
 

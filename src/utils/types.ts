@@ -39,5 +39,5 @@ export type RecipeContextType = {
 
 export type RecipeAST = {
   name: string,
-  nodes: (RecipeAST | string)[],
+  children?: RecipeAST[],
 };

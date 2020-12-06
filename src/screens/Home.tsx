@@ -13,10 +13,10 @@ import { RecipesList } from '../components/RecipesList';
 import { onMobile } from '../components/styled';
 
 export const StyledContainer = styled(Container)`
-  display: grid;
+  display: grid !important;
   grid-template-columns: 1fr 1fr;
   grid-gap: 1rem;
-  padding: 1rem 0;
+  padding: 1rem 0 !important;
   ${onMobile} {
     grid-template-columns: 1fr;
   }
