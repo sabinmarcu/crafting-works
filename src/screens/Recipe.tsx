@@ -58,7 +58,14 @@ export const RecipeScreen: FC = () => {
   );
   const { name } = useParams<{name:string}>();
   const isMobile = useIsMobile();
-  const [tab, setTab] = useState<number>(0);
+  const [tab, setTab] = useState<number>(
+    path
+      ? tabs.findIndex(
+        ({ route }) => route === location.pathname.replace(path.url, ''),
+      )
+        || 0
+      : 0,
+  );
   const prevTab = usePrevious(tab);
   useEffect(
     () => {
