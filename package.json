@@ -56,7 +56,9 @@
     "eject": "react-scripts eject",
     "feat": "gh issue create --label feat --project Backlog --assignee sabinmarcu",
     "bug": "gh issue create --label bug --project Backlog --assignee sabinmarcu",
-    "chore": "gh issue create --label chore --project Backlog --assignee sabinmarcu"
+    "chore": "gh issue create --label chore --project Backlog --assignee sabinmarcu",
+    "pr": "gh pr create",
+    "merge": "gh pr merge -rd"
   },
   "browserslist": [
     ">0.2%",
