@@ -177,12 +177,12 @@ export const AST: FC<{
           <SVG ref={measureRef}>
             <Tree
               data={data}
-              orientation="horizontal"
+              orientation="vertical"
               collapsible={false}
               translate={translate}
               textLayout={{
                 textAnchor: 'start',
-                y: -15,
+                y: 0,
                 x: 15,
               }}
             />
