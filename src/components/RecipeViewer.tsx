@@ -310,6 +310,7 @@ export const StepsView: FC = () => {
     <div>
       {steps && steps.map((step, idx) => (
         <Accordion
+          key={`${idx.toString()}`}
           expanded={active === idx}
           onChange={activate(idx)}
         >

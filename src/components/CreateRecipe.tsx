@@ -20,6 +20,7 @@ import Measure, { BoundingRect } from 'react-measure';
 import styled from 'styled-components';
 
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import { useHistory } from 'react-router';
 import {
   ModalContainer,
   ModalContent,
@@ -29,6 +30,7 @@ import {
 import { useRecipes } from '../state/recipes-v3';
 import { camelCaseToCapitalized, capitalizedToCamelCase } from '../utils/strings';
 import { SymbolType } from '../utils/types';
+import { baseRoute } from '../screens/Recipe';
 
 export const FabWrapper = styled.div`
   position: fixed;
@@ -50,21 +52,13 @@ export const CreateRecipeModal: FC<{
   open,
   onClose,
 }) => {
+  const history = useHistory();
   const { symbols, addRecipe } = useRecipes();
   const availableSymbols = useMemo(
     () => symbols.filter(({ composite }) => !composite),
     [symbols],
   );
   const [newSymbol, setNewSymbol] = useState<SymbolType & ComboBoxAddType | null>(null);
-  // useEffect(
-  //   () => {
-  //     if (newSymbol) {
-  //       addInput(newSymbol.name);
-  //       setNewSymbol(null);
-  //     }
-  //   },
-  //   [newSymbol, addInput, setNewSymbol],
-  // );
   const name = useMemo(
     () => newSymbol?.name,
     [newSymbol],
@@ -80,10 +74,14 @@ export const CreateRecipeModal: FC<{
     () => {
       if (name) {
         addRecipe(capitalizedToCamelCase(name));
+        history.push([
+          baseRoute.replace(':name', name),
+          'edit',
+        ].join('/'));
       }
       close();
     },
-    [name, close],
+    [name, close, history],
   );
   return (
     <Modal
