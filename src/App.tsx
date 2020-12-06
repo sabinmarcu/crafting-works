@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router';
 import { Container, withTheme } from '@material-ui/core';
 import styled from 'styled-components';
 
+import { Redirect } from './components/Redirect';
 import { NavBar } from './components/NavBar';
 import { Drawer, RouteChangeDrawerClose } from './components/Drawer';
 import CreateRecipe from './components/CreateRecipe';
@@ -25,6 +26,7 @@ const StyledContainer = withTheme(
 
 export const App: FC = () => (
   <Router basename={baseURL}>
+    <Redirect />
     <NavBar />
     <Drawer />
     <RouteChangeDrawerClose />
