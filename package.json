@@ -83,7 +83,8 @@
     "prune:local": "git prune",
     "prune:remote": "git remote prune origin",
     "config:remote": "git config --get remote.origin.url | cut -d: -f2- | cut -d. -f1",
-    "config:branch": "git rev-parse --abbrev-ref HEAD"
+    "config:branch": "git rev-parse --abbrev-ref HEAD",
+    "config:perm": "find .husky -type f -print0 | xargs -0 chmod +x"
   },
   "browserslist": [
     ">0.2%",
