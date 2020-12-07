@@ -4,6 +4,7 @@ import React, {
   useCallback,
 } from 'react';
 import {
+  Button,
   CardContent,
   CardHeader,
   Container,
@@ -20,7 +21,9 @@ import {
 
 import { Title } from '../state/title';
 import { camelCaseToCapitalized } from '../utils/strings';
-import { onMobile, StyledCard, StyledExpandCardContent } from './styled';
+import {
+  onMobile, RightCardActions, StyledCard, StyledExpandCardContent,
+} from './styled';
 import { ConfirmDialog, useConfirm } from './Confirm';
 import { SymbolsEditor } from './SymbolsEditor';
 
@@ -29,8 +32,14 @@ export const StyledContainer = styled(Container)`
   grid-template-columns: 1fr 1fr;
   grid-gap: 1rem;
   padding: 1rem 0 !important;
+  & > * {
+    grid-column: 1;
+  }
   ${onMobile} {
     grid-template-columns: 1fr;
+    & > * {
+      grid-column: 1 !important;
+    }
   }
 `;
 
@@ -76,6 +85,28 @@ export const Output: FC = () => {
   );
 };
 
+export const SymbolsWrapper = styled.div`
+  grid-row: 1;
+  ${onMobile} {
+    grid-row: 1;
+  }
+`;
+
+export const RemoveWrapper = styled.div`
+  grid-row: 2;
+  ${onMobile} {
+    grid-row: 3;
+  }
+`;
+
+export const InputsWrapper = styled.div`
+  grid-row: 1/5;
+  grid-column: 2;
+  ${onMobile} {
+    grid-row: 2;
+  }
+`;
+
 export const RecipeEditor: FC = () => {
   const { removeRecipe } = useRecipes();
   const history = useHistory();
@@ -98,10 +129,10 @@ export const RecipeEditor: FC = () => {
     <>
       <Title title={`Edit: ${camelCaseToCapitalized(name)}`} />
       <StyledContainer>
-        <div>
+        <SymbolsWrapper>
           <SymbolsEditor />
-        </div>
-        <div>
+        </SymbolsWrapper>
+        <InputsWrapper>
           <StyledCard>
             <CardHeader title="Materials" />
             <StyledExpandCardContent>
@@ -116,7 +147,19 @@ export const RecipeEditor: FC = () => {
               <Output />
             </CardContent>
           </StyledCard>
-        </div>
+        </InputsWrapper>
+        <RemoveWrapper>
+          <StyledCard>
+            <RightCardActions>
+              <Button
+                variant="contained"
+                color="secondary"
+              >
+                Delete Recipe
+              </Button>
+            </RightCardActions>
+          </StyledCard>
+        </RemoveWrapper>
       </StyledContainer>
       <ConfirmDialog {...confirmArgs}>
         Are you sure you want to delete this recipe (
