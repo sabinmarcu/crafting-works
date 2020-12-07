@@ -45,24 +45,30 @@
     "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-react": "^7.20.3",
     "eslint-plugin-react-hooks": "^4.0.8",
+    "husky": "next",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.2.0",
     "prettier-airbnb-config": "^1.0.0",
     "react-refresh": "^0.9.0"
   },
   "scripts": {
+    "postinstall": "husky install",
+
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
+
     "feat": "gh issue create --label feat --project Backlog --assignee sabinmarcu --body \\\"\\\" --title \"$*\"",
     "bug": "gh issue create --label bug --project Backlog --assignee sabinmarcu --body \\\"\\\" --title \"$*\"",
     "chore": "gh issue create --label chore --project Backlog --assignee sabinmarcu --body \\\"\\\" --title \"$*\"",
+
     "pr": "run-s \"pr:*\"",
     "pr:push": "git push origin \"$(yarn config:branch)\"",
     "pr:create": "gh pr create --base master --repo \"$(yarn config:remote)\" --head \"$(yarn config:branch)\" --project Backlog --fill",
     "pr:merge": "gh pr merge -rd",
     "pr:pull": "git pull origin \"$(yarn config:branch)\"",
+
     "config:remote": "git config --get remote.origin.url | cut -d: -f2- | cut -d. -f1",
     "config:branch": "git rev-parse --abbrev-ref HEAD"
   },
