@@ -65,5 +65,3 @@ export const BottomFab: FC<{
     </>
   );
 };
-
-export default BottomFab;

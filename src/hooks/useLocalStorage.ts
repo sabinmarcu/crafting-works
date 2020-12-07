@@ -95,5 +95,3 @@ export const useLocalStorage = <T>(
   }, [setValue, key]);
   return [value, setValue];
 };
-
-export default useLocalStorage;

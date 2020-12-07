@@ -15,5 +15,3 @@ export const TestScreen: FC = () => {
     </>
   );
 };
-
-export default TestScreen;

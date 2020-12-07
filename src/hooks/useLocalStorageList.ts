@@ -211,5 +211,3 @@ export function useLocalStorageList<T>(
     getKey,
   };
 }
-
-export default useLocalStorageList;

@@ -39,5 +39,3 @@ export const RecipesList: FC = () => {
     </List>
   );
 };
-
-export default RecipesList;

@@ -259,5 +259,3 @@ export const useLocalStorageObject = (
   );
   return [state?.value, update, updateField];
 };
-
-export default useLocalStorageObject;

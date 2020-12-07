@@ -35,5 +35,3 @@ export const usePreventScroll = () => {
     close: onClose,
   };
 };
-
-export default usePreventScroll;

@@ -45,4 +45,3 @@ export const HomeScreen = () => (
     </StyledContainer>
   </>
 );
-export default HomeScreen;

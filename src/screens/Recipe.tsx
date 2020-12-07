@@ -126,5 +126,3 @@ export const RecipeScreen: FC = () => {
     </RecipeProvider>
   );
 };
-
-export default RecipeScreen;
