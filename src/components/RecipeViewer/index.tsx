@@ -30,20 +30,20 @@ import {
   useRecipe,
   useResources,
   useSteps,
-} from '../state/recipes-v3';
+} from '../../state/recipes-v3';
 
 import {
   onMobile,
   StyledTabPanel,
   StyledTabs,
-} from './styled';
+} from '../styled';
 
-import { camelCaseToCapitalized } from '../utils/strings';
-import { Title } from '../state/title';
-import { useIsMobile } from '../hooks/useIsMobile';
+import { camelCaseToCapitalized } from '../../utils/strings';
+import { Title } from '../../state/title';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import { Visualization } from './Visualization';
-import { useStacks } from '../state/stack';
-import { recipeBaseRoute } from '../config/constants';
+import { useStacks } from '../../state/stack';
+import { recipeBaseRoute } from '../../config/constants';
 
 export const StyledContainer = styled(Container)`
   display: grid !important;
