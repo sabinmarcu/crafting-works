@@ -11,15 +11,15 @@ import {
 } from '@material-ui/core';
 import styled from 'styled-components';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import { SymbolsList } from './SymbolsList';
-import { SymbolType } from '../utils/types';
-import { camelCaseToCapitalized, capitalize, capitalizedToCamelCase } from '../utils/strings';
-import { RightCardActions, StyledCard, StyledExpandCardContent } from './styled';
-import { hasCircularDependency } from '../utils/calculate';
+import { SymbolsList } from '../SymbolsList';
+import { SymbolType } from '../../utils/types';
+import { camelCaseToCapitalized, capitalize, capitalizedToCamelCase } from '../../utils/strings';
+import { RightCardActions, StyledCard, StyledExpandCardContent } from '../styled';
+import { hasCircularDependency } from '../../utils/calculate';
 import {
   useRecipe,
   useRecipes,
-} from '../state/recipes-v3';
+} from '../../state/recipes-v3';
 
 type ComboBoxAddType = {inputValue?: string};
 const filter = createFilterOptions<SymbolType & ComboBoxAddType>();
