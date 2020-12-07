@@ -87,6 +87,7 @@
     "pr:merge": "gh pr merge -rd",
     "pr:pull": "git pull origin \"$(yarn config:branch)\"",
     "pr:prune": "yarn prune",
+    "pr:perm": "yarn config:perm",
 
     "prune": "run-s \"prune:*\"",
     "prune:local": "git prune",
