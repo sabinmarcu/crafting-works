@@ -21,7 +21,7 @@ import { useTheme } from '../state/theme';
 import { StyledLink, StyledToolbar } from './styled';
 
 const StyledContainer = styled(Container)`
-  display: flex !important;
+  display: flex;
   flex-flow: row nowrap;
   align-items: center;
   justify-content: space-between;

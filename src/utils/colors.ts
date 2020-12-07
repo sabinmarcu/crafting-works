@@ -3,14 +3,16 @@ export const randomColor = (
 ) => [
   '#',
   ...new Array(6)
-    .fill(
-      range[
-        Math.floor(Math.random() * range.length)
-      ],
-    ),
+    .fill(0)
+    .map(() => range[
+      Math.floor(Math.random() * range.length)
+    ]),
 ].join('');
 
-export const isHex = (input: string): boolean => /^#([0-9a-fA-F]{3}){1,2}$/.test(input);
+export const isHex = (
+  input: string,
+): boolean => /^#[0-9a-fA-F]{3,8}$/.test(input)
+  && [3, 6, 8].includes(input.length - 1);
 
 const rgbDigitGroup = '([0-9]{1,3})';
 const digitGroupRegex = new RegExp(rgbDigitGroup, 'g');

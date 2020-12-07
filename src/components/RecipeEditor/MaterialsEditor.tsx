@@ -20,7 +20,7 @@ import {
 } from '../styled';
 
 export const StyledTextField = styled(TextField)`
-  margin: 0.5rem 0 !important;
+  margin: 0.5rem 0;
 `;
 
 export const Input: FC<{

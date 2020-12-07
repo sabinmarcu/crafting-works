@@ -19,18 +19,15 @@ import { RemoveRecipe } from './RemoveRecipe';
 import { MaterialsEditor } from './MaterialsEditor';
 
 export const StyledContainer = styled(Container)`
-  display: grid !important;
+  display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 1rem;
-  padding: 1rem 0 !important;
+  padding: 1rem 0;
   & > * {
     grid-column: 1;
   }
   ${onMobile} {
     grid-template-columns: 1fr;
-    & > * {
-      grid-column: 1 !important;
-    }
   }
 `;
 
@@ -52,6 +49,7 @@ export const InputsWrapper = styled.div`
   grid-row: 1/5;
   grid-column: 2;
   ${onMobile} {
+    grid-column: 1;
     grid-row: 2;
   }
 `;

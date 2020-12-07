@@ -50,7 +50,7 @@ export const useFilter = <T extends any>(
 };
 
 export const StyledTextField = styled(TextField)`
-  margin-bottom: 25px !important;
+  margin-bottom: 25px;
 `;
 
 export const Filter: FC<FilterType> = ({

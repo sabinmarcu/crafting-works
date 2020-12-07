@@ -12,6 +12,7 @@ export const FabWrapper = styled.div<{
   vertical?: 'top' | 'bottom',
 }>`
   position: fixed;
+  z-index: 1200;
   ${({ vertical }) => (vertical && vertical === 'top'
     ? `top: ${padding}px;`
     : `bottom: ${padding}px;`
