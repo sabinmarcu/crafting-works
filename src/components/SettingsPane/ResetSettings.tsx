@@ -3,9 +3,9 @@ import { FC, useCallback } from 'react'; import {
   Typography,
 } from '@material-ui/core';
 import { useHistory } from 'react-router';
-import { useTheme } from '../state/theme';
-import { ConfirmDialog, useConfirm } from './Confirm';
-import { useRecipes } from '../state/recipes-v3';
+import { useTheme } from '../../state/theme';
+import { ConfirmDialog, useConfirm } from '../Confirm';
+import { useRecipes } from '../../state/recipes-v3';
 
 const goHome = () => {
   // @ts-ignore

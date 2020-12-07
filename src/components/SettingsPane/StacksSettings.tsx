@@ -1,6 +1,6 @@
 import { FormControlLabel, Switch, TextField } from '@material-ui/core';
 import { ChangeEvent, FC, useCallback } from 'react';
-import { useStacks } from '../state/stack';
+import { useStacks } from '../../state/stack';
 
 export const StacksEnabled: FC = () => {
   const { isEnabled, toggleEnabled } = useStacks();

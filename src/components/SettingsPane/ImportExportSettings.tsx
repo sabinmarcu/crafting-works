@@ -3,8 +3,8 @@ import {
   Button,
 } from '@material-ui/core';
 import { useHistory } from 'react-router';
-import { useRecipes } from '../state/recipes-v3';
-import { RecipesType } from '../utils/types';
+import { useRecipes } from '../../state/recipes-v3';
+import { RecipesType } from '../../utils/types';
 
 const readFile = (file: File) => new Promise<RecipesType>((accept, reject) => {
   const reader = new FileReader();
