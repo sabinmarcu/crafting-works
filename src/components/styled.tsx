@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import {
+  AppBar,
   Card,
   CardActions,
   CardContent,
@@ -117,6 +118,17 @@ export const RightCardActions = styled(CardActions)`
   flex-flow: row nowrap;
   align-items: center;
   justify-content: flex-end;
+`;
+
+export const StickyAppBar = styled(AppBar)`
+  position: sticky !important;
+`;
+
+export const StyledToolbarContainer = styled(Container)`
+  display: flex !important;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 export default StyledLink;

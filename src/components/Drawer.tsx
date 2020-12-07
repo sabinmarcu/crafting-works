@@ -3,7 +3,6 @@ import React, {
 } from 'react';
 import {
   SwipeableDrawer,
-  AppBar,
   Toolbar,
   Container,
   Typography,
@@ -17,7 +16,9 @@ import { TabContext } from '@material-ui/lab';
 import { useDrawer } from '../state/drawer';
 import { RecipesList } from './RecipesList';
 import Symbols from './SymbolsList';
-import { onMobile, StyledTabPanel as TabPanel, StyledTabs } from './styled';
+import {
+  onMobile, StickyAppBar, StyledTabPanel as TabPanel, StyledTabs, StyledToolbarContainer,
+} from './styled';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { BottomFab } from './BottomFab';
 import { useLocalStorage } from '../hooks/useLocalStorage';
@@ -47,29 +48,18 @@ const StyledDrawer = styled(SwipeableDrawer)`
   }
 `;
 
-const StyledAppBar = styled(AppBar)`
-  position: sticky !important;
-`;
-
 const StyledContainer = styled(Container)`
   margin: 1.5rem 0 !important;
 `;
 
-const StyledToolbarContainer = styled(Container)`
-  display: flex !important;
-  flex-flow: row nowrap;
-  align-items: center;
-  justify-content: space-between;
-`;
-
 const DrawerAppBar: FC = ({ children }) => (
-  <StyledAppBar>
+  <StickyAppBar>
     <Toolbar>
       <StyledToolbarContainer>
-        <Typography variant="h4">{children}</Typography>
+        <Typography variant="h5">{children}</Typography>
       </StyledToolbarContainer>
     </Toolbar>
-  </StyledAppBar>
+  </StickyAppBar>
 );
 
 export const DrawerWrapper = styled.section`
