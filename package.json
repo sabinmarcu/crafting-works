@@ -67,7 +67,6 @@
     "pr:create": "gh pr create --base master --repo \"$(yarn config:remote)\" --head \"$(yarn config:branch)\" --project Backlog --fill",
     "pr:merge": "gh pr merge -rd",
     "pr:pull": "git pull origin \"$(yarn config:branch)\"",
-    "pr:clean": "yarn prune",
     "prune": "run-s \"prune:*\"",
     "prune:local": "git prune",
     "prune:remote": "git remote prune origin",
