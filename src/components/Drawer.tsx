@@ -36,8 +36,8 @@ const StyledDrawer = styled(SwipeableDrawer)`
   .styledPaper {
     ${drawerStyle}
     ${onMobile} {
-      padding-left: env(safe-area-inset-left) !important;
-      padding-right: env(safe-area-inset-right) !important;
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
     }
   }
   .styledRoot {
@@ -49,7 +49,7 @@ const StyledDrawer = styled(SwipeableDrawer)`
 `;
 
 const StyledContainer = styled(Container)`
-  margin: 1.5rem 0 !important;
+  margin: 1.5rem 0;
 `;
 
 const DrawerAppBar: FC = ({ children }) => (

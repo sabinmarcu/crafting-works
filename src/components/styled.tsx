@@ -48,21 +48,21 @@ export const StyledTabs = withTheme(
 );
 
 export const StyledTabPanel = styled(TabPanel)`
-  padding: 0 !important;
+  padding: 0;
 `;
 
 export const StyledLink = styled(Link)`
   &, & > * {
     text-decoration: none;
-    cursor: pointer !important;
+    cursor: pointer;
     color: inherit;
   }
 `;
 
 export const ModalContainerRaw = styled(Container)`
-  padding: 25px !important;
-  margin-top: 25px !important;
-  display: flex !important;
+  padding: 25px;
+  margin-top: 25px;
+  display: flex;
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
@@ -71,8 +71,8 @@ export const ModalContainerRaw = styled(Container)`
     margin: 0;
     width: 100vw;
     padding: 15px;
-    padding-left: calc(15px + env(safe-area-inset-left)) !important;
-    padding-right: calc(15px + env(safe-area-inset-right)) !important;
+    padding-left: calc(15px + env(safe-area-inset-left));
+    padding-right: calc(15px + env(safe-area-inset-right));
   }
 `;
 
@@ -121,11 +121,11 @@ export const RightCardActions = styled(CardActions)`
 `;
 
 export const StickyAppBar = styled(AppBar)`
-  position: sticky !important;
+  position: sticky;
 `;
 
 export const StyledToolbarContainer = styled(Container)`
-  display: flex !important;
+  display: flex;
   flex-flow: row nowrap;
   align-items: center;
   justify-content: space-between;

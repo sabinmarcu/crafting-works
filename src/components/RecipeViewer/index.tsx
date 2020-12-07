@@ -46,10 +46,10 @@ import { useStacks } from '../../state/stack';
 import { recipeBaseRoute } from '../../config/constants';
 
 export const StyledContainer = styled(Container)`
-  display: grid !important;
+  display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 1rem;
-  padding: 1rem 0 !important;
+  padding: 1rem 0;
   ${onMobile} {
     grid-template-columns: 1fr;
   }
@@ -99,8 +99,8 @@ export const ResourceWrapper = withTheme(
       border-top-right-radius: ${borderRadiusGetter}px;
     }
     & * {
-      font-weight: ${({ bold }) => (bold ? 'bold' : 'normal')} !important;
-      font-size: ${({ bold }) => (bold ? '1.2' : '1')}rem !important;
+      font-weight: ${({ bold }) => (bold ? 'bold' : 'normal')};
+      font-size: ${({ bold }) => (bold ? '1.2' : '1')}rem;
     }
     & > * {
       padding: 10px;

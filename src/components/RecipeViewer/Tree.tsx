@@ -75,7 +75,7 @@ export const SVG = withTheme(
       ${leafNodeStyle}
     .linkBase {
       stroke: currentColor;
-      opacity: 0.5 !important;
+      opacity: 0.5;
     }
     .nodeBase, .nodeNameBase, .leafNodeBase {
       fill: currentColor;

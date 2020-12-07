@@ -25,7 +25,7 @@ export const SectionWrapper = styled.section<DirectionProp>`
 )};
   margin: 25px 20px;
   & > * {
-    margin: 5px !important;
+    margin: 5px;
   }
 `;
 
@@ -52,7 +52,7 @@ export const Section: FC<{
 
 export const SettingsView: FC = () => (
   <>
-    <Section title="Label Colors">
+    <Section title="Label Colors" direction="column">
       <LabelSettings />
     </Section>
     <Section title="Split into Stacks" direction="column">

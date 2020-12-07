@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { render } from 'react-dom';
+import { StylesProvider } from '@material-ui/core/styles';
 import 'typeface-roboto';
 
 import './styles.css';
@@ -14,17 +15,19 @@ import reportWebVitals from './reportWebVitals';
 
 const rootElement = document.getElementById('root');
 render(
-  <ThemeProvider>
-    <DrawerProvider>
-      <RecipeProviderV3>
-        <StackProvider>
-          <TitleProvider>
-            <App />
-          </TitleProvider>
-        </StackProvider>
-      </RecipeProviderV3>
-    </DrawerProvider>
-  </ThemeProvider>,
+  <StylesProvider injectFirst>
+    <ThemeProvider>
+      <DrawerProvider>
+        <RecipeProviderV3>
+          <StackProvider>
+            <TitleProvider>
+              <App />
+            </TitleProvider>
+          </StackProvider>
+        </RecipeProviderV3>
+      </DrawerProvider>
+    </ThemeProvider>
+  </StylesProvider>,
   rootElement,
 );
 
@@ -40,5 +43,4 @@ serviceWorkerRegistration[
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-// eslint-disable-next-line no-console
 reportWebVitals(console.log);

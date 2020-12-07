@@ -21,8 +21,8 @@ import { Error404Screen } from './screens/404';
 const StyledContainerRaw = withTheme(
   styled(Container)`
     background: ${({ theme: { palette: { background: { default: background } } } }) => background};
-    width: 100vw !important;
-    max-width: initial !important;
+    width: 100vw;
+    max-width: initial;
   `,
 );
 

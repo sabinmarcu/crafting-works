@@ -2,7 +2,10 @@ import { useCallback, useMemo } from 'react';
 import { isHex, isRGBA, randomColor } from '../utils/colors';
 import { useLocalStorage } from './useLocalStorage';
 
-export const useLabel = (label: string) => {
+export const useLabel = (label: string): [
+  string | undefined,
+  (input: string) => void,
+] => {
   const defaultColor = useMemo(
     randomColor,
     [],

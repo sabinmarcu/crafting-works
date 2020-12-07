@@ -38,15 +38,15 @@ export const StyledCardHeader = withTheme(
   styled(CardHeader)`
     padding-left: ${getPadding};
     padding-right: ${getPadding};
-    padding-left: calc(${getPadding} + env(safe-area-inset-left)) !important;
-    padding-right: calc(${getPadding} + env(safe-area-inset-right)) !important;
+    padding-left: calc(${getPadding} + env(safe-area-inset-left));
+    padding-right: calc(${getPadding} + env(safe-area-inset-right));
   `,
 );
 
 export const LargeModalContainer = styled(ModalContainer)`
-  max-width: initial !important;
-  padding: 0 !important;
-  margin: 0 !important;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
 `;
 
 export const LargeModalContent = styled(ModalContent)`
