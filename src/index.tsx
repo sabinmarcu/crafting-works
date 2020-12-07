@@ -9,6 +9,7 @@ import { TitleProvider } from './state/title';
 import { AppThemeProvider as ThemeProvider } from './state/theme';
 import { RecipeProviderV3 } from './state/recipes-v3';
 import { StackProvider } from './state/stack';
+import * as serviceWorker from './serviceWorker'
 
 const rootElement = document.getElementById('root');
 render(
@@ -25,3 +26,9 @@ render(
   </ThemeProvider>,
   rootElement,
 );
+
+serviceWorker[
+  process.env.NODE_ENV === 'production'
+    ? 'register'
+    : 'unregister'
+]();
