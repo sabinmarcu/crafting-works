@@ -1,0 +1,10 @@
+wontdo:
+  comment: |
+    This feature will not be implemented
+  close: true
+  lock: true
+
+wontfix:
+  comment: |
+    Will not fix this issue
+  close: true
