@@ -11,7 +11,7 @@ import { Redirect } from './components/Redirect';
 
 import { NavBar } from './components/NavBar';
 import { Drawer, RouteChangeDrawerClose } from './components/Drawer';
-import CreateRecipe from './components/CreateRecipe';
+import { CreateRecipeWrapper } from './components/CreateRecipe';
 
 import { HomeScreen } from './screens/Home';
 import { RecipeScreen, baseRoute as recipeRoute } from './screens/Recipe';
@@ -48,7 +48,7 @@ export const App: FC = () => (
         <Route exact path="/test" component={TestScreen} />
         <Route path="/" component={Error404Screen} />
       </Switch>
-      <CreateRecipe />
+      <CreateRecipeWrapper />
     </StyledContainer>
   </Router>
 );

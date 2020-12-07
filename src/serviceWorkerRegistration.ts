@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-use-before-define,no-param-reassign */
+/* eslint-disable no-console,@typescript-eslint/no-use-before-define,no-param-reassign */
 // This optional code is used to register a service worker.
 // register() is not called by default.
 
