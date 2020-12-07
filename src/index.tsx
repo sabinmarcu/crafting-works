@@ -8,15 +8,18 @@ import { DrawerProvider } from './state/drawer';
 import { TitleProvider } from './state/title';
 import { AppThemeProvider as ThemeProvider } from './state/theme';
 import { RecipeProviderV3 } from './state/recipes-v3';
+import { StackProvider } from './state/stack';
 
 const rootElement = document.getElementById('root');
 render(
   <ThemeProvider>
     <DrawerProvider>
       <RecipeProviderV3>
-        <TitleProvider>
-          <App />
-        </TitleProvider>
+        <StackProvider>
+          <TitleProvider>
+            <App />
+          </TitleProvider>
+        </StackProvider>
       </RecipeProviderV3>
     </DrawerProvider>
   </ThemeProvider>,
