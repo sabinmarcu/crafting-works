@@ -2,6 +2,7 @@ export type RecipeInputType = Record<string, number>;
 export type RecipeType = {
   input: RecipeInputType;
   output: number;
+  labels?: string[];
 };
 export type RecipesType = Record<string, RecipeType>;
 export type SymbolType = {
@@ -16,6 +17,7 @@ export type RecipesExtraType = {
 export type RecipesValuesType = {
   recipes: RecipesType,
   symbols: SymbolType[],
+  labels: string[],
   names: string[],
 };
 

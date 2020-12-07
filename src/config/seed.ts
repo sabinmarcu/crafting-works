@@ -19,6 +19,7 @@ const fissionCasing = {
     steelCasing: 1,
   },
   output: 4,
+  labels: ['fissionReactor'],
 };
 const fissionReactorPort = {
   input: {
@@ -26,6 +27,7 @@ const fissionReactorPort = {
     eliteControlCircuit: 1,
   },
   output: 2,
+  labels: ['fissionReactor'],
 };
 const fissionLogicAdapter = {
   input: {
@@ -33,6 +35,7 @@ const fissionLogicAdapter = {
     fissionCasing: 1,
   },
   output: 1,
+  labels: ['fissionReactor'],
 };
 const fissionFuelAssembly = {
   input: {
@@ -41,6 +44,7 @@ const fissionFuelAssembly = {
     basicChemicalTank: 1,
   },
   output: 1,
+  labels: ['fissionReactor'],
 };
 const controlRodAssembly = {
   input: {
@@ -49,6 +53,7 @@ const controlRodAssembly = {
     eliteControlCircuit: 1,
   },
   output: 1,
+  labels: ['fissionReactor'],
 };
 const reactorGlass = {
   input: {
@@ -57,6 +62,7 @@ const reactorGlass = {
     glass: 1,
   },
   output: 4,
+  labels: ['fissionReactor'],
 };
 const eliteControlCircuit = {
   input: {
@@ -94,6 +100,7 @@ const turbineCasing = {
     osmium: 1,
   },
   output: 4,
+  labels: ['industrialTurbine'],
 };
 const turbineValve = {
   input: {
@@ -101,6 +108,7 @@ const turbineValve = {
     advancedControlCircuit: 1,
   },
   output: 2,
+  labels: ['industrialTurbine'],
 };
 const turbineVent = {
   input: {
@@ -108,6 +116,7 @@ const turbineVent = {
     bars: 1,
   },
   output: 2,
+  labels: ['industrialTurbine'],
 };
 const turbineRotor = {
   input: {
@@ -115,6 +124,7 @@ const turbineRotor = {
     infusedAlloy: 3,
   },
   output: 1,
+  labels: ['industrialTurbine'],
 };
 const turbineBlade = {
   input: {
@@ -122,6 +132,7 @@ const turbineBlade = {
     infusedAlloy: 1,
   },
   output: 1,
+  labels: ['industrialTurbine'],
 };
 const rotationalComplex = {
   input: {
@@ -130,6 +141,7 @@ const rotationalComplex = {
     advancedControlCircuit: 2,
   },
   output: 1,
+  labels: ['industrialTurbine'],
 };
 const pressureDispenser = {
   input: {
@@ -138,6 +150,7 @@ const pressureDispenser = {
     infusedAlloy: 1,
   },
   output: 1,
+  labels: ['industrialTurbine'],
 };
 const electromagneticCoil = {
   input: {
@@ -146,6 +159,7 @@ const electromagneticCoil = {
     energyTablet: 1,
   },
   output: 1,
+  labels: ['industrialTurbine'],
 };
 const structuralGlass = {
   input: {
@@ -153,6 +167,7 @@ const structuralGlass = {
     glass: 1,
   },
   output: 4,
+  labels: ['industrialTurbine'],
 };
 const energyTablet = {
   input: {
@@ -168,6 +183,7 @@ const inductionCasing = {
     energyTablet: 1,
   },
   output: 4,
+  labels: ['inductionMatrix'],
 };
 const inductionPort = {
   input: {
@@ -175,6 +191,7 @@ const inductionPort = {
     eliteControlCircuit: 1,
   },
   output: 2,
+  labels: ['inductionMatrix'],
 };
 const basicInductionCell = {
   input: {
@@ -183,6 +200,7 @@ const basicInductionCell = {
     basicEnergyCube: 1,
   },
   output: 1,
+  labels: ['inductionMatrix'],
 };
 const basicEnergyCube = {
   input: {
@@ -200,35 +218,46 @@ const basicInductionProvider = {
     basicEnergyCube: 1,
   },
   output: 1,
+  labels: ['inductionMatrix'],
 };
-export default {
-  steelCasing,
-  fissionCasing,
-  fissionReactorPort,
-  fissionLogicAdapter,
-  fissionFuelAssembly,
-  basicChemicalTank,
-  controlRodAssembly,
-  reactorGlass,
-  eliteControlCircuit,
-  advancedControlCircuit,
-  infusedAlloy,
-  basicControlCircuit,
-  reinforcedAlloy,
-  steel,
-  turbineCasing,
-  turbineBlade,
-  turbineRotor,
-  turbineValve,
-  turbineVent,
-  pressureDispenser,
-  electromagneticCoil,
-  rotationalComplex,
-  structuralGlass,
-  energyTablet,
-  inductionCasing,
-  inductionPort,
-  basicInductionCell,
-  basicEnergyCube,
-  basicInductionProvider,
-};
+export default Object.entries(
+  {
+    steelCasing,
+    fissionCasing,
+    fissionReactorPort,
+    fissionLogicAdapter,
+    fissionFuelAssembly,
+    basicChemicalTank,
+    controlRodAssembly,
+    reactorGlass,
+    eliteControlCircuit,
+    advancedControlCircuit,
+    infusedAlloy,
+    basicControlCircuit,
+    reinforcedAlloy,
+    steel,
+    turbineCasing,
+    turbineBlade,
+    turbineRotor,
+    turbineValve,
+    turbineVent,
+    pressureDispenser,
+    electromagneticCoil,
+    rotationalComplex,
+    structuralGlass,
+    energyTablet,
+    inductionCasing,
+    inductionPort,
+    basicInductionCell,
+    basicEnergyCube,
+    basicInductionProvider,
+  },
+).reduce((prev, [key, value]) => ({
+  ...prev,
+  [key]: {
+    ...value,
+    labels: 'labels' in value
+      ? [...value.labels, 'minecraft']
+      : ['minecraft'],
+  },
+}), {});

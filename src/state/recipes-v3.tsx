@@ -17,6 +17,7 @@ const RecipesContext = createContext<RecipesContextType>({
   recipes: {},
   symbols: [],
   names: [],
+  labels: [],
   update: () => {},
   import: () => {},
   addRecipe: () => {},
@@ -46,6 +47,24 @@ export const RecipeProviderV3: FC = ({ children }) => {
         .filter((it, idx, arr) => arr.indexOf(it) === idx)
       : []),
     [recipes, recipeNames],
+  );
+  const labels = useMemo(
+    () => (recipes
+      ? Object.values(recipes as RecipesType)
+        .map(({ labels: l }) => l)
+        .filter(Boolean)
+        .filter((it) => it!.length > 0)
+        .reduce(
+          (prev: string[], it) => ([
+            ...prev,
+            ...it!,
+          ]),
+          [],
+        )
+      : [])
+      .sort()
+      .filter((it, idx, arr) => arr.indexOf(it) === idx),
+    [recipes],
   );
   const symbols = useMemo(
     () => allSymbols
@@ -84,6 +103,7 @@ export const RecipeProviderV3: FC = ({ children }) => {
     <RecipesContext.Provider value={{
       recipes,
       symbols,
+      labels,
       names: recipeNames,
       update,
       reset,
