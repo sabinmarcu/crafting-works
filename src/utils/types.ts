@@ -56,3 +56,8 @@ export type RecipeStepItem = {
 };
 export type RecipeStep = RecipeStepItem[];
 export type RecipeSteps = RecipeStep[];
+
+export type LabelType = {
+  name: string,
+  color: string,
+};
