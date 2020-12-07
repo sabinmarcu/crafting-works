@@ -24,10 +24,10 @@ import {
   ModalContainer,
   ModalWrapper,
   ModalContent,
-} from './styled';
-import { camelCaseToCapitalized } from '../utils/strings';
-import { RecipeAST } from '../utils/types';
-import { usePreventScroll } from '../hooks/scroll';
+} from '../styled';
+import { camelCaseToCapitalized } from '../../utils/strings';
+import { RecipeAST } from '../../utils/types';
+import { usePreventScroll } from '../../hooks/scroll';
 import { AST } from './Tree';
 
 const getPadding = ({

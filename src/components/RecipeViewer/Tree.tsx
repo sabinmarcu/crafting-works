@@ -16,13 +16,13 @@ import Measure, { BoundingRect } from 'react-measure';
 import styled from 'styled-components';
 
 import { useHistory } from 'react-router';
-import { RecipeAST } from '../utils/types';
+import { RecipeAST } from '../../utils/types';
 import {
   onMobile,
-} from './styled';
-import { capitalizedToCamelCase } from '../utils/strings';
-import { recipeBaseRoute } from '../config/constants';
-import { useSymbols } from '../state/recipes-v3';
+} from '../styled';
+import { capitalizedToCamelCase } from '../../utils/strings';
+import { recipeBaseRoute } from '../../config/constants';
+import { useSymbols } from '../../state/recipes-v3';
 
 export const SVGWrapper = styled(CardContent)`
   width: 100%;
