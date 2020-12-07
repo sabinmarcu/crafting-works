@@ -69,6 +69,10 @@
     "pr:merge": "gh pr merge -rd",
     "pr:pull": "git pull origin \"$(yarn config:branch)\"",
 
+    "prune": "run-s \"prune:*\"",
+    "prune:local": "git prune",
+    "prune:remote": "git remote prune origin",
+
     "config:remote": "git config --get remote.origin.url | cut -d: -f2- | cut -d. -f1",
     "config:branch": "git rev-parse --abbrev-ref HEAD"
   },
