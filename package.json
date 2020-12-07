@@ -85,6 +85,7 @@
 
     "issue": "git checkout $(yarn issues:git | grep \"$*\" | head -n 1)",
     "co": "yarn issue",
+    "cof": "git checkout $(yarn issues:git | head -n 1)",
 
     "pr": "run-s \"pr:*\"",
     "pr:push": "git push origin \"$(yarn config:branch)\"",
