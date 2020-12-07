@@ -177,7 +177,7 @@ export const ResourcePreview: FC<{
       </ResourceNumber>
       {isEnabled && stackSize && (
       <ResourceNumber>
-        {`(${amount})`}
+        {amount}
       </ResourceNumber>
       )}
     </ResourceWrapper>
