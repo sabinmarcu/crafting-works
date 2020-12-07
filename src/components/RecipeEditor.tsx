@@ -85,6 +85,42 @@ export const Output: FC = () => {
   );
 };
 
+export const RemoveRecipe: FC = () => {
+  const {
+    name,
+  } = useRecipe();
+  const { removeRecipe } = useRecipes();
+  const history = useHistory();
+  const removeHandler = useCallback(
+    () => {
+      removeRecipe(name);
+      history.push('/');
+    },
+    [removeRecipe, name, history],
+  );
+  const { onOpen, ...confirmArgs } = useConfirm(removeHandler);
+  return (
+    <>
+      <StyledCard>
+        <RightCardActions>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={onOpen}
+          >
+            Delete Recipe
+          </Button>
+        </RightCardActions>
+      </StyledCard>
+      <ConfirmDialog {...confirmArgs}>
+        Are you sure you want to delete this recipe (
+        {camelCaseToCapitalized(name)}
+        )?
+      </ConfirmDialog>
+    </>
+  );
+};
+
 export const SymbolsWrapper = styled.div`
   grid-row: 1;
   ${onMobile} {
@@ -108,20 +144,10 @@ export const InputsWrapper = styled.div`
 `;
 
 export const RecipeEditor: FC = () => {
-  const { removeRecipe } = useRecipes();
-  const history = useHistory();
   const {
     name,
     recipe,
   } = useRecipe();
-  const removeHandler = useCallback(
-    () => {
-      removeRecipe(name);
-      history.push('/');
-    },
-    [removeRecipe, name, history],
-  );
-  const { ...confirmArgs } = useConfirm(removeHandler);
   if (!recipe) {
     return null;
   }
@@ -149,23 +175,9 @@ export const RecipeEditor: FC = () => {
           </StyledCard>
         </InputsWrapper>
         <RemoveWrapper>
-          <StyledCard>
-            <RightCardActions>
-              <Button
-                variant="contained"
-                color="secondary"
-              >
-                Delete Recipe
-              </Button>
-            </RightCardActions>
-          </StyledCard>
+          <RemoveRecipe />
         </RemoveWrapper>
       </StyledContainer>
-      <ConfirmDialog {...confirmArgs}>
-        Are you sure you want to delete this recipe (
-        {name}
-        )?
-      </ConfirmDialog>
     </>
   );
 };
