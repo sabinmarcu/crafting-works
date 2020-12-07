@@ -23,6 +23,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import styled from 'styled-components';
 
 import { TabContext } from '@material-ui/lab';
+import { useHistory } from 'react-router';
 import {
   useAST,
   useUses,
@@ -42,6 +43,7 @@ import { Title } from '../state/title';
 import { useIsMobile } from '../hooks/useIsMobile';
 import { Visualization } from './Visualization';
 import { useStacks } from '../state/stack';
+import { recipeBaseRoute } from '../config/constants';
 
 export const StyledContainer = styled(Container)`
   display: grid !important;
@@ -91,6 +93,7 @@ export const ResourceWrapper = withTheme(
     grid-template-columns: 5fr repeat(${({ columns }) => columns || 1}, 100px);
     background: ${backgroundGetter};
     overflow: hidden;
+    cursor: ${({ onClick }) => (onClick ? 'pointer' : 'default')};
     &:first-of-type {
       border-top-left-radius: ${borderRadiusGetter}px;
       border-top-right-radius: ${borderRadiusGetter}px;
@@ -156,14 +159,16 @@ export const ResourceHeader: FC<{
 
 export const ResourcePreview: FC<{
   text: string,
-  amount: number
+  amount: number,
+  onClick?: () => void,
 }> = ({
   text,
   amount,
+  onClick,
 }) => {
   const { isEnabled, stackSize } = useStacks();
   return (
-    <ResourceWrapper columns={isEnabled ? 2 : 1}>
+    <ResourceWrapper columns={isEnabled ? 2 : 1} onClick={onClick}>
       <ResourceText>{camelCaseToCapitalized(text)}</ResourceText>
       <ResourceNumber>
         {isEnabled && stackSize
@@ -172,7 +177,7 @@ export const ResourcePreview: FC<{
       </ResourceNumber>
       {isEnabled && stackSize && (
       <ResourceNumber>
-        {amount}
+        {`(${amount})`}
       </ResourceNumber>
       )}
     </ResourceWrapper>
@@ -264,10 +269,20 @@ const StyledAccordionDetails = styled(AccordionDetails)`
 
 export const StepsView: FC = () => {
   const steps = useSteps();
+  const history = useHistory();
   const [active, setActive] = useState<number>(0);
   const activate = useCallback(
     (id: number) => () => setActive(id),
     [setActive],
+  );
+  const onClick = useCallback(
+    (name: string) => () => {
+      history.push([
+        recipeBaseRoute.replace(':name', name),
+        'view',
+      ].join('/'));
+    },
+    [history],
   );
   return (
     <div>
@@ -286,7 +301,12 @@ export const StepsView: FC = () => {
             <ResourceHeader title="Recipes" />
             {step.map(
               ({ name, amount }) => (
-                <ResourcePreview key={name} text={name} amount={amount} />
+                <ResourcePreview
+                  key={name}
+                  text={name}
+                  amount={amount}
+                  onClick={onClick(name)}
+                />
               ),
             )}
           </StyledAccordionDetails>
