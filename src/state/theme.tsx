@@ -34,13 +34,13 @@ export const ThemeContext = createContext<ThemeContextType>({
 
 export const AppThemeProvider: FC = ({ children }) => {
   const [theme, setTheme] = useLocalStorage<ThemeType>('theme', defaultTheme);
-  const [hasUserSelect, setHasUserSelect] = useLocalStorage<boolean>('theme-select');
+  const [hasMediaDetection, setHasMediaDetection] = useLocalStorage<boolean>('theme-select', true);
   const toggleTheme = useCallback(
     () => {
-      setHasUserSelect(true);
+      setHasMediaDetection(false);
       setTheme((t) => (t === 'light' ? 'dark' : 'light'));
     },
-    [setTheme, setHasUserSelect],
+    [setTheme, setHasMediaDetection],
   );
   const t = useMemo(
     () => (theme ? themes[theme] : themes.light),
@@ -50,7 +50,7 @@ export const AppThemeProvider: FC = ({ children }) => {
   const isDark = useMatchMedia('(prefers-color-scheme: dark)');
   useEffect(
     () => {
-      if (!hasUserSelect) {
+      if (hasMediaDetection) {
         if (isLight) {
           setTheme('light');
         } else if (isDark) {
@@ -60,13 +60,13 @@ export const AppThemeProvider: FC = ({ children }) => {
         }
       }
     },
-    [theme, hasUserSelect, isLight, isDark, setTheme],
+    [theme, hasMediaDetection, isLight, isDark, setTheme],
   );
   const reset = useCallback(
     () => {
-      setHasUserSelect(undefined);
+      setHasMediaDetection(true);
     },
-    [setHasUserSelect],
+    [setHasMediaDetection],
   );
 
   return (
