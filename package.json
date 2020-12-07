@@ -59,6 +59,7 @@
     "bug": "gh issue create --label bug --project Backlog --assignee sabinmarcu --body \\\"\\\" --title \"$*\"",
     "chore": "gh issue create --label chore --project Backlog --assignee sabinmarcu --body \\\"\\\" --title \"$*\"",
     "pr": "run-s \"pr:*\"",
+    "pr:push": "git push origin \"$(git_current_branch)\"",
     "pr:create": "gh pr create --base master --repo \"$(yarn config:remote)\" --head \"$(yarn config:branch)\" --project Backlog --fill",
     "pr:merge": "gh pr merge -rd",
     "pr:pull": "git pull origin \"$(git_current_branch)\"",
