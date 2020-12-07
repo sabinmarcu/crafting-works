@@ -24,13 +24,23 @@ const inRange = (
   const val = parseInt(it, 10)!;
   return !(val > 0 && val < 255);
 }).length === 0;
-const rgbDigits = (input: string): string[] => Array.from(input.match(digitGroupRegex));
-const rgbDigitsValid = (input: string[]): boolean => inRange(
-  0,
-  255,
-  ...input,
-);
-const rgbaDigitsValid = (input: string[]): boolean => {
+const rgbDigits = (input: string): string[] | undefined => {
+  const match = input.match(digitGroupRegex);
+  if (!match) {
+    return undefined;
+  }
+  return Array.from(match);
+};
+const rgbDigitsValid = (input?: string[]): boolean => !!input
+  && inRange(
+    0,
+    255,
+    ...input,
+  );
+const rgbaDigitsValid = (input?: string[]): boolean => {
+  if (!input) {
+    return false;
+  }
   const [alpha] = input.splice(input.length - 1, 1);
   return rgbDigitsValid(input) && inRange(0, 1, alpha);
 };
