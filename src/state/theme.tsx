@@ -20,7 +20,7 @@ export type ThemeContextType = {
 
 const themes = {
   dark: createMuiTheme({ palette: { type: 'dark' } }),
-  light: createMuiTheme({ palette: { type: 'light' } }),
+  light: createMuiTheme({ palette: { type: 'light', background: { default: 'rgb(230, 230, 230)' } } }),
 };
 
 const defaultTheme = 'dark';
