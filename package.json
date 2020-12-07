@@ -73,8 +73,8 @@
 
     "gc": "git commit -am",
     "gchore": "yarn gc \"chore: $*\"",
-    "gfix": "yarn gc \"fix: \"$*\"\"",
-    "gfeat": "yarn gc \"feat: \"$*\"\"",
+    "gfix": "yarn gc \"fix: $*\"",
+    "gfeat": "yarn gc \"feat: $*\"",
 
     "fetch": "git fetch --all",
 
