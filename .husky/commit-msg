@@ -3,6 +3,4 @@
 
 export PATH=$(echo $PATH | tr -s ":" "\n" | grep -v '/tmp' | tr -s "\n" ":")
 
-echo $PATH
-
 yarn commitlint --edit "$1"
