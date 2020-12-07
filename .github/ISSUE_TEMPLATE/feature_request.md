@@ -4,6 +4,7 @@ about: Suggest an idea for this project
 title: "[Feature Request] Change Me"
 labels: 'feature request'
 assignees: ''
+projects1: 'Backlog'
 
 ---
 
