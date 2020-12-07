@@ -4,7 +4,7 @@ import {
 } from '@material-ui/core';
 import { FC } from 'react';
 import styled from 'styled-components';
-import { StickyAppBar, StyledToolbarContainer } from './styled';
+import { StickyAppBar, StyledToolbarContainer } from '../styled';
 import { ResetAll, ResetThemeSelection, ResetRecipes } from './ResetSettings';
 import { Import, Export } from './ImportExportSettings';
 import { StacksEnabled, StacksAmount } from './StacksSettings';
@@ -62,3 +62,5 @@ export const SettingsView: FC = () => (
     </Section>
   </>
 );
+
+export default SettingsView;
