@@ -21,7 +21,14 @@ jobs:
       with:
         project: 'https://github.com/sabinmarcu/minecraft-calculator/projects/2'
         column_name: 'New Features'
-
+    - name: Assign Features to Backlog
+      uses: srggrs/assign-one-project-github-action@1.2.0
+      if: |
+        contains(github.event.issue.labels.*.name, 'feat') ||
+        contains(github.event.pull_request.labels.*.name, 'feat')
+      with:
+        project: 'https://github.com/sabinmarcu/minecraft-calculator/projects/1'
+        column_name: 'To do'
     - name: Assign Bugs to Backlog
       uses: srggrs/assign-one-project-github-action@1.2.0
       if: |
