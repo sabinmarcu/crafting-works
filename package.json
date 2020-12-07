@@ -61,7 +61,7 @@
     "eject": "react-scripts eject",
     "issues:git": "git branch -r | grep issue | cut -d/ -f2-",
     "i": "yarn issues:git",
-    "issues:gh": "gh issues list -a sabinmarcu",
+    "issues:gh": "gh issue list -a sabinmarcu",
     "ghi": "yarn issues:gh",
     "feat": "gh issue create --label feat --project Backlog --assignee sabinmarcu --body \\\"\\\" --title \"$*\" && yarn fetch",
     "bug": "gh issue create --label bug --project Backlog --assignee sabinmarcu --body \\\"\\\" --title \"$*\" && yarn fetch",
