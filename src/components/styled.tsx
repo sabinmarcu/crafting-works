@@ -131,4 +131,13 @@ export const StyledToolbarContainer = styled(Container)`
   justify-content: space-between;
 `;
 
+export const StyledCard = styled(Card)`
+  display: flex;
+  flex-flow: column nowrap;
+`;
+
+export const StyledExpandCardContent = styled(CardContent)`
+  flex: 1;
+`;
+
 export default StyledLink;

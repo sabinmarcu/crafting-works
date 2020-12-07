@@ -62,5 +62,3 @@ export const SettingsView: FC = () => (
     </Section>
   </>
 );
-
-export default SettingsView;

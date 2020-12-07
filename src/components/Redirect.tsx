@@ -26,5 +26,3 @@ export const Redirect: FC = () => {
   );
   return <></>;
 };
-
-export default Redirect;

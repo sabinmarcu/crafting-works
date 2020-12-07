@@ -339,5 +339,3 @@ export const ResourcesView: FC = () => {
 export const RecipeViewer: FC = () => (
   <ResourcesView />
 );
-
-export default RecipeViewer;

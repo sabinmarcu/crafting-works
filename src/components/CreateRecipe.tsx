@@ -180,5 +180,3 @@ export const CreateRecipeWrapper: FC = () => {
     </>
   );
 };
-
-export default CreateRecipeWrapper;

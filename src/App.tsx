@@ -52,5 +52,3 @@ export const App: FC = () => (
     </StyledContainer>
   </Router>
 );
-
-export default App;

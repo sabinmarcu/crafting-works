@@ -60,5 +60,3 @@ export const ConfirmDialog: FC<{
     </RightCardActions>
   </Dialog>
 );
-
-export default ConfirmDialog;

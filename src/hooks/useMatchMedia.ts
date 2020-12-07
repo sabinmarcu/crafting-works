@@ -20,5 +20,3 @@ export const useMatchMedia = (media: string) => {
   );
   return matches;
 };
-
-export default useMatchMedia;
