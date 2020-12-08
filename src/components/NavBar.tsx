@@ -65,7 +65,7 @@ export const NavBar: FC = () => {
             <StyledToolbar>
               <StyledContainer>
                 <StyledWrapper>
-                  <StyledTypography variant="body1">
+                  <StyledTypography variant={isRoot ? 'h5' : 'body1'}>
                     {!isRoot && (
                     <StyledLink to="/">
                       <StyledIconButton>
