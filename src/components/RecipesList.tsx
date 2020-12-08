@@ -29,8 +29,10 @@ export const RecipesList: FC = () => {
       ? recipeList.filter(
         ({ labels }): boolean => (labels
           ? labels.reduce(
-            (prev, label) => prev || filterBy.includes(label),
-            false,
+            (prev, label): boolean => (
+              prev || filterBy.includes(label)
+            ),
+            false as boolean,
           )
           : false
         ),

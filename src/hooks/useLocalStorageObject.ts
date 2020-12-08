@@ -260,14 +260,10 @@ export const useLocalStorageObject = <T>(
   }, [setValue, key]);
   const update = useCallback(
     (input: T | SetStateAction<T | undefined>) => (typeof input === 'function'
-      ? setValue((t) => {
-        console.log('PRESET', t, (input as (prevState: T | undefined) => T)(t?.value));
-        console.log('SETTING');
-        return {
-          value: (input as (prevState: T | undefined) => T)(t?.value),
-          action: SetTypes.update,
-        };
-      })
+      ? setValue((t) => ({
+        value: (input as (prevState: T | undefined) => T)(t?.value),
+        action: SetTypes.update,
+      }))
       : setValue({
         value: input,
         action: SetTypes.update,
