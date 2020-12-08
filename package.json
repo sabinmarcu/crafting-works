@@ -79,7 +79,7 @@
     "favicon:inject": "real-favicon inject assets/faviconData.json public public/*.html",
     "favicon:check": "real-favicon check-for-update --fail-on-update assets/faviconData.json || yarn favicon inject",
     "build": "run-s \"build:*\"",
-    "build:favicon": "favicon:check",
+    "build:favicon": "yarn favicon:check",
     "build:app": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
