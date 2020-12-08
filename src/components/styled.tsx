@@ -14,10 +14,11 @@ import {
 import { FC, ReactElement, useMemo } from 'react';
 import { use100vh } from 'react-div-100vh';
 import { TabPanel } from '@material-ui/lab';
-import { mobileBreakpoint } from '../config/constants';
-import { useIsMobile } from '../hooks/useIsMobile';
+import { mobileBreakpoint, tabletBreakpoint } from '../config/constants';
+import { useIsMobile } from '../hooks/useMedia';
 
 export const onMobile = `@media ${mobileBreakpoint}`;
+export const onTablet = `@media ${tabletBreakpoint}`;
 
 export const toolbarStyles = ({
   theme: {

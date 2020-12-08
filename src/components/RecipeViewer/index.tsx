@@ -40,7 +40,7 @@ import {
 
 import { camelCaseToCapitalized } from '../../utils/strings';
 import { Title } from '../../state/title';
-import { useIsMobile } from '../../hooks/useIsMobile';
+import { useIsMobile } from '../../hooks/useMedia';
 import { Visualization } from './Visualization';
 import { useStacks } from '../../state/stack';
 import { recipeBaseRoute } from '../../config/constants';

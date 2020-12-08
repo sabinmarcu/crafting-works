@@ -18,7 +18,7 @@ import {
   TabPanel,
   StyledTabs,
 } from '../styled';
-import { useIsMobile } from '../../hooks/useIsMobile';
+import { useIsMobile } from '../../hooks/useMedia';
 import { BottomFab } from '../BottomFab';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 
