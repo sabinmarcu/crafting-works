@@ -19,7 +19,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import styled from 'styled-components';
 
 import {
-  onMobile,
+  onTablet,
   RightCardActions,
   ModalContainer,
   ModalWrapper,
@@ -50,22 +50,17 @@ export const LargeModalContainer = styled(ModalContainer)`
 `;
 
 export const LargeModalContent = styled(ModalContent)`
-  height: calc(95vh - 100px);
-  flex: 0;
+  flex: 1;
   display: flex;
   flex-flow: column nowrap;
   padding: 0 !important;
-  ${onMobile} {
-    height: auto;
-    flex: 1;
-  }
 `;
 
 const largePadding = 50;
 export const LargeModalWrapper = styled(ModalWrapper)`
   width: calc(100% - ${largePadding * 2}px);
   height: calc(100% - ${largePadding * 2}px);
-  ${onMobile} {
+  ${onTablet} {
     height: 100%;
     width: 100%;
   }

@@ -15,7 +15,7 @@ import {
   RecipeProvider, useRecipe,
 } from '../state/recipes-v3';
 
-import { useIsMobile } from '../hooks/useIsMobile';
+import { useIsMobile } from '../hooks/useMedia';
 import { RecipeEditor } from '../components/RecipeEditor';
 import { RecipeViewer } from '../components/RecipeViewer';
 import { StyledTabs } from '../components/styled';
