@@ -25,6 +25,8 @@ const CombineProviders: FC<{
   children as any,
 );
 
+document.body.className = '';
+
 const rootElement = document.getElementById('root');
 render(
   <StylesProvider injectFirst>

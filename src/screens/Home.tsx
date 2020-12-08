@@ -24,7 +24,7 @@ export const StyledContainer = styled(Container)`
 
 export const HomeScreen = () => (
   <>
-    <Title title="Home" isRoot />
+    <Title title="Crafting Works" isRoot />
     <StyledContainer>
       <div>
         <Card>
