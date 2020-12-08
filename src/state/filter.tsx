@@ -20,7 +20,13 @@ export const LabelFilterContext = createContext<LabelFilterContextType>({
 export const uniq = <T extends any>(
   input: T[],
   extract: (input: T) => any = (it) => it,
-): T[] => input.filter((it, idx, arr) => arr.findIndex((i) => extract(i) === extract(it)) === idx);
+): T[] => [...input].filter(
+    (it, idx, arr) => {
+      const match = extract(it);
+      const midx = arr.findIndex((i) => extract(i) === match);
+      return midx === idx;
+    },
+  );
 
 export const storageKey = ['filter', 'label'].join(':');
 export const LabelFilterProvider: FC = ({ children }) => {
@@ -29,8 +35,10 @@ export const LabelFilterProvider: FC = ({ children }) => {
     { filterBy: [] },
   );
   const filterBy = useMemo(
-    () => (store?.filterBy ?? []).filter(Boolean),
-    [store],
+    () => (store?.filterBy ?? [])
+      .filter(Boolean)
+      .filter((it) => it !== 'undefined'),
+    [store?.filterBy],
   );
   const update = useCallback(
     (input: string[] | ((old: string[]) => string[])) => (Array.isArray(input)
@@ -68,3 +76,4 @@ export const LabelFilterProvider: FC = ({ children }) => {
 };
 
 export const useLabelFilter = () => useContext(LabelFilterContext);
+export const useLabelFilters = () => useLabelFilter().filterBy;

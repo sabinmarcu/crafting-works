@@ -11,7 +11,7 @@ export const FilterView: FC = () => {
     (name: string) => () => {
       toggleFilter(name);
     },
-    [],
+    [toggleFilter],
   );
   return (
     <StyledContainer>

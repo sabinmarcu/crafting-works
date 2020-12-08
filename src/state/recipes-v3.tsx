@@ -101,22 +101,40 @@ export const RecipeProviderV3: FC = ({ children }) => {
     () => setRecipes({}),
     [setRecipes],
   );
-  return (
-    <RecipesContext.Provider value={{
+  const ready = useMemo(
+    () => [
       recipes,
       symbols,
       labels,
-      names: recipeNames,
-      update,
-      reset,
-      import: importFunc,
-      addRecipe,
-      removeRecipe,
-    }}
-    >
-      {children}
-    </RecipesContext.Provider>
+      recipeNames,
+    ].filter((prev, it) => prev && it, true),
+    [
+      recipes,
+      symbols,
+      labels,
+      recipeNames,
+    ],
   );
+  return ready
+    ? (
+      <RecipesContext.Provider value={{
+        recipes,
+        symbols,
+        labels,
+        names: recipeNames,
+        update,
+        reset,
+        import: importFunc,
+        addRecipe,
+        removeRecipe,
+      }}
+      >
+        {children}
+      </RecipesContext.Provider>
+    )
+    : (
+      <></>
+    );
 };
 
 export const useSymbols = () => useRecipes().symbols;
