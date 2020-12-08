@@ -28,3 +28,5 @@ export const useLabel = (label: string): [
   );
   return [color, setter];
 };
+
+export const useLabelColor = (label: string) => useLabel(label)[0];
