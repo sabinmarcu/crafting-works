@@ -56,8 +56,8 @@ export const SymbolsEditor: FC = () => {
           }
           return hasCircularDependency(
             { name },
-            recipes[n],
-            recipes,
+            recipes![n],
+            recipes!,
             allSymbols,
           );
         },

@@ -69,7 +69,7 @@ export const MaterialsEditor: FC = () => {
     <StyledCard>
       <CardHeader title="Materials" />
       <StyledExpandCardContent>
-        {Object.keys(recipe.input).sort().map((it) => (
+        {Object.keys(recipe?.input || {}).sort().map((it) => (
           <Input
             name={it}
             key={it}

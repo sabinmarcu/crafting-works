@@ -10,6 +10,7 @@ import { TitleProvider } from './state/title';
 import { AppThemeProvider as ThemeProvider } from './state/theme';
 import { RecipeProviderV3 } from './state/recipes-v3';
 import { StackProvider } from './state/stack';
+import { LabelFilterProvider } from './state/filter';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 
@@ -21,7 +22,9 @@ render(
         <RecipeProviderV3>
           <StackProvider>
             <TitleProvider>
-              <App />
+              <LabelFilterProvider>
+                <App />
+              </LabelFilterProvider>
             </TitleProvider>
           </StackProvider>
         </RecipeProviderV3>

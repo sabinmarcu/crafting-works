@@ -165,23 +165,22 @@ enum SetTypes {
   network,
 }
 
-type ValueType = {
+type ValueType<T> = {
   action: SetTypes,
-  value: any,
+  value: T | undefined,
 };
 
-export const useLocalStorageObject = (
+export const useLocalStorageObject = <T>(
   key: string,
-  defaultValue?: any,
+  defaultValue?: T,
 ): [
-    any,
-    Dispatch<SetStateAction<any>>,
-    (path: string, value: any
-    ) => void,
+    T | undefined,
+    Dispatch<SetStateAction<T | undefined>>,
+    (path: string, value: any) => void,
   ] => {
   const prevKey = usePrevious(key);
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
-  const [state, setValue] = useState<ValueType>();
+  const [state, setValue] = useState<ValueType<T>>();
   useEffect(() => {
     if (!initialLoad || prevKey !== key) {
       setInitialLoad(true);
@@ -254,7 +253,15 @@ export const useLocalStorageObject = (
     return () => window.removeEventListener('storage', handler);
   }, [setValue, key]);
   const update = useCallback(
-    (input: any) => setValue({ value: input, action: SetTypes.update }),
+    (input: T | SetStateAction<T | undefined>) => (typeof input === 'function'
+      ? setValue((t) => ({
+        value: (input as (prevState: T | undefined) => T)(t?.value),
+        action: SetTypes.update,
+      }))
+      : setValue({
+        value: input,
+        action: SetTypes.update,
+      })),
     [setValue],
   );
   return [state?.value, update, updateField];
