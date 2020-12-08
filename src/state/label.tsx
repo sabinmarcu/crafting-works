@@ -11,12 +11,16 @@ const extract = ({ name }: LabelType) => name;
 
 export type LabelContextType = {
   labels: LabelType[],
+  rawLabels: Record<string, string> | undefined,
   setColor: (label: string, color: string) => void,
+  import: (input: Record<string, string>) => void,
 };
 
 export const LabelContext = createContext<LabelContextType>({
   labels: [],
+  rawLabels: undefined,
   setColor: () => {},
+  import: () => {},
 });
 
 const decode = (
@@ -63,6 +67,15 @@ export const LabelProvider: FC = ({ children }) => {
     ),
     [update],
   );
+  const importFunc = useCallback(
+    (imports: Record<string, string>) => {
+      setLabels({
+        ...store,
+        ...imports,
+      });
+    },
+    [store, setLabels],
+  );
   useEffect(
     () => {
       if (recipeLabels.length === 0) {
@@ -97,7 +110,9 @@ export const LabelProvider: FC = ({ children }) => {
     <LabelContext.Provider
       value={{
         labels,
+        rawLabels: store,
         setColor,
+        import: importFunc,
       }}
     >
       {children}

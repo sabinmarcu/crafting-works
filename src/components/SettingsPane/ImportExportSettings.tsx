@@ -5,8 +5,14 @@ import {
 import { useHistory } from 'react-router';
 import { useRecipes } from '../../state/recipes-v3';
 import { RecipesType } from '../../utils/types';
+import { useLabels } from '../../state/label';
 
-const readFile = (file: File) => new Promise<RecipesType>((accept, reject) => {
+export type ExportType = {
+  recipes: RecipesType,
+  labels: Record<string, string>
+};
+
+const readFile = (file: File) => new Promise<ExportType>((accept, reject) => {
   const reader = new FileReader();
   reader.onload = () => {
     try {
@@ -16,7 +22,7 @@ const readFile = (file: File) => new Promise<RecipesType>((accept, reject) => {
       if (reader.result instanceof ArrayBuffer) {
         throw new Error('Got an Array Buffer?');
       }
-      const data = JSON.parse(reader.result) as RecipesType;
+      const data = JSON.parse(reader.result) as ExportType;
       accept(data);
     } catch (e) {
       reject(e);
@@ -26,7 +32,8 @@ const readFile = (file: File) => new Promise<RecipesType>((accept, reject) => {
 });
 
 export const Import: FC = () => {
-  const { import: importFunc } = useRecipes();
+  const { import: importRecipes } = useRecipes();
+  const { import: importLabels } = useLabels();
   const history = useHistory();
   const onSubmit = useCallback(
     () => {
@@ -42,11 +49,23 @@ export const Import: FC = () => {
               await Promise.all(
                 Array.from(files).map(readFile),
               )
-            ).reduce((prev, it) => ({
-              ...prev,
-              ...it,
-            }), {}) as RecipesType;
-            importFunc(results);
+            )
+              .filter((it) => it.recipes && it.labels)
+              .reduce((prev, it) => ({
+                recipes: {
+                  ...prev.recipes,
+                  ...it.recipes,
+                },
+                labels: {
+                  ...prev.labels,
+                  ...it.labels,
+                },
+              }), {
+                recipes: {},
+                labels: {},
+              }) as ExportType;
+            importRecipes(results.recipes);
+            importLabels(results.labels);
             history.push('/');
           }
         },
@@ -54,7 +73,7 @@ export const Import: FC = () => {
       el.click();
       document.body.removeChild(el);
     },
-    [importFunc, history],
+    [importRecipes, importLabels, history],
   );
   return (
     <>
@@ -71,11 +90,15 @@ export const Import: FC = () => {
 
 export const Export: FC = () => {
   const { recipes } = useRecipes();
+  const { rawLabels: labels } = useLabels();
   const onSubmit = useCallback(
     () => {
       const blob = new Blob(
         [
-          JSON.stringify(recipes, undefined, 2),
+          JSON.stringify({
+            recipes: recipes || {},
+            labels: labels || {},
+          }, undefined, 2),
         ],
         { type: 'application/json' },
       );
@@ -88,7 +111,7 @@ export const Export: FC = () => {
       el.click();
       document.body.removeChild(el);
     },
-    [recipes],
+    [recipes, labels],
   );
   return (
     <>
