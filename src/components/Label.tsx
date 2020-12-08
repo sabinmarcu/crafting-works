@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Badge, Tooltip } from '@material-ui/core';
 import styled from 'styled-components';
-import { useLabelColor } from '../hooks/useLabel';
+import { useLabelColor } from '../state/label';
 import { camelCaseToCapitalized } from '../utils/strings';
 
 export const StyledBadge = styled(Badge)<{

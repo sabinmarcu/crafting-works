@@ -1,7 +1,12 @@
 import {
-  createContext, FC, useCallback, useContext, useMemo,
+  createContext,
+  FC,
+  useCallback,
+  useContext,
+  useMemo,
 } from 'react';
 import { useLocalStorageObject } from '../hooks/useLocalStorageObject';
+import { uniq } from '../utils/functions';
 
 export type LabelFilterContextType = {
   filterBy: string[],
@@ -16,17 +21,6 @@ export const LabelFilterContext = createContext<LabelFilterContextType>({
   removeFilter: () => {},
   toggleFilter: () => {},
 });
-
-export const uniq = <T extends any>(
-  input: T[],
-  extract: (input: T) => any = (it) => it,
-): T[] => [...input].filter(
-    (it, idx, arr) => {
-      const match = extract(it);
-      const midx = arr.findIndex((i) => extract(i) === match);
-      return midx === idx;
-    },
-  );
 
 export const storageKey = ['filter', 'label'].join(':');
 export const LabelFilterProvider: FC = ({ children }) => {
