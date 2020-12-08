@@ -12,7 +12,6 @@ import {
 } from '../utils/calculate';
 import { useLocalStorageObject } from '../hooks/useLocalStorageObject';
 import { RecipeContextType, RecipesContextType, RecipesType } from '../utils/types';
-import { useLabelGuard } from '../hooks/useLabel';
 
 const RecipesContext = createContext<RecipesContextType>({
   recipes: undefined,
@@ -67,7 +66,6 @@ export const RecipeProviderV3: FC = ({ children }) => {
       .filter((it, idx, arr) => arr.indexOf(it) === idx),
     [recipes],
   );
-  useLabelGuard(labels);
   const symbols = useMemo(
     () => allSymbols
       .map((it) => ({ name: it, composite: recipeNames.includes(it) })),
@@ -101,40 +99,22 @@ export const RecipeProviderV3: FC = ({ children }) => {
     () => setRecipes({}),
     [setRecipes],
   );
-  const ready = useMemo(
-    () => [
+  return (
+    <RecipesContext.Provider value={{
       recipes,
       symbols,
       labels,
-      recipeNames,
-    ].filter((prev, it) => prev && it, true),
-    [
-      recipes,
-      symbols,
-      labels,
-      recipeNames,
-    ],
+      names: recipeNames,
+      update,
+      reset,
+      import: importFunc,
+      addRecipe,
+      removeRecipe,
+    }}
+    >
+      {children}
+    </RecipesContext.Provider>
   );
-  return ready
-    ? (
-      <RecipesContext.Provider value={{
-        recipes,
-        symbols,
-        labels,
-        names: recipeNames,
-        update,
-        reset,
-        import: importFunc,
-        addRecipe,
-        removeRecipe,
-      }}
-      >
-        {children}
-      </RecipesContext.Provider>
-    )
-    : (
-      <></>
-    );
 };
 
 export const useSymbols = () => useRecipes().symbols;

@@ -2,7 +2,7 @@ import { FC, useMemo } from 'react';
 import styled from 'styled-components';
 import { Chip } from '@material-ui/core';
 import { useFilter, Filter } from './Filter';
-import { useLabelColor } from '../hooks/useLabel';
+import { useLabelColor } from '../state/label';
 import { camelCaseToCapitalized } from '../utils/strings';
 
 export const StyledContainer = styled.div`

@@ -4,7 +4,7 @@ import { ColorPicker } from 'material-ui-color';
 import styled from 'styled-components';
 
 import { useRecipes } from '../../state/recipes-v3';
-import { useLabel } from '../../hooks/useLabel';
+import { useLabel } from '../../state/label';
 import { camelCaseToCapitalized } from '../../utils/strings';
 
 const LabelWrapper = styled.article`

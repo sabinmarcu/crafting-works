@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { createElement, FC } from 'react';
 import { render } from 'react-dom';
 import { StylesProvider } from '@material-ui/core/styles';
 import 'typeface-roboto';
@@ -13,23 +13,34 @@ import { StackProvider } from './state/stack';
 import { LabelFilterProvider } from './state/filter';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import { LabelProvider } from './state/label';
+
+const CombineProviders: FC<{
+  providers: FC[]
+}> = ({
+  providers,
+  children,
+}) => providers.reverse().reduce(
+  (prev, it) => createElement(it, undefined, prev),
+  children as any,
+);
 
 const rootElement = document.getElementById('root');
 render(
   <StylesProvider injectFirst>
-    <ThemeProvider>
-      <DrawerProvider>
-        <RecipeProviderV3>
-          <StackProvider>
-            <TitleProvider>
-              <LabelFilterProvider>
-                <App />
-              </LabelFilterProvider>
-            </TitleProvider>
-          </StackProvider>
-        </RecipeProviderV3>
-      </DrawerProvider>
-    </ThemeProvider>
+    <CombineProviders
+      providers={[
+        ThemeProvider,
+        DrawerProvider,
+        RecipeProviderV3,
+        LabelProvider,
+        StackProvider,
+        TitleProvider,
+        LabelFilterProvider,
+      ]}
+    >
+      <App />
+    </CombineProviders>
   </StylesProvider>,
   rootElement,
 );
