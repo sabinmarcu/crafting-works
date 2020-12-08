@@ -29,8 +29,8 @@ jobs:
     - name: Build
       run: yarn run build
       env:
-        PUBLIC_URL: "https://sabinmarcu.github.io/minecraft-calculator"
-        REACT_APP_BASE_URL: '/minecraft-calculator'
+        PUBLIC_URL: "https://sabinmarcu.github.io/crafting-works"
+        REACT_APP_BASE_URL: '/crafting-works'
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:

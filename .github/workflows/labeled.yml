@@ -14,7 +14,7 @@ jobs:
     - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
       with:
         action-token: "${{ secrets.LABEL_SECRET }}"
-        project-url: "https://github.com/sabinmarcu/minecraft-calculator/projects/2"
+        project-url: "https://github.com/sabinmarcu/crafting-works/projects/2"
         column-name: "Accepted"
         label-name: "feat"
   deny-feature-request:
@@ -23,7 +23,7 @@ jobs:
     - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
       with:
         action-token: "${{ secrets.LABEL_SECRET }}"
-        project-url: "https://github.com/sabinmarcu/minecraft-calculator/projects/2"
+        project-url: "https://github.com/sabinmarcu/crafting-works/projects/2"
         column-name: "Denied"
         label-name: "wontdo"
   move-to-in-progress-backlog:
@@ -32,7 +32,7 @@ jobs:
     - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
       with:
         action-token: "${{ secrets.LABEL_SECRET }}"
-        project-url: "https://github.com/sabinmarcu/minecraft-calculator/projects/1"
+        project-url: "https://github.com/sabinmarcu/crafting-works/projects/1"
         column-name: "In progress"
         label-name: "in-progress"
   move-to-in-progress-planning:
@@ -41,6 +41,6 @@ jobs:
     - uses: konradpabjan/move-labeled-or-milestoned-issue@v2.0
       with:
         action-token: "${{ secrets.LABEL_SECRET }}"
-        project-url: "https://github.com/sabinmarcu/minecraft-calculator/projects/2"
+        project-url: "https://github.com/sabinmarcu/crafting-works/projects/2"
         column-name: "In Progress"
         label-name: "in-progress"
