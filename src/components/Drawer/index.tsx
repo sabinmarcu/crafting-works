@@ -3,9 +3,6 @@ import React, {
 } from 'react';
 import {
   SwipeableDrawer,
-  Toolbar,
-  Container,
-  Typography,
   Tab,
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
@@ -13,16 +10,21 @@ import styled from 'styled-components';
 
 import { useHistory } from 'react-router';
 import { TabContext } from '@material-ui/lab';
-import { useDrawer } from '../state/drawer';
-import { RecipesList } from './RecipesList';
-import Symbols from './SymbolsList';
+import { useDrawer } from '../../state/drawer';
 import {
-  onMobile, StickyAppBar, StyledTabPanel as TabPanel, StyledTabs, StyledToolbarContainer,
-} from './styled';
-import { useIsMobile } from '../hooks/useIsMobile';
-import { BottomFab } from './BottomFab';
-import { useLocalStorage } from '../hooks/useLocalStorage';
-import { SettingsView } from './SettingsPane';
+  onMobile,
+  StyledTabPanel
+  as
+  TabPanel,
+  StyledTabs,
+} from '../styled';
+import { useIsMobile } from '../../hooks/useIsMobile';
+import { BottomFab } from '../BottomFab';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
+
+import { SettingsView } from '../SettingsPane';
+import { RecipesView } from './RecipeView';
+import { FilterView } from './FilterView';
 
 const drawerStyle = `
   min-width: min(100vw, 300px);
@@ -48,20 +50,6 @@ const StyledDrawer = styled(SwipeableDrawer)`
   }
 `;
 
-const StyledContainer = styled(Container)`
-  margin: 1.5rem 0;
-`;
-
-const DrawerAppBar: FC = ({ children }) => (
-  <StickyAppBar>
-    <Toolbar>
-      <StyledToolbarContainer>
-        <Typography variant="h5">{children}</Typography>
-      </StyledToolbarContainer>
-    </Toolbar>
-  </StickyAppBar>
-);
-
 export const DrawerWrapper = styled.section`
   display: flex;
   flex-flow: column nowrap;
@@ -79,21 +67,9 @@ export const StyledTabPanel = styled(TabPanel)`
   ${drawerStyle}
 `;
 
-export const RecipesView: FC = () => (
-  <>
-    <DrawerAppBar>Symbols</DrawerAppBar>
-    <StyledContainer>
-      <Symbols />
-    </StyledContainer>
-    <DrawerAppBar>Recipes</DrawerAppBar>
-    <StyledContainer>
-      <RecipesList />
-    </StyledContainer>
-  </>
-);
-
 const tabs = [
   { title: 'Recipes', Component: RecipesView },
+  { title: 'Filter', Component: FilterView },
   { title: 'Settings', Component: SettingsView },
 ];
 
