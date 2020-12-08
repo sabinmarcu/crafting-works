@@ -15,7 +15,7 @@ export type RecipesExtraType = {
 };
 
 export type RecipesValuesType = {
-  recipes: RecipesType,
+  recipes: RecipesType | undefined,
   symbols: SymbolType[],
   labels: string[],
   names: string[],
@@ -32,7 +32,7 @@ export type RecipesFuncsType = {
 export type RecipesContextType = RecipesValuesType & RecipesFuncsType;
 
 export type RecipeContextType = {
-  recipe: RecipeType,
+  recipe: RecipeType | undefined,
   symbols: SymbolType[],
   name: string,
   ast?: RecipeAST,

@@ -17,7 +17,7 @@ import { labelPrefix } from '../hooks/useLabel';
 import { makeKey, stripKey } from '../hooks/config';
 
 const RecipesContext = createContext<RecipesContextType>({
-  recipes: {},
+  recipes: undefined,
   symbols: [],
   names: [],
   labels: [],
@@ -30,7 +30,7 @@ const RecipesContext = createContext<RecipesContextType>({
 
 export const useRecipes = () => useContext(RecipesContext);
 export const RecipeProviderV3: FC = ({ children }) => {
-  const [recipes, setRecipes, update] = useLocalStorageObject('recipes-v3', seedData);
+  const [recipes, setRecipes, update] = useLocalStorageObject<RecipesType>('recipes-v3', seedData);
   const recipeNames = useMemo(
     () => (recipes ? Object.keys(recipes) : []),
     [recipes],
@@ -96,7 +96,7 @@ export const RecipeProviderV3: FC = ({ children }) => {
     [update],
   );
   const removeRecipe = useCallback(
-    (name: string) => setRecipes(
+    (name: string) => recipes && setRecipes(
       Object.entries(recipes)
         .filter(([key]) => key !== name)
         .reduce((prev, [key, value]) => ({
@@ -180,7 +180,7 @@ export const RecipeProvider: FC<{ name: string }> = ({ children, name }) => {
   );
   const removeInput = useCallback(
     (n: string) => {
-      updateFunc('input', Object.entries(recipe.input || {})
+      updateFunc('input', Object.entries(recipe?.input ?? {})
         .filter(([key]) => key !== n)
         .reduce((prev, [k, v]) => ({
           ...prev,
@@ -253,10 +253,10 @@ export const useResources = () => useContext(RecipeContext).resources;
 export const useAST = () => useContext(RecipeContext).ast;
 export const useUses = () => useContext(RecipeContext).uses;
 export const useSteps = () => useContext(RecipeContext).steps;
-export const useInput = (name: string): [number, (val: string) => void] => {
+export const useInput = (name: string): [number | undefined, (val: string) => void] => {
   const { recipe, update } = useRecipe();
   const value = useMemo(
-    () => recipe.input[name],
+    () => recipe?.input[name],
     [recipe],
   );
   const updateFunc = useCallback(
@@ -268,10 +268,10 @@ export const useInput = (name: string): [number, (val: string) => void] => {
     updateFunc,
   ];
 };
-export const useOutput = (): [number, (val: string) => void] => {
+export const useOutput = (): [number | undefined, (val: string) => void] => {
   const { recipe, update } = useRecipe();
   const value = useMemo(
-    () => recipe.output,
+    () => recipe?.output,
     [recipe],
   );
   const updateFunc = useCallback(

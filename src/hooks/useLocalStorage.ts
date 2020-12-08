@@ -55,20 +55,19 @@ export const useLocalStorage = <T>(
           localStorage.removeItem(makeKey(key));
         } else {
           logState('⚙ LocalStorage Set', key, value);
-          localStorage.setItem(makeKey(key), JSON.stringify(value));
+          const evt = document.createEvent('StorageEvent');
+          // @ts-ignore
+          evt.initStorageEvent(
+            'storage',
+            false, false,
+            makeKey(key),
+            null,
+            JSON.stringify(value),
+            window.location,
+            window.localStorage,
+          );
+          window.dispatchEvent(evt);
         }
-        const evt = document.createEvent('StorageEvent');
-        // @ts-ignore
-        evt.initStorageEvent(
-          'storage',
-          false, false,
-          makeKey(key),
-          null,
-          JSON.stringify(value),
-          window.location,
-          window.localStorage,
-        );
-        window.dispatchEvent(evt);
       }
     }
     return undefined;
