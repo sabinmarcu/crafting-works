@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { isHex, isRGBA, randomColor } from '../utils/colors';
 import { useLocalStorage } from './useLocalStorage';
 
+export const labelPrefix = ['label', 'color'].join(':');
 export const useLabel = (label: string): [
   string | undefined,
   (input: string) => void,
@@ -11,7 +12,7 @@ export const useLabel = (label: string): [
     [],
   );
   const key = useMemo(
-    () => ['color', label].join(':'),
+    () => [labelPrefix, label].join(':'),
     [label],
   );
   const [color, setColor] = useLocalStorage(

@@ -16,7 +16,6 @@ export const useLocalStorage = <T>(
   const [value, setValue] = useState<T>();
   useEffect(() => {
     if (!initialLoad || prevKey !== key) {
-      setInitialLoad(true);
       const val = localStorage.getItem(makeKey(key));
       if (val) {
         try {
@@ -29,6 +28,7 @@ export const useLocalStorage = <T>(
       } else {
         setValue(defaultValue);
       }
+      setInitialLoad(true);
     }
   }, [initialLoad, key, defaultValue]);
   useEffect(() => {
