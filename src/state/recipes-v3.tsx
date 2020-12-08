@@ -4,7 +4,6 @@ import {
   useContext,
   useMemo,
   useCallback,
-  useEffect,
 } from 'react';
 
 import seedData from '../config/seed';
@@ -13,8 +12,7 @@ import {
 } from '../utils/calculate';
 import { useLocalStorageObject } from '../hooks/useLocalStorageObject';
 import { RecipeContextType, RecipesContextType, RecipesType } from '../utils/types';
-import { labelPrefix } from '../hooks/useLabel';
-import { makeKey, stripKey } from '../hooks/config';
+import { useLabelGuard } from '../hooks/useLabel';
 
 const RecipesContext = createContext<RecipesContextType>({
   recipes: undefined,
@@ -69,23 +67,7 @@ export const RecipeProviderV3: FC = ({ children }) => {
       .filter((it, idx, arr) => arr.indexOf(it) === idx),
     [recipes],
   );
-  useEffect(
-    () => {
-      if (labels.length === 0) {
-        return undefined;
-      }
-      const match = makeKey(labelPrefix);
-      const labelKeys = Object.keys(localStorage)
-        .filter((it) => it.startsWith(match))
-        .map((it) => stripKey(it, labelPrefix));
-      const toRemove = labelKeys
-        .filter((it) => !labels.includes(it))
-        .map((it) => makeKey(it, `${labelPrefix}:`));
-      toRemove.forEach((it) => localStorage.removeItem(it));
-      return undefined;
-    },
-    [labels],
-  );
+  useLabelGuard(labels);
   const symbols = useMemo(
     () => allSymbols
       .map((it) => ({ name: it, composite: recipeNames.includes(it) })),

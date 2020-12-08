@@ -6,52 +6,19 @@ import {
   useState,
 } from 'react';
 import {
-  capitalize, CardHeader, Chip, TextField,
+  capitalize, CardHeader, TextField,
 } from '@material-ui/core';
-import styled from 'styled-components';
 
 import { Autocomplete, createFilterOptions } from '@material-ui/lab';
 import { useRecipe, useRecipes } from '../../state/recipes-v3';
 import {
-  AutocompleteWrapper, RightCardActions, StyledCard, StyledExpandCardContent,
+  AutocompleteWrapper,
+  RightCardActions,
+  StyledCard,
+  StyledExpandCardContent,
 } from '../styled';
-import { useLabelColor } from '../../hooks/useLabel';
+import { LabelList } from '../LabelList';
 import { camelCaseToCapitalized, capitalizedToCamelCase } from '../../utils/strings';
-
-export const StyledContainer = styled.div`
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: flex-start;
-`;
-
-export const StyledChip = styled(Chip)<{
-  customColor?: string
-}>`
-  margin: 5px;
-  background: ${({ customColor }) => customColor};
-`;
-
-export const LabelChip: FC<{
-  name: string,
-  onRemove?: (input: string) => (e: Event) => void,
-}> = ({
-  name,
-  onRemove,
-}) => {
-  const color = useLabelColor(name);
-  const removeFunc = useMemo(
-    () => (onRemove ? onRemove(name) : undefined),
-    [onRemove, name],
-  );
-  return (
-    <StyledChip
-      label={camelCaseToCapitalized(name)}
-      customColor={color}
-      onDelete={removeFunc}
-    />
-  );
-};
 
 type ComboBoxAddType = {inputValue?: string};
 type LabelInputType = { name: string };
@@ -64,7 +31,7 @@ export const LabelEditor: FC = () => {
     () => recipe?.labels ?? [],
     [recipe],
   );
-  const deleteHandler = useCallback(
+  const removeHandler = useCallback(
     (label: string) => (e: Event) => {
       e.preventDefault();
       removeLabel(label);
@@ -91,13 +58,11 @@ export const LabelEditor: FC = () => {
       <CardHeader title="Labels" />
       {labels && (
       <StyledExpandCardContent>
-        {labels.map((label) => (
-          <LabelChip
-            name={label}
-            key={label}
-            onRemove={deleteHandler}
-          />
-        ))}
+        <LabelList
+          labels={labels}
+          onRemove={removeHandler}
+          filter={false}
+        />
       </StyledExpandCardContent>
       )}
       <RightCardActions>

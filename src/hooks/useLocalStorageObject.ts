@@ -19,23 +19,26 @@ type PairType = { key: string, value: any };
 const makePairs = (
   obj: any,
   prefix: string,
-): PairType[] => Object.entries(obj)
-  .reduce(
-    (prev, [k, v]) => {
-      const key = [prefix, k].join(':');
-      return [
-        ...prev,
-        ...(typeof v === 'object'
-          ? [
-            { key, value: makeType(Array.isArray(v) ? 'array' : 'object') },
-            ...makePairs(v, key),
-          ]
-          : [{ key, value: v }]
-        ),
-      ];
-    },
-    [] as PairType[],
-  ) as PairType[];
+): PairType[] => {
+  const pairs = Object.entries(obj)
+    .reduce(
+      (prev, [k, v]) => {
+        const key = [prefix, k].join(':');
+        return [
+          ...prev,
+          ...(typeof v === 'object'
+            ? [
+              { key, value: makeType(Array.isArray(v) ? 'array' : 'object') },
+              ...(makePairs(v, key)),
+            ]
+            : [{ key, value: v }]
+          ),
+        ];
+      },
+      [] as PairType[],
+    ) as PairType[];
+  return pairs;
+};
 
 const readPairs = (prefix: string, type = 'object'): any => {
   const test = new RegExp(`^${prefix}:[^:]+$`);
@@ -102,7 +105,10 @@ const diff = (orig: any, target: any, prefix?: string): DiffPair[] => {
             || target[it],
           action: DiffActions.set,
         },
-        ...makePairs(target[it], [prefix, it].join(':')),
+        ...(typeof target[it] === 'object'
+          ? makePairs(target[it], [prefix, it].join(':'))
+          : []
+        ),
       ],
       [] as PairType[],
     ).map((it) => ({ ...it, action: DiffActions.set }));

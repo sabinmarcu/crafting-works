@@ -144,4 +144,8 @@ export const AutocompleteWrapper = styled.div`
   flex: 1;
 `;
 
+export const StyledContainer = styled(Container)`
+  margin: 1.5rem 0;
+`;
+
 export default StyledLink;

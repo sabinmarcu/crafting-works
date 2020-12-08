@@ -1,16 +1,20 @@
-import { createContext, FC, useCallback } from 'react';
+import {
+  createContext, FC, useCallback, useContext, useMemo,
+} from 'react';
 import { useLocalStorageObject } from '../hooks/useLocalStorageObject';
 
 export type LabelFilterContextType = {
   filterBy: string[],
   addFilter: (input: string) => void
   removeFilter: (input: string) => void
+  toggleFilter: (input: string) => void
 };
 
 export const LabelFilterContext = createContext<LabelFilterContextType>({
   filterBy: [],
   addFilter: () => {},
   removeFilter: () => {},
+  toggleFilter: () => {},
 });
 
 export const uniq = <T extends any>(
@@ -20,14 +24,19 @@ export const uniq = <T extends any>(
 
 export const storageKey = ['filter', 'label'].join(':');
 export const LabelFilterProvider: FC = ({ children }) => {
-  const [filterBy, setFilterBy] = useLocalStorageObject<string[]>(
+  const [store, setFilterBy] = useLocalStorageObject<{ filterBy: string[] }>(
     storageKey,
-    [],
+    { filterBy: [] },
+  );
+  const filterBy = useMemo(
+    () => (store?.filterBy ?? []).filter(Boolean),
+    [store],
   );
   const update = useCallback(
     (input: string[] | ((old: string[]) => string[])) => (Array.isArray(input)
-      ? setFilterBy(uniq(input))
-      : setFilterBy((t) => uniq(input(t || [])))),
+      ? setFilterBy({ filterBy: uniq(input) })
+      : setFilterBy((t) => ({ filterBy: uniq(input(t?.filterBy || [])) }))
+    ),
     [setFilterBy],
   );
   const addFilter = useCallback(
@@ -38,15 +47,24 @@ export const LabelFilterProvider: FC = ({ children }) => {
     (input: string) => update((f) => f.filter((it) => it !== input)),
     [update],
   );
+  const toggleFilter = useCallback(
+    (input: string) => (filterBy.includes(input)
+      ? removeFilter(input)
+      : addFilter(input)),
+    [filterBy, addFilter, removeFilter],
+  );
   return (
     <LabelFilterContext.Provider
       value={{
         filterBy: filterBy || [],
         addFilter,
         removeFilter,
+        toggleFilter,
       }}
     >
       {children}
     </LabelFilterContext.Provider>
   );
 };
+
+export const useLabelFilter = () => useContext(LabelFilterContext);
