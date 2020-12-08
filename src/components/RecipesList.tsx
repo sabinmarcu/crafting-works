@@ -10,6 +10,7 @@ import { camelCaseToCapitalized } from '../utils/strings';
 import { StyledLink } from './styled';
 import { Filter, useFilter } from './Filter';
 import { LabelBadge, LabelBadgeList } from './Label';
+import { useLabelFilters } from '../state/filter';
 
 export const RecipesList: FC = () => {
   const { recipes } = useRecipes();
@@ -22,8 +23,24 @@ export const RecipesList: FC = () => {
       })),
     [recipes],
   );
+  const filterBy = useLabelFilters();
+  const preFilteredList = useMemo(
+    () => (filterBy.length > 0
+      ? recipeList.filter(
+        ({ labels }): boolean => (labels
+          ? labels.reduce(
+            (prev, label) => prev || filterBy.includes(label),
+            false,
+          )
+          : false
+        ),
+      )
+      : recipeList
+    ),
+    [recipeList, filterBy],
+  );
   const { list, ...filterProps } = useFilter(
-    recipeList,
+    preFilteredList,
     ({ text }) => text,
   );
   return (
