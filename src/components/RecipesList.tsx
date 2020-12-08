@@ -9,13 +9,15 @@ import { useRecipes } from '../state/recipes-v3';
 import { camelCaseToCapitalized } from '../utils/strings';
 import { StyledLink } from './styled';
 import { Filter, useFilter } from './Filter';
+import { LabelBadge, LabelBadgeList } from './Label';
 
 export const RecipesList: FC = () => {
   const { recipes } = useRecipes();
   const recipeList = useMemo(
-    () => Object.keys(recipes || {})
-      .map((it) => ({
+    () => Object.entries(recipes || {})
+      .map(([it, { labels }]) => ({
         id: it,
+        labels,
         text: camelCaseToCapitalized(it),
       })),
     [recipes],
@@ -27,12 +29,21 @@ export const RecipesList: FC = () => {
   return (
     <List>
       <Filter {...filterProps} />
-      {list.map(({ id, text }) => (
+      {list.map(({ id, text, labels }) => (
         <StyledLink to={`/recipes/${id}`} key={id}>
           <ListItem button>
             <ListItemText>
               {text}
             </ListItemText>
+            {labels && (
+              <LabelBadgeList>
+                {labels.map(
+                  (label) => (
+                    <LabelBadge key={label} name={label} />
+                  ),
+                )}
+              </LabelBadgeList>
+            )}
           </ListItem>
         </StyledLink>
       ))}
