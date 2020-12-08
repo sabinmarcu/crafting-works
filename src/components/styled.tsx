@@ -140,4 +140,8 @@ export const StyledExpandCardContent = styled(CardContent)`
   flex: 1;
 `;
 
+export const AutocompleteWrapper = styled.div`
+  flex: 1;
+`;
+
 export default StyledLink;

@@ -17,6 +17,7 @@ import {
 import { SymbolsEditor } from './SymbolsEditor';
 import { RemoveRecipe } from './RemoveRecipe';
 import { MaterialsEditor } from './MaterialsEditor';
+import { LabelEditor } from './LabelsEditor';
 
 export const StyledContainer = styled(Container)`
   display: grid;
@@ -38,10 +39,17 @@ export const SymbolsWrapper = styled.div`
   }
 `;
 
-export const RemoveWrapper = styled.div`
+export const LabelsWrapper = styled.div`
   grid-row: 2;
   ${onMobile} {
-    grid-row: 3;
+    grid-row: 2;
+  }
+`;
+
+export const RemoveWrapper = styled.div`
+  grid-row: 3;
+  ${onMobile} {
+    grid-row: 4;
   }
 `;
 
@@ -50,7 +58,7 @@ export const InputsWrapper = styled.div`
   grid-column: 2;
   ${onMobile} {
     grid-column: 1;
-    grid-row: 2;
+    grid-row: 3;
   }
 `;
 
@@ -69,6 +77,9 @@ export const RecipeEditor: FC = () => {
         <SymbolsWrapper>
           <SymbolsEditor />
         </SymbolsWrapper>
+        <LabelsWrapper>
+          <LabelEditor />
+        </LabelsWrapper>
         <InputsWrapper>
           <MaterialsEditor />
         </InputsWrapper>
