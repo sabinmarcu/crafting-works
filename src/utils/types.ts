@@ -42,6 +42,8 @@ export type RecipeContextType = {
   update: (path: string, value: any) => void,
   addInput: (name: string) => void,
   removeInput: (name: string) => void,
+  addLabel: (name: string) => void,
+  removeLabel: (name: string) => void,
 };
 
 export type RecipeAST = {

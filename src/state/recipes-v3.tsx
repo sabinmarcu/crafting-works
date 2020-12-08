@@ -131,6 +131,8 @@ export const RecipeContext = createContext<RecipeContextType>({
   update: () => {},
   addInput: () => {},
   removeInput: () => {},
+  addLabel: () => {},
+  removeLabel: () => {},
 });
 
 export const RecipeProvider: FC<{ name: string }> = ({ children, name }) => {
@@ -164,6 +166,22 @@ export const RecipeProvider: FC<{ name: string }> = ({ children, name }) => {
           ...prev,
           [k]: v,
         }), {}));
+    },
+    [updateFunc, recipe],
+  );
+  const addLabel = useCallback(
+    (n: string) => {
+      updateFunc('labels', [
+        ...(recipe?.labels ?? []),
+        n,
+      ]);
+    },
+    [updateFunc, recipe],
+  );
+  const removeLabel = useCallback(
+    (n: string) => {
+      updateFunc('labels', (recipe?.labels ?? [])
+        .filter((it) => it !== n));
     },
     [updateFunc, recipe],
   );
@@ -201,6 +219,8 @@ export const RecipeProvider: FC<{ name: string }> = ({ children, name }) => {
       update: updateFunc,
       addInput,
       removeInput,
+      addLabel,
+      removeLabel,
     }}
     >
       {children}

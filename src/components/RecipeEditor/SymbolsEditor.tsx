@@ -9,12 +9,16 @@ import {
   CardHeader,
   TextField,
 } from '@material-ui/core';
-import styled from 'styled-components';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { SymbolsList } from '../SymbolsList';
 import { SymbolType } from '../../utils/types';
 import { camelCaseToCapitalized, capitalize, capitalizedToCamelCase } from '../../utils/strings';
-import { RightCardActions, StyledCard, StyledExpandCardContent } from '../styled';
+import {
+  AutocompleteWrapper,
+  RightCardActions,
+  StyledCard,
+  StyledExpandCardContent,
+} from '../styled';
 import { hasCircularDependency } from '../../utils/calculate';
 import {
   useRecipe,
@@ -23,10 +27,6 @@ import {
 
 type ComboBoxAddType = {inputValue?: string};
 const filter = createFilterOptions<SymbolType & ComboBoxAddType>();
-
-const AutocompleteWrapper = styled.div`
-  flex: 1;
-`;
 
 export const SymbolsEditor: FC = () => {
   const {
