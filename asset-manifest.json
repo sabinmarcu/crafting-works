@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "https://sabinmarcu.github.io/crafting-works/static/css/main.cf1b5c1e.chunk.css",
-    "main.js": "https://sabinmarcu.github.io/crafting-works/static/js/main.c9f23d02.chunk.js",
-    "main.js.map": "https://sabinmarcu.github.io/crafting-works/static/js/main.c9f23d02.chunk.js.map",
+    "main.js": "https://sabinmarcu.github.io/crafting-works/static/js/main.5485f546.chunk.js",
+    "main.js.map": "https://sabinmarcu.github.io/crafting-works/static/js/main.5485f546.chunk.js.map",
     "runtime-main.js": "https://sabinmarcu.github.io/crafting-works/static/js/runtime-main.3e437910.js",
     "runtime-main.js.map": "https://sabinmarcu.github.io/crafting-works/static/js/runtime-main.3e437910.js.map",
     "static/css/2.377ea654.chunk.css": "https://sabinmarcu.github.io/crafting-works/static/css/2.377ea654.chunk.css",
-    "static/js/2.dc394250.chunk.js": "https://sabinmarcu.github.io/crafting-works/static/js/2.dc394250.chunk.js",
-    "static/js/2.dc394250.chunk.js.map": "https://sabinmarcu.github.io/crafting-works/static/js/2.dc394250.chunk.js.map",
+    "static/js/2.4700cd21.chunk.js": "https://sabinmarcu.github.io/crafting-works/static/js/2.4700cd21.chunk.js",
+    "static/js/2.4700cd21.chunk.js.map": "https://sabinmarcu.github.io/crafting-works/static/js/2.4700cd21.chunk.js.map",
     "static/js/3.07917aca.chunk.js": "https://sabinmarcu.github.io/crafting-works/static/js/3.07917aca.chunk.js",
     "static/js/3.07917aca.chunk.js.map": "https://sabinmarcu.github.io/crafting-works/static/js/3.07917aca.chunk.js.map",
     "index.html": "https://sabinmarcu.github.io/crafting-works/index.html",
@@ -15,14 +15,14 @@
     "service-worker.js.map": "https://sabinmarcu.github.io/crafting-works/service-worker.js.map",
     "static/css/2.377ea654.chunk.css.map": "https://sabinmarcu.github.io/crafting-works/static/css/2.377ea654.chunk.css.map",
     "static/css/main.cf1b5c1e.chunk.css.map": "https://sabinmarcu.github.io/crafting-works/static/css/main.cf1b5c1e.chunk.css.map",
-    "static/js/2.dc394250.chunk.js.LICENSE.txt": "https://sabinmarcu.github.io/crafting-works/static/js/2.dc394250.chunk.js.LICENSE.txt",
+    "static/js/2.4700cd21.chunk.js.LICENSE.txt": "https://sabinmarcu.github.io/crafting-works/static/js/2.4700cd21.chunk.js.LICENSE.txt",
     "static/media/index.css": "https://sabinmarcu.github.io/crafting-works/static/media/roboto-latin-900italic.cb5ad999.woff2"
   },
   "entrypoints": [
     "static/js/runtime-main.3e437910.js",
     "static/css/2.377ea654.chunk.css",
-    "static/js/2.dc394250.chunk.js",
+    "static/js/2.4700cd21.chunk.js",
     "static/css/main.cf1b5c1e.chunk.css",
-    "static/js/main.c9f23d02.chunk.js"
+    "static/js/main.5485f546.chunk.js"
   ]
 }
