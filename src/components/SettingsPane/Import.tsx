@@ -3,14 +3,9 @@ import {
   Button,
 } from '@material-ui/core';
 import { useHistory } from 'react-router';
+import { ExportType } from '../../utils/types';
 import { useRecipes } from '../../state/recipes-v3';
-import { RecipesType } from '../../utils/types';
 import { useLabels } from '../../state/label';
-
-export type ExportType = {
-  recipes: RecipesType,
-  labels: Record<string, string>
-};
 
 const readFile = (file: File) => new Promise<ExportType>((accept, reject) => {
   const reader = new FileReader();
@@ -83,44 +78,6 @@ export const Import: FC = () => {
         onClick={onSubmit}
       >
         Import
-      </Button>
-    </>
-  );
-};
-
-export const Export: FC = () => {
-  const { recipes } = useRecipes();
-  const { rawLabels: labels } = useLabels();
-  const onSubmit = useCallback(
-    () => {
-      const blob = new Blob(
-        [
-          JSON.stringify({
-            recipes: recipes || {},
-            labels: labels || {},
-          }, undefined, 2),
-        ],
-        { type: 'application/json' },
-      );
-      const obj = window.URL.createObjectURL(blob);
-      const el = document.createElement('a');
-      el.style.display = 'none';
-      el.href = obj;
-      el.download = 'export.json';
-      document.body.appendChild(el);
-      el.click();
-      document.body.removeChild(el);
-    },
-    [recipes, labels],
-  );
-  return (
-    <>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={onSubmit}
-      >
-        Export
       </Button>
     </>
   );
