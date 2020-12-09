@@ -1,3 +1,4 @@
+import { uniq } from './functions';
 import {
   RecipeAST,
   RecipeStepItem,
@@ -84,6 +85,10 @@ export const generateUses = (
   return ast;
 };
 
+type RecipeReduce = {
+  list: RecipeSteps,
+  ignore: string[],
+};
 export const generateSteps = (
   ast: RecipeAST,
   resources: Record<string, number>,
@@ -117,7 +122,24 @@ export const generateSteps = (
         [] as RecipeAST[],
       );
   }
-  return steps.reverse();
+  const finalSteps = steps.reverse()
+    .reduce(
+      ({ list, ignore }: RecipeReduce, s: RecipeStep) => ({
+        list: [
+          ...list,
+          s.filter(({ name }) => !ignore.includes(name)),
+        ],
+        ignore: uniq([
+          ...ignore,
+          ...s.map(({ name }) => name),
+        ]),
+      }),
+      {
+        list: [],
+        ignore: [],
+      },
+    );
+  return finalSteps.list;
 };
 
 export const hasCircularDependency = (
