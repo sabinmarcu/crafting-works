@@ -1,4 +1,8 @@
-import { createMuiTheme, Theme, ThemeProvider } from '@material-ui/core';
+import {
+  createMuiTheme,
+  Theme,
+  ThemeProvider,
+} from '@material-ui/core';
 import React, {
   createContext,
   useContext,
@@ -14,20 +18,35 @@ export type ThemeType = 'light' | 'dark';
 export type ThemeContextType = {
   theme: ThemeType,
   t: Theme,
+  ti: Theme,
   toggle: () => void,
   reset: () => void,
 };
 
 const themes = {
-  dark: createMuiTheme({ palette: { type: 'dark' } }),
-  light: createMuiTheme({ palette: { type: 'light', background: { default: 'rgb(230, 230, 230)' } } }),
+  dark: createMuiTheme({
+    palette: {
+      type: 'dark',
+    },
+  }),
+  light: createMuiTheme({
+    palette: {
+      type: 'light',
+      background: {
+        default: 'rgb(230, 230, 230)',
+      },
+    },
+  }),
 };
 
 const defaultTheme = 'dark';
+const invertTheme = (t: string) => (t === 'dark' ? 'light' : 'dark');
+const defaultInvertedTheme = 'light';
 
 export const ThemeContext = createContext<ThemeContextType>({
   theme: defaultTheme,
   t: themes[defaultTheme],
+  ti: themes[defaultInvertedTheme],
   toggle: () => {},
   reset: () => {},
 });
@@ -43,7 +62,11 @@ export const AppThemeProvider: FC = ({ children }) => {
     [setTheme, setHasMediaDetection],
   );
   const t = useMemo(
-    () => (theme ? themes[theme] : themes.light),
+    () => (theme ? themes[theme] : themes[defaultTheme]),
+    [theme],
+  );
+  const ti = useMemo(
+    () => (theme ? themes[invertTheme(theme)] : themes[defaultInvertedTheme]),
     [theme],
   );
   const isLight = useMatchMedia('(prefers-color-scheme: light)');
@@ -73,6 +96,7 @@ export const AppThemeProvider: FC = ({ children }) => {
     <ThemeContext.Provider value={{
       theme: theme || 'light',
       t,
+      ti,
       toggle: toggleTheme,
       reset,
     }}
