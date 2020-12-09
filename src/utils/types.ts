@@ -63,3 +63,8 @@ export type LabelType = {
   name: string,
   color: string,
 };
+
+export type ExportType = {
+  recipes: RecipesType,
+  labels: Record<string, string>
+};

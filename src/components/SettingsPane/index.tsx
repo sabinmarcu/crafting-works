@@ -6,7 +6,8 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import { StickyAppBar, StyledToolbarContainer } from '../styled';
 import { ResetAll, ResetThemeSelection, ResetRecipes } from './ResetSettings';
-import { Import, Export } from './ImportExportSettings';
+import { Import } from './Import';
+import { Export } from './Export';
 import { StacksEnabled, StacksAmount } from './StacksSettings';
 import { LabelSettings } from './LabelsSettings';
 
