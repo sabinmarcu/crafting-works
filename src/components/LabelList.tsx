@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 import styled from 'styled-components';
-import { Chip } from '@material-ui/core';
+import { Chip, withTheme } from '@material-ui/core';
 import { useFilter, Filter } from './Filter';
 import { useLabelColor } from '../state/label';
 import { camelCaseToCapitalized } from '../utils/strings';
@@ -12,14 +12,17 @@ export const StyledContainer = styled.div`
   justify-content: flex-start;
 `;
 
-export const StyledChip = styled(Chip)<{
-  customColor?: string
-}>`
-  margin: 5px;
-  &, &:hover, &:focus {
-    background: ${({ customColor }) => customColor};
-  }
-`;
+export const StyledChip = withTheme(
+  styled(Chip)<{
+    customColor?: string
+  }>`
+    margin: 5px;
+    &, &:hover, &:focus {
+      background: ${({ customColor }) => (customColor)};
+      color: ${({ customColor, theme: { palette: { getContrastText } } }) => (customColor ? getContrastText(customColor) : undefined)};
+    }
+  `,
+);
 
 export const LabelChip: FC<{
   name: string,
