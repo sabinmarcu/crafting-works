@@ -116,7 +116,6 @@ export const ExportModal: FC<{
     },
     [filteredRecipes, filteredLabels],
   );
-  console.log({ filteredLabels, filteredRecipes });
   return (
     <Modal
       open={open}
