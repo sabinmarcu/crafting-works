@@ -1,6 +1,6 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "Crafting Works",
+    "short_name": "Crafting Works",
     "icons": [
         {
             "src": "/android-chrome-36x36.png",
@@ -50,5 +50,6 @@
     ],
     "theme_color": "#ffffff",
     "background_color": "#ffffff",
+    "start_url": "/",
     "display": "standalone"
 }
