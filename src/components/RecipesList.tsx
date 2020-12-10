@@ -11,14 +11,18 @@ import { StyledLink } from './styled';
 import { Filter, useFilter } from './Filter';
 import { LabelBadge, LabelBadgeList } from './Label';
 import { useLabelFilters } from '../state/filter';
+import { uniq } from '../utils/functions';
 
 export const RecipesList: FC = () => {
   const { recipes } = useRecipes();
   const recipeList = useMemo(
     () => Object.entries(recipes || {})
-      .map(([it, { labels }]) => ({
+      .map(([it, { labels, inheritedLabels }]) => ({
         id: it,
-        labels,
+        labels: uniq([
+          ...(labels || []),
+          ...(inheritedLabels || []),
+        ]),
         text: camelCaseToCapitalized(it),
       })),
     [recipes],
@@ -48,7 +52,11 @@ export const RecipesList: FC = () => {
   return (
     <List>
       <Filter {...filterProps} />
-      {list.map(({ id, text, labels }) => (
+      {list.map(({
+        id,
+        text,
+        labels,
+      }) => (
         <StyledLink to={`/recipes/${id}`} key={id}>
           <ListItem button>
             <ListItemText>

@@ -31,6 +31,10 @@ export const LabelEditor: FC = () => {
     () => recipe?.labels ?? [],
     [recipe],
   );
+  const inheritedLabels = useMemo(
+    () => recipe?.inheritedLabels,
+    [recipe],
+  );
   const removeHandler = useCallback(
     (label: string) => (e: Event) => {
       e.preventDefault();
@@ -60,6 +64,7 @@ export const LabelEditor: FC = () => {
       <StyledExpandCardContent>
         <LabelList
           labels={labels}
+          extraLabels={inheritedLabels}
           onRemove={removeHandler}
           filter={false}
         />

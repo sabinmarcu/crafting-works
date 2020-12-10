@@ -8,10 +8,16 @@ import {
 
 import seedData from '../config/seed';
 import {
-  generateAST, generateSteps, generateUses, reduce,
+  generateAST,
+  generateSteps,
+  generateUses,
+  inheritLabels,
+  reduce,
 } from '../utils/calculate';
 import { useLocalStorageObject } from '../hooks/useLocalStorageObject';
-import { RecipeContextType, RecipesContextType, RecipesType } from '../utils/types';
+import {
+  ComboRecipesType, ComboRecipeType, RecipeContextType, RecipesContextType, RecipesType,
+} from '../utils/types';
 
 const RecipesContext = createContext<RecipesContextType>({
   recipes: undefined,
@@ -27,10 +33,42 @@ const RecipesContext = createContext<RecipesContextType>({
 
 export const useRecipes = () => useContext(RecipesContext);
 export const RecipeProviderV3: FC = ({ children }) => {
-  const [recipes, setRecipes, update] = useLocalStorageObject<RecipesType>('recipes-v3', seedData);
+  const [baseRecipes, setRecipes, update] = useLocalStorageObject<RecipesType>('recipes-v3', seedData);
+  const recipes = useMemo(
+    () => {
+      if (!baseRecipes) {
+        return undefined;
+      }
+      const recipesList = Object.entries(baseRecipes as RecipesType);
+      const fixedRecipesList = recipesList
+        .map(([key, value]): [string, ComboRecipeType] => {
+          const deps = generateAST(value, baseRecipes, undefined, key);
+          const uses = generateUses(key, baseRecipes, undefined);
+          return [
+            key,
+            {
+              ...value,
+              deps,
+              uses,
+            },
+          ];
+        });
+      const fixedRecipes = fixedRecipesList.reduce(
+        (prev: ComboRecipesType, [key, value]) => ({
+          ...prev,
+          [key]: value,
+        }),
+        {} as ComboRecipesType,
+      );
+      Object.values(fixedRecipes)
+        .forEach(({ deps }) => inheritLabels(deps, fixedRecipes));
+      return fixedRecipes;
+    },
+    [baseRecipes],
+  );
   const recipeNames = useMemo(
-    () => (recipes ? Object.keys(recipes) : []),
-    [recipes],
+    () => (baseRecipes ? Object.keys(baseRecipes) : []),
+    [baseRecipes],
   );
   const allSymbols = useMemo(
     () => (recipes
@@ -121,10 +159,7 @@ export const useSymbols = () => useRecipes().symbols;
 export const useNames = () => useRecipes().names;
 
 export const RecipeContext = createContext<RecipeContextType>({
-  recipe: {
-    input: {},
-    output: -1,
-  },
+  recipe: undefined,
   resources: {},
   symbols: [],
   name: 'unknown',
@@ -189,23 +224,11 @@ export const RecipeProvider: FC<{ name: string }> = ({ children, name }) => {
     () => (recipe && store.recipes ? reduce(recipe, store.recipes) : {}),
     [recipe, store],
   );
-  const ast = useMemo(
-    () => (recipe && store.recipes
-      ? generateAST(recipe, store.recipes, undefined, name)
-      : undefined),
-    [recipe, store, name],
-  );
-  const uses = useMemo(
-    () => (store.recipes
-      ? generateUses(name, store.recipes, undefined)
-      : undefined),
-    [store, name],
-  );
   const steps = useMemo(
-    () => (ast
-      ? generateSteps(ast, resources)
+    () => (recipe?.deps
+      ? generateSteps(recipe.deps, resources)
       : undefined),
-    [ast, resources],
+    [recipe, resources],
   );
   return (
     <RecipeContext.Provider value={{
@@ -213,8 +236,8 @@ export const RecipeProvider: FC<{ name: string }> = ({ children, name }) => {
       symbols,
       name,
       resources,
-      ast,
-      uses,
+      ast: recipe?.deps,
+      uses: recipe?.uses,
       steps,
       update: updateFunc,
       addInput,

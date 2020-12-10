@@ -7,6 +7,7 @@ import {
   RecipesType,
   RecipeType,
   SymbolType,
+  ComboRecipesType,
 } from './types';
 
 export const adjust = (
@@ -171,4 +172,30 @@ export const hasCircularDependency = (
     false,
   );
   return nextContainSymbol;
+};
+
+export const inheritLabels = (
+  { name, children }: RecipeAST,
+  recipes: ComboRecipesType,
+  toAdd: string[] = [],
+) => {
+  const recipe = recipes[name];
+  if (children) {
+    children.forEach((child) => {
+      const childRecipe = recipes[child.name];
+      if (!childRecipe) {
+        return undefined;
+      }
+      const nextLabels = uniq([
+        ...toAdd,
+        ...(recipe.labels || []),
+        ...(recipe.inheritedLabels || []),
+        ...(childRecipe.labels || []),
+        ...(childRecipe.inheritedLabels || []),
+      ]);
+      childRecipe.inheritedLabels = nextLabels;
+      inheritLabels(child, recipes, nextLabels);
+      return undefined;
+    });
+  }
 };

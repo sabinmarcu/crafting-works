@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 import styled from 'styled-components';
-import { Chip, withTheme } from '@material-ui/core';
+import { Chip, Typography, withTheme } from '@material-ui/core';
 import { useFilter, Filter } from './Filter';
 import { useLabelColor } from '../state/label';
 import { camelCaseToCapitalized } from '../utils/strings';
@@ -19,7 +19,9 @@ export const StyledChip = withTheme(
     margin: 5px;
     &, &:hover, &:focus {
       background: ${({ customColor }) => (customColor)};
-      color: ${({ customColor, theme: { palette: { getContrastText } } }) => (customColor ? getContrastText(customColor) : undefined)};
+      &, svg {
+        color: ${({ customColor, theme: { palette: { getContrastText } } }) => (customColor ? getContrastText(customColor) : undefined)};
+      }
     }
   `,
 );
@@ -55,14 +57,20 @@ export const LabelChip: FC<{
   );
 };
 
+export const StyledTypography = styled(Typography)`
+  margin: 25px 0 15px;
+`;
+
 export const LabelList: FC<{
   labels: string[],
+  extraLabels?: string[],
   filter?: boolean,
   active?: string[],
   onRemove?: (input: string) => (e: Event) => void,
   onClick?: (input: string) => (e: any) => void,
 }> = ({
   labels,
+  extraLabels,
   onRemove,
   onClick,
   filter = true,
@@ -80,18 +88,49 @@ export const LabelList: FC<{
       })),
     [filter, list, labels, active],
   );
+  const extra = useMemo(
+    () => (extraLabels && labels
+      ? extraLabels.filter((it) => !labels.includes(it))
+      : undefined),
+    [extraLabels, labels],
+  );
   return (
-    <StyledContainer>
-      {filter && <Filter {...filterProps} />}
-      {renderLabels.map(({ label, active: a }) => (
-        <LabelChip
-          name={label}
-          key={label}
-          active={a}
-          onRemove={onRemove}
-          onClick={onClick}
-        />
-      ))}
-    </StyledContainer>
+    <>
+      {extra && (
+      <StyledTypography
+        variant="h5"
+      >
+        Own Labels
+      </StyledTypography>
+      )}
+      <StyledContainer>
+        {filter && <Filter {...filterProps} />}
+        {renderLabels.map(({ label, active: a }) => (
+          <LabelChip
+            name={label}
+            key={label}
+            active={a}
+            onRemove={onRemove}
+            onClick={onClick}
+          />
+        ))}
+      </StyledContainer>
+      {extra && (
+      <>
+        <StyledTypography
+          variant="h5"
+        >
+          Inherited Labels
+        </StyledTypography>
+        {extra.map((label) => (
+          <LabelChip
+            name={label}
+            key={label}
+            active
+          />
+        ))}
+      </>
+      )}
+    </>
   );
 };
