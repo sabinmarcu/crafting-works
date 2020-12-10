@@ -82,7 +82,7 @@ export const RecipeScreen: FC = () => {
   useEffect(
     () => {
       if (path && path.isExact) {
-        history.push(`${path.url}${tabs[0].route}`);
+        history.replace(`${path.url}${tabs[0].route}`);
         setTab(0);
       }
     },
@@ -92,7 +92,7 @@ export const RecipeScreen: FC = () => {
   useEffect(
     () => {
       if (path && prevTab !== tab) {
-        history.push(`${path.url}${(tabs[tab] || tabs[0]).route}`);
+        history.replace(`${path.url}${(tabs[tab] || tabs[0]).route}`);
       }
     },
     [history, path, tab, prevTab],
