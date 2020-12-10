@@ -112,7 +112,7 @@
     "release": "run-s \"release:*\"",
     "release:co": "git checkout staging",
     "release:pr": "gh pr create --base master --repo \"$(yarn config:remote)\" --head staging --project Backlog --fill",
-    "release:merge": "gh pr merge -r",
+    "release:merge": "gh pr merge -r --delete-branch=false",
     "release:pull": "git pull origin \"$(yarn config:branch)\"",
     "release:back": "git checkout stating",
     "release:refresh": "git pull origin \"$(yarn config:branch)\"",
