@@ -5,6 +5,12 @@ export type RecipeType = {
   labels?: string[];
 };
 export type RecipesType = Record<string, RecipeType>;
+export type ComboRecipeType = RecipeType & {
+  deps: RecipeAST,
+  uses: RecipeAST,
+  inheritedLabels?: string[],
+};
+export type ComboRecipesType = Record<string, ComboRecipeType>;
 export type SymbolType = {
   name: string;
   composite?: boolean;
@@ -15,7 +21,7 @@ export type RecipesExtraType = {
 };
 
 export type RecipesValuesType = {
-  recipes: RecipesType | undefined,
+  recipes: ComboRecipesType | undefined,
   symbols: SymbolType[],
   labels: string[],
   names: string[],
@@ -32,7 +38,7 @@ export type RecipesFuncsType = {
 export type RecipesContextType = RecipesValuesType & RecipesFuncsType;
 
 export type RecipeContextType = {
-  recipe: RecipeType | undefined,
+  recipe: ComboRecipeType | undefined,
   symbols: SymbolType[],
   name: string,
   ast?: RecipeAST,
