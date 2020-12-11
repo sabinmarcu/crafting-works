@@ -19,6 +19,7 @@ import {
 } from '../styled';
 import { LabelList } from '../LabelList';
 import { uniq } from '../../utils/functions';
+import { RecipeType } from '../../utils/types';
 
 export const ExportModal: FC<{
   open: boolean,
@@ -96,10 +97,18 @@ export const ExportModal: FC<{
   );
   const onSubmit = useCallback(
     () => {
+      const fixedRecipes = Object.entries(filteredRecipes || {})
+        .map((
+          [key, { labels: l, input, output }],
+        ) => [key, { labels: l, input, output }] as [string, RecipeType])
+        .reduce((prev, [key, it]) => ({
+          ...prev,
+          [key]: it,
+        }), {});
       const blob = new Blob(
         [
           JSON.stringify({
-            recipes: filteredRecipes || {},
+            recipes: fixedRecipes,
             labels: filteredLabels || {},
           }, undefined, 2),
         ],
