@@ -26,6 +26,8 @@
   "scripts": {
     "start": "run-p \"start:*\"",
     "start:app": "yarn workspace @crafting-works/app start",
+    "build": "run-p \"build:*\"",
+    "build:app": "yarn workspace @crafting-works/app build",
     "postinstall": "run-s \"postinstall:*\"",
     "postinstall:husky": "husky install",
     "postinstall:git": "git config pull.rebase true",
