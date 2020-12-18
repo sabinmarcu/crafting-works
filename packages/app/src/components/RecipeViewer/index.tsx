@@ -1,0 +1,341 @@
+import React, {
+  FC,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Container,
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Tab,
+  withTheme,
+  Theme,
+} from '@material-ui/core';
+
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+import styled from 'styled-components';
+
+import { TabContext } from '@material-ui/lab';
+import { useHistory } from 'react-router';
+import {
+  useAST,
+  useUses,
+  useRecipe,
+  useResources,
+  useSteps,
+} from '../../state/recipes-v3';
+
+import {
+  onMobile,
+  StyledTabPanel,
+  StyledTabs,
+} from '../styled';
+
+import { camelCaseToCapitalized } from '../../utils/strings';
+import { Title } from '../../state/title';
+import { useIsMobile } from '../../hooks/useMedia';
+import { Visualization } from './Visualization';
+import { useStacks } from '../../state/stack';
+import { recipeBaseRoute } from '../../config/constants';
+
+export const StyledContainer = styled(Container)`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1rem;
+  padding: 1rem 0;
+  ${onMobile} {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const backgroundGetter = ({
+  theme:
+  {
+    palette: {
+      background: {
+        default: val,
+      },
+    },
+  },
+}: { theme: Theme }) => val;
+const borderRadiusGetter = ({
+  theme:
+  {
+    shape: {
+      borderRadius: val,
+    },
+  },
+}: { theme: Theme }) => val;
+const borderGetter = ({
+  theme:
+  {
+    palette: {
+      background: {
+        paper: val,
+      },
+    },
+  },
+}: { theme: Theme }) => val;
+
+export const ResourceWrapper = withTheme(
+  styled.div<{
+    columns?: number,
+    bold?: boolean,
+  }>`
+    display: grid;
+    grid-template-columns: 5fr repeat(${({ columns }) => columns || 1}, 100px);
+    background: ${backgroundGetter};
+    overflow: hidden;
+    cursor: ${({ onClick }) => (onClick ? 'pointer' : 'default')};
+    &:first-of-type {
+      border-top-left-radius: ${borderRadiusGetter}px;
+      border-top-right-radius: ${borderRadiusGetter}px;
+    }
+    & * {
+      font-weight: ${({ bold }) => (bold ? 'bold' : 'normal')};
+      font-size: ${({ bold }) => (bold ? '1.2' : '1')}rem;
+    }
+    & > * {
+      padding: 10px;
+      border-top: solid 1px ${borderGetter};
+      border-left: solid 1px ${borderGetter};
+      &:last-child {
+        border-right: solid 1px ${borderGetter};
+      }
+    }
+    &:last-of-type {
+      border-bottom-left-radius: ${borderRadiusGetter}px;
+      border-bottom-right-radius: ${borderRadiusGetter}px;
+      & > * {
+        border-bottom: solid 1px ${borderGetter};
+      }
+    }
+  `,
+);
+
+export const ResourceText = styled(Typography)`
+  flex: 1;
+`;
+
+export const ResourceNumber = styled(Typography)`
+  font-feature-settings: tnum;
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+export const SVGCard = styled(Card)`
+  display: flex;
+  flex-flow: column nowrap;
+`;
+
+export const ResourceHeader: FC<{
+  title: string
+}> = ({
+  title,
+}) => {
+  const { isEnabled } = useStacks();
+  return (
+    <ResourceWrapper columns={isEnabled ? 2 : 1} bold>
+      <ResourceText>{title}</ResourceText>
+      <ResourceNumber>
+        {isEnabled ? 'Stacks' : 'Amount'}
+      </ResourceNumber>
+      {isEnabled && (
+        <ResourceNumber>Amount</ResourceNumber>
+      )}
+    </ResourceWrapper>
+  );
+};
+
+export const ResourcePreview: FC<{
+  text: string,
+  amount: number,
+  onClick?: () => void,
+}> = ({
+  text,
+  amount,
+  onClick,
+}) => {
+  const { isEnabled, stackSize } = useStacks();
+  return (
+    <ResourceWrapper columns={isEnabled ? 2 : 1} onClick={onClick}>
+      <ResourceText>{camelCaseToCapitalized(text)}</ResourceText>
+      <ResourceNumber>
+        {isEnabled && stackSize
+          ? Math.ceil(amount / stackSize!)
+          : amount}
+      </ResourceNumber>
+      {isEnabled && stackSize && (
+      <ResourceNumber>
+        {amount}
+      </ResourceNumber>
+      )}
+    </ResourceWrapper>
+  );
+};
+
+const ResourcesSummary: FC = () => {
+  const resources = useResources();
+  const rootResources = useMemo(
+    () => Object.entries(resources)
+      .filter(([key]) => !key.startsWith('_')),
+    [resources],
+  );
+  return (
+    <Card>
+      <CardHeader title="Total Resouces" />
+      <CardContent>
+        <ResourceHeader title="Resource" />
+        {rootResources.map(
+          ([key, value]) => (
+            <ResourcePreview key={key} text={key} amount={value} />
+          ),
+        )}
+      </CardContent>
+    </Card>
+  );
+};
+
+export const ASTPreview: FC = () => {
+  const ast = useAST();
+  const uses = useUses();
+  const isMobile = useIsMobile();
+  const tabs = useMemo(
+    () => [
+      { title: 'Dependencies', ast, styleLeafNodes: true },
+      { title: 'Uses', ast: uses, styleLeafNodes: false },
+    ],
+    [ast, uses],
+  );
+  const [tab, setTab] = useState<string>(tabs[0].title);
+  const onChange = useCallback(
+    (event, newValue) => setTab(newValue),
+    [setTab],
+  );
+  return (
+    <SVGCard>
+      <TabContext value={tab}>
+        <StyledTabs
+          value={tab}
+          onChange={onChange}
+          variant={isMobile ? 'fullWidth' : undefined}
+        >
+          {tabs.map(({ title }) => (
+            <Tab
+              key={title}
+              value={title}
+              label={title}
+            />
+          ))}
+        </StyledTabs>
+        {tabs.map(({ title, ast: tree, styleLeafNodes }) => (
+          <StyledTabPanel value={title} key={title}>
+            <Visualization
+              ast={tree}
+              title={title}
+              styleLeafNodes={styleLeafNodes}
+            />
+          </StyledTabPanel>
+        ))}
+      </TabContext>
+    </SVGCard>
+  );
+};
+
+export const FullCol = styled.div`
+  grid-row-start: 1;
+  grid-row-end: 4;
+  grid-column: 2;
+  ${onMobile} {
+    grid-row: 3;
+    grid-column: 1;
+  }
+`;
+
+const StyledAccordionDetails = styled(AccordionDetails)`
+  display: flex;
+  flex-flow: column nowrap;
+`;
+
+export const StepsView: FC = () => {
+  const steps = useSteps();
+  const history = useHistory();
+  const [active, setActive] = useState<number>(0);
+  const activate = useCallback(
+    (id: number) => () => setActive(id),
+    [setActive],
+  );
+  const onClick = useCallback(
+    (name: string) => () => {
+      history.push([
+        recipeBaseRoute.replace(':name', name),
+        'view',
+      ].join('/'));
+    },
+    [history],
+  );
+  return (
+    <div>
+      {steps && steps.map((step, idx) => (
+        <Accordion
+          key={`${idx.toString()}`}
+          expanded={active === idx}
+          onChange={activate(idx)}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+          >
+            {`Step ${idx + 1}`}
+          </AccordionSummary>
+          <StyledAccordionDetails>
+            <ResourceHeader title="Recipes" />
+            {step.map(
+              ({ name, amount }) => (
+                <ResourcePreview
+                  key={name}
+                  text={name}
+                  amount={amount}
+                  onClick={onClick(name)}
+                />
+              ),
+            )}
+          </StyledAccordionDetails>
+        </Accordion>
+      ))}
+    </div>
+  );
+};
+
+export const ResourcesView: FC = () => {
+  const { name } = useRecipe();
+  return (
+    <>
+      <Title title={`View: ${camelCaseToCapitalized(name)}`} />
+      <StyledContainer>
+        <div>
+          <ResourcesSummary />
+        </div>
+        <FullCol>
+          <ASTPreview />
+        </FullCol>
+        <div>
+          <StepsView />
+        </div>
+      </StyledContainer>
+    </>
+  );
+};
+
+export const RecipeViewer: FC = () => (
+  <ResourcesView />
+);
